@@ -30,7 +30,8 @@ function limpiar(texto: string): string {
 
 function twiml(mensaje: string): Response {
   const xml = `<?xml version="1.0" encoding="UTF-8"?><Response><Message>${limpiar(mensaje)}</Message></Response>`;
-  return new Response(xml, {
+  const bytes = new TextEncoder().encode(xml);
+  return new Response(bytes, {
     status: 200,
     headers: { "Content-Type": "text/xml; charset=utf-8" },
   });
