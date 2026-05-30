@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Empresa {
+  id                 String         @id @default(cuid())
+  nombre             String
+  telefonoWhatsapp   String         @unique
+  promptSistema      String?
+  creadoEn           DateTime       @default(now())
+  actualizadoEn      DateTime       @updatedAt
+  conversaciones     Conversacion[]
+  documentos         Documento[]
+}
+
+model Conversacion {
+  id             String     @id @default(cuid())
+  empresa        Empresa    @relation(fields: [empresaId], references: [id])
+  empresaId      String
+  numeroCliente  String
+  estado         Estado     @default(ACTIVA)
+  modoHumano     Boolean    @default(false)
+  creadoEn       DateTime   @default(now())
+  actualizadoEn  DateTime   @updatedAt
+  mensajes       Mensaje[]
+}
+
+model Mensaje {
+  id             String       @id @default(cuid())
+  conversacion   Conversacion @relation(fields: [conversacionId], references: [id])
+  conversacionId String
+  contenido      String
+  rol            Rol
+  creadoEn       DateTime     @default(now())
+}
+
+model Documento {
+  id          String   @id @default(cuid())
+  empresa     Empresa  @relation(fields: [empresaId], references: [id])
+  empresaId   String
+  nombre      String
+  contenido   String
+  tipo        String   @default("texto")
+  creadoEn    DateTime @default(now())
+}
+
+enum Estado {
+  ACTIVA
+  CERRADA
+}
+
+enum Rol {
+  CLIENTE
+  ASISTENTE
+}
