@@ -5,12 +5,15 @@
 NexoAgent es un sistema completo de asistentes virtuales potenciados por IA (Claude de Anthropic) que permite a las empresas automatizar y mejorar sus conversaciones con clientes a través de WhatsApp. Incluye gestión de conocimiento, CRM integrado, automatizaciones, analíticas y **creación automática de citas/tareas desde WhatsApp con sincronización a Google Calendar**.
 
 > 📚 **Guías rápidas**: 
+> - [⚡ Setup Supabase (5 min)](QUICKSTART-SUPABASE.md) ← **NUEVO**
 > - [🚀 Deploy en Render](QUICKSTART-RENDER.md)
 > - [📦 Deployment completo](DEPLOYMENT.md)
-> - [🔒 Seguridad](SECURITY.md)
-> - [🤖 Agente Automático](AGENTE-AUTOMATICO.md) ← **NUEVO**
-> - [📅 Setup Google Calendar](GOOGLE-CALENDAR-SETUP.md) ← **NUEVO**
-> - [⏰ Validación de Horarios](VALIDACION-HORARIOS.md) ← **NUEVO**
+> - [🔒 Seguridad y Validaciones](VALIDATION-SECURITY.md) ← **NUEVO**
+> - [🎨 Guía de Marca](BRAND-GUIDE.md) ← **NUEVO**
+> - [✅ Checklist Producción](PRODUCTION-READY-CHECKLIST.md) ← **NUEVO**
+> - [🤖 Agente Automático](AGENTE-AUTOMATICO.md)
+> - [📅 Setup Google Calendar](GOOGLE-CALENDAR-SETUP.md)
+> - [⏰ Validación de Horarios](VALIDACION-HORARIOS.md)
 
 ---
 
