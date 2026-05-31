@@ -7,9 +7,32 @@ datasource db {
   provider = "postgresql"
 }
 
+enum RolUsuario {
+  PROVEEDOR
+  CLIENTE
+}
+
+model Usuario {
+  id        String      @id @default(cuid())
+  email     String      @unique
+  password  String
+  nombre    String
+  rol       RolUsuario  @default(CLIENTE)
+  empresaId String?     @unique
+  empresa   Empresa?    @relation("EmpresaUsuario", fields: [empresaId], references: [id])
+  creadoEn  DateTime    @default(now())
+  actualizadoEn DateTime @updatedAt
+}
+
 model Empresa {
   id                      String         @id @default(cuid())
   nombre                  String
+  rif                     String?
+  nif                     String?
+  responsable             String?
+  direccion               String?
+  telefono                String?
+  email                   String?
   telefonoWhatsapp        String         @unique
   promptSistema           String?
   calendlyUrl             String?
@@ -17,6 +40,7 @@ model Empresa {
   googleRefreshToken      String?
   googleAccessToken       String?
   googleTokenExpiry       DateTime?
+  usuario                 Usuario?       @relation("EmpresaUsuario")
   creadoEn                DateTime       @default(now())
   actualizadoEn           DateTime       @updatedAt
   conversaciones          Conversacion[]
