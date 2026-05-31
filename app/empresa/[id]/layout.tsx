@@ -65,12 +65,12 @@ export default async function EmpresaLayout({
 
   return (
     <div className="min-h-screen flex" style={{ background: "#F4F7FA" }}>
-      <aside className="w-60 flex flex-col fixed h-full" style={{ background: "#0E2436" }}>
+      <aside className="w-60 flex flex-col fixed h-full bg-white shadow-lg" style={{ borderRight: "2px solid #10B981", boxShadow: "4px 0 12px rgba(16, 185, 129, 0.1)" }}>
         {/* Logo + empresa */}
-        <div className="px-5 py-5" style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
-          <Link href="/admin" className="flex items-center gap-1.5 mb-4 opacity-50 hover:opacity-80 transition-opacity">
-            <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-            <span className="text-white text-xs">← Volver al panel</span>
+        <div className="px-5 py-5" style={{ borderBottom: "1px solid #E5E7EB" }}>
+          <Link href="/admin" className="flex items-center gap-1.5 mb-4 text-gray-500 hover:text-gray-700 transition-colors">
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+            <span className="text-xs">← Volver al panel</span>
           </Link>
           <div className="mb-4 px-2">
             <Image
@@ -82,12 +82,12 @@ export default async function EmpresaLayout({
               className="w-full h-auto"
             />
           </div>
-          <div className="flex items-center gap-2.5 pt-3" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+          <div className="flex items-center gap-2.5 pt-3" style={{ borderTop: "1px solid #E5E7EB" }}>
             <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 font-sora font-bold text-white text-sm" style={{ background: "linear-gradient(135deg, #0EA5E9 0%, #10B981 100%)" }}>
               {empresa.nombre[0]}
             </div>
             <div className="min-w-0">
-              <p className="text-white text-sm font-semibold font-sora truncate leading-tight">{empresa.nombre}</p>
+              <p className="text-gray-900 text-sm font-semibold font-sora truncate leading-tight">{empresa.nombre}</p>
               <div className="flex items-center gap-1.5 mt-0.5">
                 <span className="w-1.5 h-1.5 rounded-full" style={{ background: "#22B26B" }}></span>
                 <span className="text-xs" style={{ color: "#73869A" }}>Activo</span>
@@ -110,8 +110,8 @@ export default async function EmpresaLayout({
               );
             }
             return (
-              <Link key={item.label} href={href} className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors hover:text-white group" style={{ color: "#A9BED2" }}>
-                <span className="group-hover:text-white transition-colors">{item.icon}</span>
+              <Link key={item.label} href={href} className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all text-gray-600 hover:text-gray-900 hover:bg-gradient-to-r hover:from-blue-50 hover:to-emerald-50 group">
+                <span className="transition-colors">{item.icon}</span>
                 <span>{item.label}</span>
                 {item.label === "Conversaciones" && pendientes > 0 && (
                   <span className="ml-auto text-xs font-bold text-white px-1.5 py-0.5 rounded-full" style={{ background: "#F0A93B" }}>
@@ -124,11 +124,11 @@ export default async function EmpresaLayout({
         </nav>
 
         {/* Footer */}
-        <div className="px-5 py-4 space-y-3" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
-          <div className="text-xs text-gray-400">
-            <div className="font-medium text-white">{session.user.name}</div>
+        <div className="px-5 py-4 space-y-3" style={{ borderTop: "1px solid #E5E7EB" }}>
+          <div className="text-xs">
+            <div className="font-medium text-gray-900">{session.user.name}</div>
             <div className="mt-1">
-              <span className="px-2 py-0.5 rounded text-[10px] uppercase font-medium bg-blue-500/20 text-blue-300">
+              <span className="px-2 py-0.5 rounded text-[10px] uppercase font-medium bg-gradient-to-r from-blue-100 to-emerald-100 text-gray-700">
                 {session.user.rol}
               </span>
             </div>
@@ -136,12 +136,12 @@ export default async function EmpresaLayout({
           <form action={logout}>
             <button
               type="submit"
-              className="w-full text-left text-xs text-red-400 hover:text-red-300 transition-colors"
+              className="w-full text-left text-xs text-red-500 hover:text-red-600 transition-colors font-medium"
             >
               Cerrar sesión
             </button>
           </form>
-          <p className="text-xs" style={{ color: "#41566B" }}>NexoAgent · Empleado virtual IA</p>
+          <p className="text-xs text-gray-400">NexoAgent · Empleado virtual IA</p>
         </div>
       </aside>
 

@@ -8,9 +8,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <div className="min-h-screen flex" style={{ background: "#F4F7FA" }}>
-      <aside className="w-60 flex flex-col fixed h-full" style={{ background: "#0E2436" }}>
+      <aside className="w-60 flex flex-col fixed h-full bg-white shadow-lg" style={{ borderRight: "2px solid #10B981", boxShadow: "4px 0 12px rgba(16, 185, 129, 0.1)" }}>
         {/* Logo */}
-        <div className="px-5 py-6" style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+        <div className="px-5 py-6" style={{ borderBottom: "1px solid #E5E7EB" }}>
           <div className="mb-3">
             <Image
               src="/logo.png"
@@ -21,42 +21,44 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               className="w-full h-auto"
             />
           </div>
-          <p className="text-xs text-center mt-3 pt-3" style={{ color: "#73869A", borderTop: "1px solid rgba(255,255,255,0.08)" }}>Panel Administrador</p>
+          <p className="text-xs text-center mt-3 pt-3 text-gray-500" style={{ borderTop: "1px solid #E5E7EB" }}>Panel Administrador</p>
         </div>
 
         {/* Nav */}
         <nav className="flex-1 px-3 py-4 space-y-0.5">
-          <p className="text-xs font-semibold uppercase tracking-wider px-3 py-2" style={{ color: "#41566B", letterSpacing: "0.1em" }}>Administración</p>
+          <p className="text-xs font-semibold uppercase tracking-wider px-3 py-2 text-gray-400" style={{ letterSpacing: "0.1em" }}>Administración</p>
 
-          <Link href="/admin" className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors hover:text-white hover:bg-white/5 group" style={{ color: "#A9BED2" }}>
+          <Link href="/admin" className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all text-gray-600 hover:text-gray-900 hover:bg-gradient-to-r hover:from-blue-50 hover:to-emerald-50">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
             Panel General
           </Link>
 
-          <Link href="/admin/usuarios" className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors hover:text-white hover:bg-white/5 group" style={{ color: "#A9BED2" }}>
+          <Link href="/admin/usuarios" className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all text-gray-600 hover:text-gray-900 hover:bg-gradient-to-r hover:from-blue-50 hover:to-emerald-50">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
             Usuarios
           </Link>
         </nav>
 
         {/* Footer */}
-        <div className="px-5 py-4 space-y-3" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+        <div className="px-5 py-4 space-y-3" style={{ borderTop: "1px solid #E5E7EB" }}>
           {session && (
-            <div className="text-xs text-gray-400">
-              <div className="font-medium text-white">{session.user.name}</div>
-              <div>{session.user.email}</div>
-              <div className="mt-1 text-blue-400">{session.user.rol}</div>
+            <div className="text-xs">
+              <div className="font-medium text-gray-900">{session.user.name}</div>
+              <div className="text-gray-600">{session.user.email}</div>
+              <div className="mt-1">
+                <span className="px-2 py-0.5 rounded text-[10px] uppercase font-medium bg-gradient-to-r from-blue-100 to-emerald-100 text-gray-700">{session.user.rol}</span>
+              </div>
             </div>
           )}
           <form action={logout}>
             <button
               type="submit"
-              className="w-full text-left text-xs text-red-400 hover:text-red-300 transition-colors"
+              className="w-full text-left text-xs text-red-500 hover:text-red-600 transition-colors font-medium"
             >
               Cerrar sesión
             </button>
           </form>
-          <p className="text-xs" style={{ color: "#41566B" }}>NexoAgent · v1.0</p>
+          <p className="text-xs text-gray-400">NexoAgent · v1.0</p>
         </div>
       </aside>
 

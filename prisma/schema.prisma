@@ -7,55 +7,48 @@ datasource db {
   provider = "postgresql"
 }
 
-enum RolUsuario {
-  PROVEEDOR
-  CLIENTE
-}
-
 model Usuario {
-  id        String      @id @default(cuid())
-  email     String      @unique
-  password  String
-  nombre    String
-  rol       RolUsuario  @default(CLIENTE)
-  empresaId String?     @unique
-  empresa   Empresa?    @relation("EmpresaUsuario", fields: [empresaId], references: [id])
-  creadoEn  DateTime    @default(now())
-  actualizadoEn DateTime @updatedAt
+  id            String     @id @default(cuid())
+  email         String     @unique
+  password      String
+  nombre        String
+  rol           RolUsuario @default(CLIENTE)
+  empresaId     String?    @unique
+  creadoEn      DateTime   @default(now())
+  actualizadoEn DateTime   @updatedAt
+  empresa       Empresa?   @relation("EmpresaUsuario", fields: [empresaId], references: [id])
 }
 
 model Empresa {
-  id                      String         @id @default(cuid())
-  nombre                  String
-  rif                     String?
-  nif                     String?
-  responsable             String?
-  direccion               String?
-  telefono                String?
-  email                   String?
-  telefonoWhatsapp        String         @unique
-  promptSistema           String?
-  calendlyUrl             String?
-  googleCalendarId        String?
-  googleRefreshToken      String?
-  googleAccessToken       String?
-  googleTokenExpiry       DateTime?
-  usuario                 Usuario?       @relation("EmpresaUsuario")
-  creadoEn                DateTime       @default(now())
-  actualizadoEn           DateTime       @updatedAt
-  conversaciones          Conversacion[]
-  documentos              Documento[]
-  contactos               Contacto[]
-  memoria                 MemoriaEmpresa[]
-  automatizaciones        Automatizacion[]
-  citas                   Cita[]
+  id                 String           @id @default(cuid())
+  nombre             String
+  telefonoWhatsapp   String           @unique
+  creadoEn           DateTime         @default(now())
+  actualizadoEn      DateTime         @updatedAt
+  promptSistema      String?
+  calendlyUrl        String?
+  googleAccessToken  String?
+  googleCalendarId   String?
+  googleRefreshToken String?
+  googleTokenExpiry  DateTime?
+  direccion          String?
+  email              String?
+  nif                String?
+  responsable        String?
+  rif                String?
+  telefono           String?
+  automatizaciones   Automatizacion[]
+  citas              Cita[]
+  contactos          Contacto[]
+  conversaciones     Conversacion[]
+  documentos         Documento[]
+  memoria            MemoriaEmpresa[]
+  usuario            Usuario?         @relation("EmpresaUsuario")
 }
 
 model Cita {
   id                 String     @id @default(cuid())
-  empresa            Empresa    @relation(fields: [empresaId], references: [id])
   empresaId          String
-  contacto           Contacto?  @relation(fields: [contactoId], references: [id])
   contactoId         String?
   nombreCliente      String
   telefono           String
@@ -63,39 +56,27 @@ model Cita {
   fin                DateTime
   estado             EstadoCita @default(PENDIENTE)
   notas              String?
-  googleEventId      String?
-  googleCalendarLink String?
   creadoEn           DateTime   @default(now())
   actualizadoEn      DateTime   @updatedAt
-}
-
-enum EstadoCita {
-  PENDIENTE
-  CONFIRMADA
-  CANCELADA
+  googleCalendarLink String?
+  googleEventId      String?
+  contacto           Contacto?  @relation(fields: [contactoId], references: [id])
+  empresa            Empresa    @relation(fields: [empresaId], references: [id])
 }
 
 model MemoriaEmpresa {
   id            String           @id @default(cuid())
-  empresa       Empresa          @relation(fields: [empresaId], references: [id])
   empresaId     String
   categoria     CategoriaMemoria
   clave         String
   valor         String
   creadoEn      DateTime         @default(now())
   actualizadoEn DateTime         @updatedAt
-}
-
-enum CategoriaMemoria {
-  PRODUCTO
-  HORARIO
-  PRECIO
-  POLITICA
+  empresa       Empresa          @relation(fields: [empresaId], references: [id])
 }
 
 model Automatizacion {
   id            String      @id @default(cuid())
-  empresa       Empresa     @relation(fields: [empresaId], references: [id])
   empresaId     String
   nombre        String
   trigger       TipoTrigger
@@ -105,17 +86,11 @@ model Automatizacion {
   ejecuciones   Int         @default(0)
   creadoEn      DateTime    @default(now())
   actualizadoEn DateTime    @updatedAt
-}
-
-enum TipoTrigger {
-  PRIMER_MENSAJE
-  PALABRA_CLAVE
-  FUERA_HORARIO
+  empresa       Empresa     @relation(fields: [empresaId], references: [id])
 }
 
 model Contacto {
   id             String         @id @default(cuid())
-  empresa        Empresa        @relation(fields: [empresaId], references: [id])
   empresaId      String
   nombre         String?
   telefono       String
@@ -123,54 +98,79 @@ model Contacto {
   notas          String?
   creadoEn       DateTime       @default(now())
   actualizadoEn  DateTime       @updatedAt
-  conversaciones Conversacion[]
   citas          Cita[]
+  empresa        Empresa        @relation(fields: [empresaId], references: [id])
+  conversaciones Conversacion[]
 
   @@unique([empresaId, telefono])
 }
 
 model Conversacion {
-  id             String       @id @default(cuid())
-  empresa        Empresa      @relation(fields: [empresaId], references: [id])
-  empresaId      String
-  contacto       Contacto?    @relation(fields: [contactoId], references: [id])
-  contactoId     String?
-  numeroCliente  String
-  estado         Estado       @default(ACTIVA)
-  modoHumano     Boolean      @default(false)
-  creadoEn       DateTime     @default(now())
-  actualizadoEn  DateTime     @updatedAt
-  mensajes       Mensaje[]
+  id            String    @id @default(cuid())
+  empresaId     String
+  numeroCliente String
+  estado        Estado    @default(ACTIVA)
+  creadoEn      DateTime  @default(now())
+  actualizadoEn DateTime  @updatedAt
+  modoHumano    Boolean   @default(false)
+  contactoId    String?
+  contacto      Contacto? @relation(fields: [contactoId], references: [id])
+  empresa       Empresa   @relation(fields: [empresaId], references: [id])
+  mensajes      Mensaje[]
 }
 
 model Mensaje {
   id             String       @id @default(cuid())
-  conversacion   Conversacion @relation(fields: [conversacionId], references: [id])
   conversacionId String
   contenido      String
   rol            Rol
   creadoEn       DateTime     @default(now())
+  conversacion   Conversacion @relation(fields: [conversacionId], references: [id])
 }
 
 model Documento {
-  id          String            @id @default(cuid())
-  empresa     Empresa           @relation(fields: [empresaId], references: [id])
-  empresaId   String
-  nombre      String
-  contenido   String
-  tipo        String            @default("texto")
-  creadoEn    DateTime          @default(now())
-  chunks      DocumentoChunk[]
+  id        String           @id @default(cuid())
+  empresaId String
+  nombre    String
+  contenido String
+  tipo      String           @default("texto")
+  creadoEn  DateTime         @default(now())
+  empresa   Empresa          @relation(fields: [empresaId], references: [id])
+  chunks    DocumentoChunk[]
 }
 
 model DocumentoChunk {
   id          String    @id @default(cuid())
-  documento   Documento @relation(fields: [documentoId], references: [id], onDelete: Cascade)
   documentoId String
   empresaId   String
   contenido   String
   indice      Int
   creadoEn    DateTime  @default(now())
+  documento   Documento @relation(fields: [documentoId], references: [id], onDelete: Cascade)
+}
+
+enum RolUsuario {
+  PROVEEDOR
+  CLIENTE
+}
+
+enum EstadoCita {
+  PENDIENTE
+  CONFIRMADA
+  CANCELADA
+}
+
+enum CategoriaMemoria {
+  PRODUCTO
+  HORARIO
+  PRECIO
+  POLITICA
+}
+
+enum TipoTrigger {
+  PRIMER_MENSAJE
+  PALABRA_CLAVE
+  FUERA_HORARIO
 }
 
 enum TipoContacto {
