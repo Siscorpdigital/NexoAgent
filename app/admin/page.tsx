@@ -25,8 +25,7 @@ export default async function AdminPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-8 py-8">
+    <div className="max-w-7xl mx-auto px-8 py-8">
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Panel de Administración</h1>
@@ -151,6 +150,5 @@ export default async function AdminPage() {
           )}
         </div>
       </div>
-    </div>
   );
 }

@@ -16,8 +16,7 @@ export default async function NuevaEmpresaPage({
   const { error } = await searchParams;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-3xl mx-auto px-8 py-8">
+    <div className="max-w-3xl mx-auto px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Nueva Empresa</h1>
           <p className="text-gray-600 mt-1">Crea una nueva empresa y opcionalmente su usuario de acceso</p>
@@ -200,6 +199,5 @@ export default async function NuevaEmpresaPage({
           </div>
         </form>
       </div>
-    </div>
   );
 }

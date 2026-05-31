@@ -27,8 +27,7 @@ export default async function EditarEmpresaPage({
   if (!empresa) notFound();
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-3xl mx-auto px-8 py-8">
+    <div className="max-w-3xl mx-auto px-8 py-8">
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Editar Empresa</h1>
@@ -186,6 +185,5 @@ export default async function EditarEmpresaPage({
           </div>
         </form>
       </div>
-    </div>
   );
 }
