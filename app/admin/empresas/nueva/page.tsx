@@ -2,12 +2,18 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { crearEmpresaConUsuario } from "@/app/actions/admin";
 
-export default async function NuevaEmpresaPage() {
+export default async function NuevaEmpresaPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
   const session = await auth();
 
   if (!session || session.user.rol !== "PROVEEDOR") {
     redirect("/dashboard");
   }
+
+  const { error } = await searchParams;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -16,6 +22,12 @@ export default async function NuevaEmpresaPage() {
           <h1 className="text-3xl font-bold text-gray-900">Nueva Empresa</h1>
           <p className="text-gray-600 mt-1">Crea una nueva empresa y opcionalmente su usuario de acceso</p>
         </div>
+
+        {error && (
+          <div className="mb-6 px-4 py-3 bg-red-50 border border-red-200 rounded-lg text-red-700">
+            ⚠️ {decodeURIComponent(error)}
+          </div>
+        )}
 
         <form action={crearEmpresaConUsuario} className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 space-y-6">
           {/* Datos de la empresa */}
