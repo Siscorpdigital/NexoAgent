@@ -17,6 +17,25 @@ model Empresa {
   conversaciones     Conversacion[]
   documentos         Documento[]
   contactos          Contacto[]
+  memoria            MemoriaEmpresa[]
+}
+
+model MemoriaEmpresa {
+  id            String           @id @default(cuid())
+  empresa       Empresa          @relation(fields: [empresaId], references: [id])
+  empresaId     String
+  categoria     CategoriaMemoria
+  clave         String
+  valor         String
+  creadoEn      DateTime         @default(now())
+  actualizadoEn DateTime         @updatedAt
+}
+
+enum CategoriaMemoria {
+  PRODUCTO
+  HORARIO
+  PRECIO
+  POLITICA
 }
 
 model Contacto {

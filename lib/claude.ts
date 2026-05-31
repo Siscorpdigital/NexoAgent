@@ -10,11 +10,47 @@ type MensajeHistorial = {
   contenido: string;
 };
 
+type EntradaMemoria = {
+  categoria: string;
+  clave: string;
+  valor: string;
+};
+
+const LABEL_CATEGORIA: Record<string, string> = {
+  PRODUCTO: "Productos y Servicios",
+  HORARIO:  "Horarios",
+  PRECIO:   "Precios y Tarifas",
+  POLITICA: "Políticas",
+};
+
+function formatearMemoria(memoria: EntradaMemoria[]): string {
+  if (memoria.length === 0) return "";
+
+  const porCategoria: Record<string, EntradaMemoria[]> = {};
+  for (const e of memoria) {
+    if (!porCategoria[e.categoria]) porCategoria[e.categoria] = [];
+    porCategoria[e.categoria].push(e);
+  }
+
+  const secciones = Object.entries(porCategoria).map(([cat, items]) => {
+    const titulo = LABEL_CATEGORIA[cat] ?? cat;
+    const lineas = items.map((i) => `  • ${i.clave}: ${i.valor}`).join("\n");
+    return `${titulo}:\n${lineas}`;
+  });
+
+  return (
+    "\n\n--- DATOS EXACTOS DEL NEGOCIO (usa estos datos siempre) ---\n" +
+    secciones.join("\n\n") +
+    "\n--- FIN DE DATOS ---"
+  );
+}
+
 export async function generarRespuesta(
   nombreEmpresa: string,
   historial: MensajeHistorial[],
   promptPersonalizado?: string | null,
-  documentos?: { nombre: string; contenido: string }[]
+  documentos?: { nombre: string; contenido: string }[],
+  memoria?: EntradaMemoria[]
 ): Promise<string> {
   const mensajes = historial.map((m) => ({
     role: m.rol === "CLIENTE" ? ("user" as const) : ("assistant" as const),
@@ -27,16 +63,16 @@ export async function generarRespuesta(
 Responde siempre en español, de forma amable, breve y útil.
 Si no sabes algo específico del negocio, ofrece conectar al cliente con un agente humano.`;
 
+  const seccionMemoria = formatearMemoria(memoria ?? []);
+
   const seccionDocumentos =
     documentos && documentos.length > 0
-      ? `\n\n--- INFORMACIÓN DEL NEGOCIO ---\nUsa estos documentos para responder preguntas del cliente:\n\n` +
-        documentos
-          .map((d) => `## ${d.nombre}\n${d.contenido}`)
-          .join("\n\n") +
-        `\n--- FIN DE LA INFORMACIÓN ---`
+      ? `\n\n--- BASE DE CONOCIMIENTO ---\n` +
+        documentos.map((d) => `## ${d.nombre}\n${d.contenido}`).join("\n\n") +
+        `\n--- FIN ---`
       : "";
 
-  const systemPrompt = basePrompt + seccionDocumentos;
+  const systemPrompt = basePrompt + seccionMemoria + seccionDocumentos;
 
   const respuesta = await anthropic.messages.create({
     model: "claude-haiku-4-5-20251001",

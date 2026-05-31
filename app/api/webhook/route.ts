@@ -72,7 +72,7 @@ export async function POST(request: Request) {
 
     const empresa = await prisma.empresa.findFirst({
       where: { telefonoWhatsapp: numeroEmpresa },
-      include: { documentos: true },
+      include: { documentos: true, memoria: true },
     });
 
     if (!empresa) {
@@ -145,7 +145,8 @@ export async function POST(request: Request) {
       empresa.promptSistema,
       chunksRelevantes.length > 0
         ? [{ nombre: "Base de conocimiento", contenido: chunksRelevantes.join("\n\n---\n\n") }]
-        : empresa.documentos
+        : empresa.documentos,
+      empresa.memoria
     );
 
     await prisma.mensaje.create({
