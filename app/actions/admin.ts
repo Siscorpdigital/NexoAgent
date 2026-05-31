@@ -6,8 +6,11 @@ import { redirect } from "next/navigation";
 import bcrypt from "bcryptjs";
 
 export async function crearEmpresaConUsuario(formData: FormData) {
+  console.log("[crearEmpresaConUsuario] Iniciando...");
   try {
+    console.log("[crearEmpresaConUsuario] Verificando sesión...");
     const session = await auth();
+    console.log("[crearEmpresaConUsuario] Sesión:", session?.user?.email, session?.user?.rol);
 
     if (!session || session.user.rol !== "PROVEEDOR") {
       redirect("/admin/empresas/nueva?error=No+autorizado");
@@ -57,6 +60,7 @@ export async function crearEmpresaConUsuario(formData: FormData) {
     }
 
     // Crear empresa
+    console.log("[crearEmpresaConUsuario] Creando empresa:", { nombre, telefonoWhatsapp });
     const empresa = await prisma.empresa.create({
       data: {
         nombre,
@@ -85,9 +89,11 @@ export async function crearEmpresaConUsuario(formData: FormData) {
       });
     }
 
+    console.log("[crearEmpresaConUsuario] Empresa creada exitosamente:", empresa.id);
     redirect(`/admin?creada=true`);
   } catch (error) {
-    console.error("[crearEmpresaConUsuario] Error:", error);
+    console.error("[crearEmpresaConUsuario] Error completo:", error);
+    console.error("[crearEmpresaConUsuario] Stack:", error instanceof Error ? error.stack : "No stack");
     const mensaje = error instanceof Error ? error.message : "Error+desconocido";
     redirect(`/admin/empresas/nueva?error=${encodeURIComponent(mensaje)}`);
   }
