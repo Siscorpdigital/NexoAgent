@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { auth } from "@/lib/auth";
 import { logout } from "@/app/actions/auth";
 
@@ -10,17 +11,17 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <aside className="w-60 flex flex-col fixed h-full" style={{ background: "#0E2436" }}>
         {/* Logo */}
         <div className="px-5 py-6" style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl grad-bg flex items-center justify-center flex-shrink-0">
-              <span className="text-white font-bold text-sm font-sora">N</span>
-            </div>
-            <div>
-              <span className="text-white font-bold text-base font-sora">
-                Nexo<span className="grad-text">Agent</span>
-              </span>
-              <p className="text-xs mt-0.5" style={{ color: "#41566B" }}>Panel administrador</p>
-            </div>
+          <div className="mb-3">
+            <Image
+              src="/logo.png"
+              alt="NexoAgent"
+              width={180}
+              height={50}
+              priority
+              className="w-full h-auto"
+            />
           </div>
+          <p className="text-xs text-center mt-3 pt-3" style={{ color: "#73869A", borderTop: "1px solid rgba(255,255,255,0.08)" }}>Panel Administrador</p>
         </div>
 
         {/* Nav */}

@@ -15,8 +15,26 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "NexoAgent — Panel de Control",
-  description: "El empleado virtual con IA para WhatsApp",
+  title: "NexoAgent — Tu Empleado Virtual para WhatsApp",
+  description: "Plataforma de agentes conversacionales inteligentes para WhatsApp. Atiende, Agenda, Vende, Recuerda y Crece con IA",
+  keywords: ["NexoAgent", "WhatsApp", "IA", "Asistente Virtual", "Automatización", "CRM", "Agenda"],
+  authors: [{ name: "NexoAgent" }],
+  openGraph: {
+    title: "NexoAgent — Tu Empleado Virtual para WhatsApp",
+    description: "Atiende, Agenda, Vende, Recuerda y Crece con IA",
+    images: ["/logo.png"],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "NexoAgent — Tu Empleado Virtual para WhatsApp",
+    description: "Atiende, Agenda, Vende, Recuerda y Crece con IA",
+    images: ["/logo.png"],
+  },
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
