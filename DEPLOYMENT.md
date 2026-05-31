@@ -108,6 +108,111 @@ railway up
 
 ---
 
+## Deployment en Render
+
+### Paso 1: Crear Web Service
+1. Ve a https://dashboard.render.com
+2. Click en "New" > "Web Service"
+3. Conecta tu repositorio GitHub
+4. Configuración del servicio:
+   - **Name**: nexoagent (o tu preferencia)
+   - **Region**: Oregon (US West) u otro cercano
+   - **Branch**: main
+   - **Root Directory**: (dejar vacío)
+   - **Runtime**: Node
+   - **Build Command**: `npm install && npm run build`
+   - **Start Command**: `npm start`
+   - **Instance Type**: Starter ($7/mes) o Free
+
+### Paso 2: Agregar base de datos PostgreSQL
+1. En el dashboard de Render, click "New" > "PostgreSQL"
+2. Configuración:
+   - **Name**: nexoagent-db
+   - **Database**: nexoagent
+   - **User**: nexoagent
+   - **Region**: Mismo que tu Web Service
+   - **PostgreSQL Version**: 16
+   - **Plan**: Starter ($7/mes) o Free
+3. Click "Create Database"
+4. Espera a que se aprovisione (1-2 minutos)
+5. Copia el **Internal Database URL** (empieza con `postgresql://`)
+
+### Paso 3: Configurar variables de entorno
+En tu Web Service > Environment:
+
+```env
+# Database (usa Internal Database URL para mejor rendimiento)
+DATABASE_URL=postgresql://nexoagent:PASSWORD@dpg-xxxxx-a/nexoagent
+
+# Anthropic
+ANTHROPIC_API_KEY=sk-ant-api03-xxxxxxxxxxxxx
+
+# WhatsApp
+WHATSAPP_VERIFY_TOKEN=tu_token_secreto_aleatorio
+WHATSAPP_TOKEN=tu_meta_access_token
+WHATSAPP_PHONE_NUMBER_ID=tu_phone_number_id
+
+# Twilio (si usas Twilio en lugar de Meta)
+TWILIO_ACCOUNT_SID=ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+TWILIO_AUTH_TOKEN=tu_auth_token
+TWILIO_WHATSAPP_FROM=whatsapp:+14155238886
+
+# App
+NODE_ENV=production
+NEXT_PUBLIC_APP_URL=https://tu-servicio.onrender.com
+```
+
+### Paso 4: Ejecutar migraciones
+**Opción A - Desde tu local:**
+```bash
+# Usa la External Database URL (no la Internal)
+DATABASE_URL="postgresql://nexoagent:PASSWORD@dpg-xxxxx-a.oregon-postgres.render.com/nexoagent" npx prisma migrate deploy
+```
+
+**Opción B - Shell de Render:**
+1. En tu Web Service > Shell tab
+2. Ejecuta:
+```bash
+npx prisma migrate deploy
+```
+
+### Paso 5: Deploy automático
+- Render detecta el push a `main` y deploya automáticamente
+- Puedes ver logs en tiempo real en la pestaña "Logs"
+- El deploy tarda ~3-5 minutos
+
+### Paso 6: Configurar auto-deploy (opcional)
+1. Settings > Build & Deploy
+2. **Auto-Deploy**: Yes (habilitado por defecto)
+3. Cada push a `main` deployará automáticamente
+
+### Troubleshooting Render
+
+**Error: "Build failed - Cannot find module 'prisma'"**
+Solución: Asegúrate de que el build command incluya `npm install`:
+```bash
+npm install && npm run build
+```
+
+**Error: "Database connection failed"**
+Solución: 
+- Usa **Internal Database URL** para mejor rendimiento
+- Verifica que la base de datos esté en la misma región
+- Chequea que las migraciones se hayan ejecutado
+
+**Error: "Deploy timed out"**
+Solución:
+- Render Free tier puede ser lento, considera Starter ($7/mes)
+- Verifica que no haya errores en los logs
+- El primer deploy toma más tiempo (5-10 min)
+
+**App se duerme (Free tier)**
+- Render Free duerme después de 15 min de inactividad
+- Primera request tarda ~30 segundos en despertar
+- Solución: Upgrade a Starter ($7/mes) para 24/7
+
+---
+
 ## Deployment en DigitalOcean App Platform
 
 ### Paso 1: Crear App

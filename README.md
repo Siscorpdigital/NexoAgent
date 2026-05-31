@@ -4,6 +4,11 @@
 
 NexoAgent es un sistema completo de asistentes virtuales potenciados por IA (Claude de Anthropic) que permite a las empresas automatizar y mejorar sus conversaciones con clientes a través de WhatsApp. Incluye gestión de conocimiento, CRM integrado, automatizaciones, analíticas y calendario de citas.
 
+> 📚 **Guías rápidas**: 
+> - [🚀 Deploy en Render](QUICKSTART-RENDER.md)
+> - [📦 Deployment completo](DEPLOYMENT.md)
+> - [🔒 Seguridad](SECURITY.md)
+
 ---
 
 ## ✨ Características principales
