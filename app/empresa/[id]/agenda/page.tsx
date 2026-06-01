@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { crearCita, cambiarEstadoCita, eliminarCita, guardarCalendly, desconectarGoogleCalendar } from "@/app/actions/agenda";
+import { crearCita, cambiarEstadoCita, desconectarGoogleCalendar } from "@/app/actions/agenda";
 import { EstadoCita } from "@/app/generated/prisma/client";
 import { getAuthUrl } from "@/lib/google-calendar";
 

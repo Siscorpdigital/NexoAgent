@@ -1,4 +1,4 @@
-import { google } from "googleapis";
+import { google, type Auth } from "googleapis";
 
 const oauth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_CLIENT_ID,
@@ -28,7 +28,7 @@ export function setCredentials(accessToken: string, refreshToken?: string) {
 }
 
 export async function createEvent(
-  auth: any,
+  auth: Auth.OAuth2Client,
   calendarId: string,
   event: {
     summary: string;
@@ -58,7 +58,7 @@ export async function createEvent(
 }
 
 export async function updateEvent(
-  auth: any,
+  auth: Auth.OAuth2Client,
   calendarId: string,
   eventId: string,
   updates: {
@@ -84,7 +84,7 @@ export async function updateEvent(
   });
 }
 
-export async function deleteEvent(auth: any, calendarId: string, eventId: string) {
+export async function deleteEvent(auth: Auth.OAuth2Client, calendarId: string, eventId: string) {
   const calendar = google.calendar({ version: "v3", auth });
   await calendar.events.delete({ calendarId, eventId });
 }

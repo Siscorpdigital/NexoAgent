@@ -64,9 +64,6 @@ export async function sugerirHorarios(
   duracion: number,
   preferencia?: "mañana" | "tarde" | "noche"
 ): Promise<string[]> {
-  const dia = new Date(fecha);
-  const diaSemana = dia.getDay(); // 0 = domingo, 6 = sábado
-
   // Obtener horarios de la empresa de la memoria
   const horarios = await prisma.memoriaEmpresa.findMany({
     where: {
@@ -96,7 +93,7 @@ export async function sugerirHorarios(
   const finDelDia = new Date(fecha);
   finDelDia.setHours(23, 59, 59, 999);
 
-  const citasDelDia = await prisma.cita.findMany({
+  await prisma.cita.findMany({
     where: {
       empresaId,
       estado: { not: "CANCELADA" },

@@ -4,13 +4,11 @@ import { redirect } from "next/navigation";
 import { cambiarContrasena } from "@/app/actions/usuarios";
 
 export default async function CuentaPage({
-  params,
   searchParams,
 }: {
   params: Promise<{ id: string }>;
   searchParams: Promise<{ error?: string; passwordCambiada?: string }>;
 }) {
-  const { id } = await params;
   const { error, passwordCambiada } = await searchParams;
 
   const session = await auth();

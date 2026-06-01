@@ -62,7 +62,16 @@ export default async function EmpresaConversacionesPage({ params }: { params: Pr
   );
 }
 
-function ConversacionItem({ c, empresaId }: { c: any; empresaId: string }) {
+interface ConversacionItemProps {
+  numeroCliente: string;
+  modoHumano: boolean;
+  mensajes: Array<{ contenido: string }>;
+  _count: { mensajes: number };
+  id: string;
+  actualizadoEn: Date;
+}
+
+function ConversacionItem({ c, empresaId }: { c: ConversacionItemProps; empresaId: string }) {
   return (
     <Link href={`/empresa/${empresaId}/conversaciones/${c.id}`} className="flex items-center gap-4 px-5 py-4 hover:bg-gray-50 transition-colors">
       <div className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">

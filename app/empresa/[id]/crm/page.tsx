@@ -29,7 +29,7 @@ export default async function CRMPage({
   const contactos = await prisma.contacto.findMany({
     where: {
       empresaId: id,
-      ...(filtro ? { tipo: filtro as any } : {}),
+      ...(filtro ? { tipo: filtro as "LEAD" | "CLIENTE" | "PROVEEDOR" } : {}),
     },
     orderBy: { creadoEn: "desc" },
     include: { _count: { select: { conversaciones: true } } },

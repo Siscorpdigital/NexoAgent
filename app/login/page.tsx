@@ -1,12 +1,7 @@
 import { signIn } from "@/lib/auth";
-import { redirect } from "next/navigation";
 import Image from "next/image";
 
-export default function LoginPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ error?: string }>;
-}) {
+export default function LoginPage() {
   async function handleLogin(formData: FormData) {
     "use server";
 

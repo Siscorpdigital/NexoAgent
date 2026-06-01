@@ -189,7 +189,7 @@ export async function POST(request: Request) {
 
       if (hora) {
         // Verificar hora específica
-        const { disponible, conflictos } = await verificarDisponibilidad(
+        const { disponible } = await verificarDisponibilidad(
           empresa.id,
           fecha,
           hora,
@@ -219,7 +219,7 @@ export async function POST(request: Request) {
         let respuestaSugerencias: string;
         if (sugerencias.length > 0) {
           const horariosFormateados = sugerencias.map(h => {
-            const [hora, min] = h.split(':');
+            const [hora] = h.split(':');
             const horaNum = parseInt(hora);
             if (horaNum < 12) return `${h} (mañana)`;
             if (horaNum < 18) return `${h} (tarde)`;
@@ -247,7 +247,7 @@ export async function POST(request: Request) {
       const { nombreCliente, telefono, fecha, hora, duracion, notas } = resultado.tool;
 
       // Verificar disponibilidad antes de crear
-      const { disponible, conflictos } = await verificarDisponibilidad(
+      const { disponible } = await verificarDisponibilidad(
         empresa.id,
         fecha,
         hora,

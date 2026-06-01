@@ -96,7 +96,7 @@ export default async function AutomatizacionesPage({
                     {t?.label} {a.condicion ? `· ${a.condicion}` : ""}
                   </p>
                   <p className="text-xs italic mb-4 line-clamp-2" style={{ color: "#41566B" }}>
-                    "{a.mensaje}"
+                    &ldquo;{a.mensaje}&rdquo;
                   </p>
 
                   <div className="flex items-center justify-between">

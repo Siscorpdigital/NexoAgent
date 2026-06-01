@@ -50,7 +50,7 @@ export default async function EmpresaConversacionDetallePage({
 
       {conversacion.modoHumano && (
         <div className="mb-4 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-700">
-          Esta conversación está en modo humano. La IA no responderá hasta que hagas clic en "Reactivar IA".
+          Esta conversación está en modo humano. La IA no responderá hasta que hagas clic en &ldquo;Reactivar IA&rdquo;.
         </div>
       )}
 

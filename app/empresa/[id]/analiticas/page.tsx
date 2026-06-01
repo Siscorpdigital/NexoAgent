@@ -20,7 +20,6 @@ export default async function AnaliticasPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const hoy = hace(0);
   const hace7 = hace(7);
   const hace30 = hace(30);
 
