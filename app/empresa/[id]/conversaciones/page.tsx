@@ -2,6 +2,8 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { formatTimeAgo } from "@/lib/utils";
 import Breadcrumbs from "@/app/components/Breadcrumbs";
+import ScrollToTop from "@/app/components/ScrollToTop";
+import EmptyState from "@/app/components/help/EmptyState";
 
 export default async function EmpresaConversacionesPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -34,13 +36,16 @@ export default async function EmpresaConversacionesPage({ params }: { params: Pr
       </div>
 
       {conversaciones.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-12 text-center">
-          <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
-          </div>
-          <p className="text-gray-500 text-sm">Aún no hay conversaciones.</p>
-          <p className="text-gray-400 text-xs mt-1">Cuando llegue el primer WhatsApp aparecerá aquí.</p>
-        </div>
+        <EmptyState
+          icon="💬"
+          title="No hay conversaciones aún"
+          description="Cuando llegue el primer mensaje de WhatsApp aparecerá aquí"
+          steps={[
+            "Configura tu número de WhatsApp Business",
+            "Comparte tu número con tus clientes",
+            "Las conversaciones aparecerán automáticamente"
+          ]}
+        />
       ) : (
         <div className="space-y-6">
           {pendientes.length > 0 && (
@@ -68,6 +73,8 @@ export default async function EmpresaConversacionesPage({ params }: { params: Pr
           )}
         </div>
       )}
+
+      <ScrollToTop />
     </div>
   );
 }

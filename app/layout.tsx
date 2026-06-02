@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Sora, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
+import { ToastProvider } from "@/lib/context/ToastContext";
+import ToastContainer from "@/app/components/ui/ToastContainer";
+import SkipLinks from "@/app/components/a11y/SkipLinks";
 
 const sora = Sora({
   variable: "--font-sora",
@@ -40,7 +43,13 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" className={`${sora.variable} ${jakarta.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col font-jakarta">{children}</body>
+      <body className="min-h-full flex flex-col font-jakarta">
+        <ToastProvider>
+          <SkipLinks />
+          <main id="main-content">{children}</main>
+          <ToastContainer />
+        </ToastProvider>
+      </body>
     </html>
   );
 }
