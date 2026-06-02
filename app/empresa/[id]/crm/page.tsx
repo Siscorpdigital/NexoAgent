@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { crearContacto } from "@/app/actions/crm";
-import SearchInput from "@/app/components/data/SearchInput";
+import SearchForm from "@/app/components/data/SearchForm";
 import ScrollToTop from "@/app/components/ScrollToTop";
 import EmptyState from "@/app/components/help/EmptyState";
 import LoadingButton from "@/app/components/ui/LoadingButton";
@@ -66,7 +66,7 @@ export default async function CRMPage({
 
       {/* Búsqueda */}
       <div className="mb-4">
-        <SearchInput placeholder="Buscar por nombre o teléfono..." />
+        <SearchForm placeholder="Buscar por nombre o teléfono..." />
       </div>
 
       {/* Filtros */}
