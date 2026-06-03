@@ -205,17 +205,17 @@ export default function FormularioRespuesta({
             🤖 La IA está respondiendo automáticamente
           </p>
           {activarModoHumano ? (
-            <form action={activarModoHumano}>
+            <form action={activarModoHumano} className="w-full flex justify-center">
               <input type="hidden" name="conversacionId" value={conversacionId} />
               <input type="hidden" name="empresaId" value={empresaId} />
               <input type="hidden" name="numeroCliente" value={numeroCliente} />
-              <LoadingButton
+              <button
                 type="submit"
-                className="text-xs font-medium px-5 py-2 rounded-lg text-white transition-all hover:shadow-md"
+                className="text-sm font-semibold px-6 py-3 rounded-lg text-white transition-all hover:shadow-lg hover:opacity-90"
                 style={{ background: "#FB923C" }}
               >
-                👤 Tomar control (Modo humano)
-              </LoadingButton>
+                👤 Tomar control de la conversación
+              </button>
             </form>
           ) : (
             <p className="text-xs text-gray-500 text-center">
