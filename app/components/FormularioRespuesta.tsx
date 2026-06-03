@@ -1,12 +1,15 @@
 "use client";
 
 import { useRef, useState, useTransition } from "react";
+import LoadingButton from "./ui/LoadingButton";
 
 interface FormularioRespuestaProps {
   conversacionId: string;
   empresaId: string;
+  numeroCliente: string;
   modoHumano: boolean;
   enviarMensajeHumano: (formData: FormData) => Promise<void>;
+  activarModoHumano?: (formData: FormData) => Promise<void>;
 }
 
 type SendStatus = "idle" | "sending" | "sent" | "error";
@@ -14,8 +17,10 @@ type SendStatus = "idle" | "sending" | "sent" | "error";
 export default function FormularioRespuesta({
   conversacionId,
   empresaId,
+  numeroCliente,
   modoHumano,
   enviarMensajeHumano,
+  activarModoHumano,
 }: FormularioRespuestaProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -194,11 +199,24 @@ export default function FormularioRespuesta({
         </button>
       </form>
 
-      {!modoHumano && (
-        <p className="text-xs text-gray-500 mt-2 text-center">
-          La IA está respondiendo automáticamente. Activa el modo humano para
-          responder tú mismo.
-        </p>
+      {!modoHumano && activarModoHumano && (
+        <div className="mt-3 flex flex-col items-center gap-3 p-3 rounded-lg" style={{ background: "rgba(251,146,60,0.08)", border: "1px solid rgba(251,146,60,0.2)" }}>
+          <p className="text-xs text-center" style={{ color: "#FB923C" }}>
+            🤖 La IA está respondiendo automáticamente
+          </p>
+          <form action={activarModoHumano}>
+            <input type="hidden" name="conversacionId" value={conversacionId} />
+            <input type="hidden" name="empresaId" value={empresaId} />
+            <input type="hidden" name="numeroCliente" value={numeroCliente} />
+            <LoadingButton
+              type="submit"
+              className="text-xs font-medium px-5 py-2 rounded-lg text-white transition-all hover:shadow-md"
+              style={{ background: "#FB923C" }}
+            >
+              👤 Tomar control (Modo humano)
+            </LoadingButton>
+          </form>
+        </div>
       )}
 
       {/* Indicador de estado adicional */}

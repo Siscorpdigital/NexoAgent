@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { reactivarIA, enviarMensajeHumano } from "@/app/actions/conversaciones";
+import { reactivarIA, enviarMensajeHumano, activarModoHumanoFormData } from "@/app/actions/conversaciones";
 import FormularioRespuesta from "@/app/components/FormularioRespuesta";
 import ChatMessages from "@/app/components/ChatMessages";
 import LoadingButton from "@/app/components/ui/LoadingButton";
@@ -91,8 +91,10 @@ export default async function EmpresaConversacionDetallePage({
       <FormularioRespuesta
         conversacionId={conversacion.id}
         empresaId={id}
+        numeroCliente={conversacion.numeroCliente}
         modoHumano={conversacion.modoHumano}
         enviarMensajeHumano={enviarMensajeHumano}
+        activarModoHumano={activarModoHumanoFormData}
       />
     </div>
   );

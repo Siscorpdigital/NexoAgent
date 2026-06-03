@@ -37,6 +37,19 @@ export async function activarModoHumano(
   revalidatePath(`/empresa/${empresaId}/conversaciones/${conversacionId}`);
 }
 
+export async function activarModoHumanoFormData(formData: FormData) {
+  const conversacionId = formData.get("conversacionId") as string;
+  const empresaId = formData.get("empresaId") as string;
+  const numeroCliente = formData.get("numeroCliente") as string;
+
+  if (!conversacionId || !empresaId || !numeroCliente) {
+    console.error("Datos incompletos para activar modo humano");
+    return;
+  }
+
+  await activarModoHumano(conversacionId, empresaId, numeroCliente);
+}
+
 export async function enviarMensajeHumano(formData: FormData) {
   const session = await auth();
   if (!session) {
