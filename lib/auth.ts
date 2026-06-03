@@ -33,6 +33,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return null;
         }
 
+        // Si el usuario no tiene password (es OAuth), no puede hacer login con credentials
+        if (!usuario.password) {
+          return null;
+        }
+
         const passwordMatch = await bcrypt.compare(
           credentials.password as string,
           usuario.password
