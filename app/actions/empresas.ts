@@ -131,14 +131,16 @@ export async function eliminarEmpresa(formData: FormData) {
 }
 
 export async function actualizarPrompt(formData: FormData) {
-  try {
-    const rawData = {
-      id: formData.get("id"),
-      prompt: formData.get("prompt"),
-      origen: formData.get("origen"),
-    };
+  const rawData = {
+    id: formData.get("id"),
+    prompt: formData.get("prompt"),
+    origen: formData.get("origen"),
+  };
 
-    const validated = actualizarPromptSchema.parse(rawData);
+  let validated;
+
+  try {
+    validated = actualizarPromptSchema.parse(rawData);
 
     await prisma.empresa.update({
       where: { id: validated.id },
@@ -148,11 +150,6 @@ export async function actualizarPrompt(formData: FormData) {
     });
 
     revalidatePath(`/empresa/${validated.id}/configuracion`);
-
-    if (validated.origen === "empresa") {
-      redirect(`/empresa/${validated.id}/configuracion?guardado=1`);
-    }
-    redirect("/dashboard/empresas?guardado=1");
   } catch (error) {
     if (error instanceof z.ZodError) {
       console.error("Validación fallida:", error.issues);
@@ -161,4 +158,10 @@ export async function actualizarPrompt(formData: FormData) {
     console.error("Error al actualizar prompt:", error);
     throw new Error("Error al actualizar prompt");
   }
+
+  // Redirect fuera del try-catch para que Next.js lo maneje correctamente
+  if (validated.origen === "empresa") {
+    redirect(`/empresa/${validated.id}/configuracion?guardado=1`);
+  }
+  redirect("/dashboard/empresas?guardado=1");
 }
