@@ -41,3 +41,9 @@ yarn-error.log*
 next-env.d.ts
 
 /app/generated/prisma
+
+# migration scripts - archivos generados
+backups/
+vercel-env-template.txt
+env_backup.txt
+.vercel-url.tmp
