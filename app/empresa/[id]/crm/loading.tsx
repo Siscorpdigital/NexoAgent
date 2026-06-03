@@ -1,17 +1,37 @@
+import { Skeleton, SkeletonList } from "@/app/components/ui/Skeleton";
+
 export default function CRMLoading() {
   return (
-    <div className="animate-pulse">
-      <div className="h-8 w-24 bg-gray-200 rounded mb-2" />
-      <div className="h-5 w-64 bg-gray-200 rounded mb-8" />
+    <div>
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <Skeleton className="h-8 w-32 mb-2" />
+          <Skeleton className="h-4 w-64" />
+        </div>
+      </div>
+
+      <div className="mb-4">
+        <Skeleton className="h-10 w-full" />
+      </div>
+
+      <div className="flex gap-2 mb-6">
+        {[1, 2, 3, 4].map((i) => (
+          <Skeleton key={i} className="h-8 w-24 rounded-full" />
+        ))}
+      </div>
 
       <div className="grid grid-cols-3 gap-6">
-        <div className="col-span-2 space-y-3">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} className="h-16 bg-gray-100 rounded-xl" />
-          ))}
+        <div className="col-span-2">
+          <SkeletonList items={6} />
         </div>
-        <div>
-          <div className="h-80 bg-gray-100 rounded-xl" />
+        <div className="bg-white rounded-xl p-5" style={{ border: "1px solid #E2E9F0" }}>
+          <Skeleton className="h-6 w-32 mb-4" />
+          <div className="space-y-3">
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+          </div>
         </div>
       </div>
     </div>

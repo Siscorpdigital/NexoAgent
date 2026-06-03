@@ -4,10 +4,10 @@ import { redirect } from "next/navigation";
 import {
   crearAutomatizacion,
   toggleAutomatizacion,
-  eliminarAutomatizacion,
 } from "@/app/actions/automatizaciones";
 import LoadingButton from "@/app/components/ui/LoadingButton";
 import ScrollToTop from "@/app/components/ScrollToTop";
+import DeleteAutomatizacionButton from "@/app/components/actions/DeleteAutomatizacionButton";
 
 const TRIGGERS = [
   {
@@ -114,13 +114,11 @@ export default async function AutomatizacionesPage({
                           {a.activa ? "Pausar" : "Activar"}
                         </button>
                       </form>
-                      <form action={eliminarAutomatizacion}>
-                        <input type="hidden" name="id" value={a.id} />
-                        <input type="hidden" name="empresaId" value={id} />
-                        <button type="submit" className="text-xs font-medium transition-colors hover:underline" style={{ color: "#DC2626" }}>
-                          Eliminar
-                        </button>
-                      </form>
+                      <DeleteAutomatizacionButton
+                        automatizacionId={a.id}
+                        empresaId={id}
+                        nombre={a.nombre}
+                      />
                     </div>
                   </div>
                 </div>

@@ -5,6 +5,7 @@ import SearchForm from "@/app/components/data/SearchForm";
 import ScrollToTop from "@/app/components/ScrollToTop";
 import EmptyState from "@/app/components/help/EmptyState";
 import LoadingButton from "@/app/components/ui/LoadingButton";
+import CRMHeader from "@/app/components/pages/CRMHeader";
 
 const TIPOS = [
   { key: "TODOS", label: "Todos" },
@@ -55,14 +56,11 @@ export default async function CRMPage({
 
   return (
     <div>
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold font-sora" style={{ color: "#0E2436" }}>CRM</h1>
-          <p className="text-sm mt-1" style={{ color: "#73869A" }}>
-            {contactos.length} contacto{contactos.length !== 1 ? "s" : ""} · Leads, clientes y proveedores
-          </p>
-        </div>
-      </div>
+      <CRMHeader
+        contactosCount={contactos.length}
+        contactos={contactos}
+        empresaId={id}
+      />
 
       {/* Búsqueda */}
       <div className="mb-4">

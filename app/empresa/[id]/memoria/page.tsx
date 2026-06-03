@@ -1,9 +1,10 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { agregarMemoria, eliminarMemoria } from "@/app/actions/memoria";
+import { agregarMemoria } from "@/app/actions/memoria";
 import LoadingButton from "@/app/components/ui/LoadingButton";
 import ScrollToTop from "@/app/components/ScrollToTop";
+import DeleteMemoriaButton from "@/app/components/actions/DeleteMemoriaButton";
 
 const CATEGORIAS = [
   { key: "PRODUCTO",  label: "Productos y Servicios", color: "#2B82F0", bg: "rgba(43,130,240,0.06)",  placeholder: "Ej: Consulta básica",       placeholderValor: "Ej: $500 · incluye revisión y diagnóstico" },
@@ -72,13 +73,13 @@ export default async function MemoriaPage({
                         <p className="text-sm font-medium" style={{ color: "#0E2436" }}>{e.clave}</p>
                         <p className="text-xs mt-0.5" style={{ color: "#73869A" }}>{e.valor}</p>
                       </div>
-                      <form action={eliminarMemoria} className="flex-shrink-0">
-                        <input type="hidden" name="id" value={e.id} />
-                        <input type="hidden" name="empresaId" value={id} />
-                        <button type="submit" className="text-xs transition-colors hover:underline mt-0.5" style={{ color: "#DC2626" }}>
-                          ×
-                        </button>
-                      </form>
+                      <div className="flex-shrink-0 mt-0.5">
+                        <DeleteMemoriaButton
+                          memoriaId={e.id}
+                          empresaId={id}
+                          clave={e.clave}
+                        />
+                      </div>
                     </div>
                   ))
                 )}

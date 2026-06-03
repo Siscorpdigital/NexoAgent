@@ -1,7 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { actualizarContacto, eliminarContacto } from "@/app/actions/crm";
+import { actualizarContacto } from "@/app/actions/crm";
+import DeleteContactButton from "@/app/components/actions/DeleteContactButton";
+import LoadingButton from "@/app/components/ui/LoadingButton";
 
 const BADGE: Record<string, { label: string; color: string; bg: string }> = {
   LEAD:      { label: "Lead",      color: "#2B82F0", bg: "rgba(43,130,240,0.08)" },
@@ -94,23 +96,21 @@ export default async function ContactoDetallePage({
                 className="w-full rounded-lg px-3 py-2 text-sm focus:outline-none resize-none"
                 style={{ border: "1px solid #E2E9F0", color: "#0E2436" }} />
             </div>
-            <button type="submit"
-              className="w-full text-white text-sm font-medium py-2 rounded-lg transition-opacity hover:opacity-90 grad-bg">
+            <LoadingButton
+              type="submit"
+              className="w-full text-white text-sm font-medium py-2 rounded-lg transition-opacity hover:opacity-90 grad-bg"
+            >
               Guardar
-            </button>
+            </LoadingButton>
           </form>
 
           {/* Eliminar */}
           <div className="mt-4 pt-4" style={{ borderTop: "1px solid #F4F7FA" }}>
-            <form action={eliminarContacto}>
-              <input type="hidden" name="id" value={contacto.id} />
-              <input type="hidden" name="empresaId" value={id} />
-              <button type="submit"
-                className="text-xs font-medium transition-colors hover:underline"
-                style={{ color: "#DC2626" }}>
-                Eliminar contacto
-              </button>
-            </form>
+            <DeleteContactButton
+              contactoId={contacto.id}
+              empresaId={id}
+              contactoNombre={contacto.nombre ?? contacto.telefono}
+            />
           </div>
         </div>
 
