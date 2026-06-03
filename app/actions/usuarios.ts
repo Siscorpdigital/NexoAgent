@@ -101,6 +101,11 @@ export async function cambiarContrasena(formData: FormData) {
         redirect(`/admin/usuarios?error=Debes+ingresar+tu+contraseña+actual`);
       }
 
+      // Si el usuario no tiene password (es OAuth), no puede cambiar contraseña
+      if (!usuario.password) {
+        redirect(`/admin/usuarios?error=Usuario+OAuth+no+puede+cambiar+contraseña`);
+      }
+
       const passwordMatch = await bcrypt.compare(passwordActual, usuario.password);
       if (!passwordMatch) {
         redirect(`/admin/usuarios?error=Contraseña+actual+incorrecta`);
