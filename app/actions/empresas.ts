@@ -57,7 +57,8 @@ export async function editarEmpresa(formData: FormData) {
     const rawData = {
       id: formData.get("id"),
       nombre: formData.get("nombre"),
-      telefono: formData.get("telefono"),
+      telefono: formData.get("telefono") || null,
+      telefonoWhatsapp: formData.get("telefonoWhatsapp"),
       rif: formData.get("rif") || null,
       nif: formData.get("nif") || null,
       responsable: formData.get("responsable") || null,
@@ -71,7 +72,8 @@ export async function editarEmpresa(formData: FormData) {
       where: { id: validated.id },
       data: {
         nombre: sanitizeString(validated.nombre),
-        telefonoWhatsapp: sanitizePhone(validated.telefono),
+        telefono: validated.telefono ? sanitizePhone(validated.telefono) : null,
+        telefonoWhatsapp: sanitizePhone(validated.telefonoWhatsapp),
         rif: validated.rif ? sanitizeString(validated.rif) : null,
         nif: validated.nif ? sanitizeString(validated.nif) : null,
         responsable: validated.responsable ? sanitizeString(validated.responsable) : null,

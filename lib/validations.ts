@@ -35,6 +35,14 @@ export const editarEmpresaSchema = z.object({
     .min(10, "El teléfono debe tener al menos 10 dígitos")
     .max(20, "El teléfono no puede exceder 20 caracteres")
     .regex(/^\+?[0-9]+$/, "El teléfono solo puede contener números y el símbolo +")
+    .trim()
+    .optional()
+    .nullable(),
+  telefonoWhatsapp: z
+    .string()
+    .min(10, "El teléfono WhatsApp debe tener al menos 10 dígitos")
+    .max(20, "El teléfono WhatsApp no puede exceder 20 caracteres")
+    .regex(/^\+?[0-9]+$/, "El teléfono WhatsApp solo puede contener números y el símbolo +")
     .trim(),
   rif: z.string().max(50).trim().optional().nullable(),
   nif: z.string().max(50).trim().optional().nullable(),
