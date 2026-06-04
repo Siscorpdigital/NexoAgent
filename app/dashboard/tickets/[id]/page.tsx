@@ -50,18 +50,25 @@ const categoriaLabels = {
 export default async function TicketDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
+  const { id: ticketId } = await params;
+
   const session = await auth();
   if (!session?.user) {
     redirect("/login");
   }
 
-  const ticket = await obtenerTicket(params.id);
+  console.log("🎫 DASHBOARD/TICKETS - Buscando ticket:", ticketId, "Usuario:", session.user.id, "Rol:", session.user.rol);
+
+  const ticket = await obtenerTicket(ticketId);
 
   if (!ticket) {
-    redirect("/dashboard/tickets?error=Ticket+no+encontrado");
+    console.error("❌ DASHBOARD/TICKETS - Ticket no encontrado:", ticketId);
+    redirect("/dashboard/tickets?error=No+tienes+permisos+o+el+ticket+no+existe");
   }
+
+  console.log("✅ DASHBOARD/TICKETS - Ticket cargado:", ticket.id);
 
   // Obtener usuarios proveedores para asignar (solo si es proveedor)
   let proveedores: any[] = [];
