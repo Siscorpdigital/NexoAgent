@@ -29,18 +29,37 @@ export async function crearEmpresaConUsuario(formData: FormData) {
     const email = (formData.get("email") as string) || null;
     const planId = (formData.get("planId") as string) || null;
 
-    if (!nombre || !telefonoWhatsapp) {
-      redirect("/admin/empresas/nueva?error=Faltan+campos+requeridos");
-    }
-
-    if (!planId) {
-      redirect("/admin/empresas/nueva?error=Debe+seleccionar+un+plan");
-    }
-
     // Datos del usuario (opcional)
     const usuarioNombre = formData.get("usuarioNombre") as string;
     const usuarioEmail = formData.get("usuarioEmail") as string;
     const usuarioPassword = formData.get("usuarioPassword") as string;
+
+    // Función para crear URL con datos del formulario
+    const createErrorUrl = (errorMsg: string) => {
+      const params = new URLSearchParams({
+        error: errorMsg,
+        nombre: nombre || "",
+        rif: rif || "",
+        nif: nif || "",
+        responsable: responsable || "",
+        direccion: direccion || "",
+        telefono: telefono || "",
+        telefonoWhatsapp: telefonoWhatsapp || "",
+        email: email || "",
+        planId: planId || "",
+        usuarioNombre: usuarioNombre || "",
+        usuarioEmail: usuarioEmail || "",
+      });
+      return `/admin/empresas/nueva?${params.toString()}`;
+    };
+
+    if (!nombre || !telefonoWhatsapp) {
+      redirect(createErrorUrl("Faltan campos requeridos"));
+    }
+
+    if (!planId) {
+      redirect(createErrorUrl("Debe seleccionar un plan"));
+    }
 
     // Validar que el teléfono no exista
     const existente = await prisma.empresa.findUnique({
@@ -48,7 +67,7 @@ export async function crearEmpresaConUsuario(formData: FormData) {
     });
 
     if (existente) {
-      redirect("/admin/empresas/nueva?error=Ya+existe+una+empresa+con+ese+WhatsApp");
+      redirect(createErrorUrl("Ya existe una empresa con ese WhatsApp"));
     }
 
     // Si se proveen datos de usuario, validar
@@ -58,11 +77,11 @@ export async function crearEmpresaConUsuario(formData: FormData) {
       });
 
       if (usuarioExistente) {
-        redirect("/admin/empresas/nueva?error=Ya+existe+un+usuario+con+ese+email");
+        redirect(createErrorUrl("Ya existe un usuario con ese email"));
       }
 
       if (usuarioPassword.length < 8) {
-        redirect("/admin/empresas/nueva?error=Contraseña+debe+tener+8+caracteres");
+        redirect(createErrorUrl("Contraseña debe tener 8 caracteres"));
       }
     }
 

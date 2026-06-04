@@ -7,7 +7,20 @@ import PasswordInput from "@/app/components/PasswordInput";
 export default async function NuevaEmpresaPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{
+    error?: string;
+    nombre?: string;
+    rif?: string;
+    nif?: string;
+    responsable?: string;
+    direccion?: string;
+    telefono?: string;
+    telefonoWhatsapp?: string;
+    email?: string;
+    planId?: string;
+    usuarioNombre?: string;
+    usuarioEmail?: string;
+  }>;
 }) {
   const session = await auth();
 
@@ -15,7 +28,21 @@ export default async function NuevaEmpresaPage({
     redirect("/dashboard");
   }
 
-  const { error } = await searchParams;
+  const params = await searchParams;
+  const {
+    error,
+    nombre = "",
+    rif = "",
+    nif = "",
+    responsable = "",
+    direccion = "",
+    telefono = "",
+    telefonoWhatsapp = "",
+    email = "",
+    planId = "",
+    usuarioNombre = "",
+    usuarioEmail = "",
+  } = params;
 
   // Obtener planes disponibles
   const planes = await prisma.plan.findMany({
@@ -50,6 +77,7 @@ export default async function NuevaEmpresaPage({
                   type="text"
                   name="nombre"
                   required
+                  defaultValue={nombre}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Ej: Clínica Dental Sonrisas"
                 />
@@ -62,6 +90,7 @@ export default async function NuevaEmpresaPage({
                 <input
                   type="text"
                   name="rif"
+                  defaultValue={rif}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Ej: J-123456789"
                 />
@@ -74,6 +103,7 @@ export default async function NuevaEmpresaPage({
                 <input
                   type="text"
                   name="nif"
+                  defaultValue={nif}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Ej: 12345678A"
                 />
@@ -86,6 +116,7 @@ export default async function NuevaEmpresaPage({
                 <input
                   type="text"
                   name="responsable"
+                  defaultValue={responsable}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Ej: Dr. Juan Pérez"
                 />
@@ -98,6 +129,7 @@ export default async function NuevaEmpresaPage({
                 <input
                   type="text"
                   name="direccion"
+                  defaultValue={direccion}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Ej: Calle Principal #123, Caracas"
                 />
@@ -110,6 +142,7 @@ export default async function NuevaEmpresaPage({
                 <input
                   type="text"
                   name="telefono"
+                  defaultValue={telefono}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Ej: +58 424 1234567"
                 />
@@ -123,6 +156,7 @@ export default async function NuevaEmpresaPage({
                   type="text"
                   name="telefonoWhatsapp"
                   required
+                  defaultValue={telefonoWhatsapp}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Ej: +584241234567"
                 />
@@ -135,6 +169,7 @@ export default async function NuevaEmpresaPage({
                 <input
                   type="email"
                   name="email"
+                  defaultValue={email}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Ej: contacto@clinica.com"
                 />
@@ -148,6 +183,7 @@ export default async function NuevaEmpresaPage({
                 <select
                   name="planId"
                   required
+                  defaultValue={planId}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="">Selecciona un plan...</option>
@@ -177,6 +213,7 @@ export default async function NuevaEmpresaPage({
                 <input
                   type="text"
                   name="usuarioNombre"
+                  defaultValue={usuarioNombre}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Ej: Juan Pérez"
                 />
@@ -189,6 +226,7 @@ export default async function NuevaEmpresaPage({
                 <input
                   type="email"
                   name="usuarioEmail"
+                  defaultValue={usuarioEmail}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Ej: juan@clinica.com"
                 />
