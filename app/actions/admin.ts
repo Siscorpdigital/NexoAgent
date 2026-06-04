@@ -70,6 +70,28 @@ export async function crearEmpresaConUsuario(formData: FormData) {
       redirect(createErrorUrl("Ya existe una empresa con ese WhatsApp"));
     }
 
+    // Validar que el RIF no exista (si se proporcionó)
+    if (rif) {
+      const empresaConRif = await prisma.empresa.findUnique({
+        where: { rif },
+      });
+
+      if (empresaConRif) {
+        redirect(createErrorUrl("Ya existe una empresa con ese RIF"));
+      }
+    }
+
+    // Validar que el NIF no exista (si se proporcionó)
+    if (nif) {
+      const empresaConNif = await prisma.empresa.findUnique({
+        where: { nif },
+      });
+
+      if (empresaConNif) {
+        redirect(createErrorUrl("Ya existe una empresa con ese NIF"));
+      }
+    }
+
     // Si se proveen datos de usuario, validar
     if (usuarioEmail && usuarioPassword) {
       const usuarioExistente = await prisma.usuario.findUnique({

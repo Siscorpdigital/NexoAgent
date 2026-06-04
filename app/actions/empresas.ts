@@ -68,6 +68,40 @@ export async function editarEmpresa(formData: FormData) {
 
     const validated = editarEmpresaSchema.parse(rawData);
 
+    // Validar que el WhatsApp no esté en uso por otra empresa
+    const empresaConWhatsapp = await prisma.empresa.findFirst({
+      where: {
+        telefonoWhatsapp: validated.telefonoWhatsapp,
+        id: { not: validated.id },
+      },
+    });
+
+    if (empresaConWhatsapp) {
+      redirect(`/admin/empresas/${validated.id}/editar?error=${encodeURIComponent("Ya existe una empresa con ese WhatsApp")}`);
+    }
+
+    // Validar que el RIF no esté en uso por otra empresa (si se proporcionó)
+    if (validated.rif) {
+      const empresaConRif = await prisma.empresa.findUnique({
+        where: { rif: validated.rif },
+      });
+
+      if (empresaConRif && empresaConRif.id !== validated.id) {
+        redirect(`/admin/empresas/${validated.id}/editar?error=${encodeURIComponent("Ya existe una empresa con ese RIF")}`);
+      }
+    }
+
+    // Validar que el NIF no esté en uso por otra empresa (si se proporcionó)
+    if (validated.nif) {
+      const empresaConNif = await prisma.empresa.findUnique({
+        where: { nif: validated.nif },
+      });
+
+      if (empresaConNif && empresaConNif.id !== validated.id) {
+        redirect(`/admin/empresas/${validated.id}/editar?error=${encodeURIComponent("Ya existe una empresa con ese NIF")}`);
+      }
+    }
+
     await prisma.empresa.update({
       where: { id: validated.id },
       data: {
