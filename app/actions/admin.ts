@@ -6,9 +6,6 @@ import { redirect } from "next/navigation";
 import bcrypt from "bcryptjs";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 
-// Re-exportar la nueva función de crear empresa con múltiples usuarios
-export { crearEmpresaConUsuarios } from "./usuarios-empresa";
-
 export async function crearEmpresaConUsuario(formData: FormData) {
   console.log("[crearEmpresaConUsuario] Iniciando...");
 
