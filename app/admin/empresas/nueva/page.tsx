@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { crearEmpresaConUsuario } from "@/app/actions/admin";
+import PasswordInput from "@/app/components/PasswordInput";
 
 export default async function NuevaEmpresaPage({
   searchParams,
@@ -194,14 +195,11 @@ export default async function NuevaEmpresaPage({
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Contraseña
-                </label>
-                <input
-                  type="password"
+                <PasswordInput
                   name="usuarioPassword"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  label="Contraseña"
                   placeholder="Mínimo 8 caracteres"
+                  autoComplete="new-password"
                 />
               </div>
             </div>

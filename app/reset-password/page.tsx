@@ -1,6 +1,7 @@
 import { resetPassword } from "@/app/actions/password-reset";
 import Image from "next/image";
 import Link from "next/link";
+import PasswordInput from "@/app/components/PasswordInput";
 
 export default function ResetPasswordPage({
   searchParams,
@@ -70,33 +71,23 @@ export default function ResetPasswordPage({
         <form action={resetPassword} className="space-y-6">
           <input type="hidden" name="token" value={searchParams.token} />
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Nueva contraseña
-            </label>
-            <input
-              type="password"
-              name="password"
-              required
-              minLength={6}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Mínimo 6 caracteres"
-            />
-          </div>
+          <PasswordInput
+            name="password"
+            label="Nueva contraseña"
+            placeholder="Mínimo 6 caracteres"
+            required
+            autoComplete="new-password"
+            className="py-3"
+          />
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Confirmar contraseña
-            </label>
-            <input
-              type="password"
-              name="confirmPassword"
-              required
-              minLength={6}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Confirma tu contraseña"
-            />
-          </div>
+          <PasswordInput
+            name="confirmPassword"
+            label="Confirmar contraseña"
+            placeholder="Confirma tu contraseña"
+            required
+            autoComplete="new-password"
+            className="py-3"
+          />
 
           <button
             type="submit"

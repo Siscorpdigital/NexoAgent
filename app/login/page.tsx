@@ -1,6 +1,7 @@
 import { login, loginWithGoogle } from "@/app/actions/auth";
 import Image from "next/image";
 import Link from "next/link";
+import PasswordInput from "@/app/components/PasswordInput";
 
 export default function LoginPage({
   searchParams,
@@ -64,12 +65,12 @@ export default function LoginPage({
                 ¿Olvidaste tu contraseña?
               </Link>
             </div>
-            <input
-              type="password"
+            <PasswordInput
               name="password"
-              required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="••••••••"
+              required
+              autoComplete="current-password"
+              className="py-3"
             />
           </div>
 
