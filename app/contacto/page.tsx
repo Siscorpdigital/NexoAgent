@@ -8,7 +8,7 @@ export default function ContactoPage({
   searchParams: { success?: string; error?: string };
 }) {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-cyan-50 to-emerald-50 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-cyan-50 to-emerald-50 relative overflow-hidden px-4 sm:px-6">
       {/* Decorative elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-20 w-64 h-64 bg-blue-400/10 rounded-full blur-3xl animate-float"></div>
@@ -18,7 +18,7 @@ export default function ContactoPage({
         ></div>
       </div>
 
-      <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-2xl border border-gray-100 relative z-10 animate-fade-in-up">
+      <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-2xl w-full max-w-2xl border border-gray-100 relative z-10 animate-fade-in-up">
         <div className="text-center mb-6">
           <div className="flex justify-center mb-4">
             <Image
@@ -27,10 +27,10 @@ export default function ContactoPage({
               width={576}
               height={180}
               priority
-              className="w-auto h-24"
+              className="w-auto h-20 sm:h-24"
             />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
             Contacta con Soporte
           </h2>
           <p className="text-gray-600 text-sm">

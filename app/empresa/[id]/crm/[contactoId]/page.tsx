@@ -42,7 +42,7 @@ export default async function ContactoDetallePage({
 
   return (
     <div className="max-w-3xl">
-      <div className="flex items-center gap-3 mb-6">
+      <div className="flex items-center gap-2 sm:gap-3 mb-6">
         <Link href={`/empresa/${id}/crm`} className="transition-colors" style={{ color: "#73869A" }}>
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
         </Link>
@@ -70,7 +70,7 @@ export default async function ContactoDetallePage({
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {/* Editar contacto */}
         <div className="bg-white rounded-xl p-5" style={{ border: "1px solid #E2E9F0" }}>
           <h2 className="font-semibold font-sora text-sm mb-4" style={{ color: "#0E2436" }}>Datos del contacto</h2>

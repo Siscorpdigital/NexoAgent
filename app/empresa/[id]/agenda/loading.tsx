@@ -28,7 +28,7 @@ export default function AgendaLoading() {
       {/* Formulario */}
       <div className="bg-white rounded-xl p-6 mb-6" style={{ border: "1px solid #E2E9F0" }}>
         <Skeleton className="h-6 w-48 mb-5" />
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <Skeleton className="h-10 w-full" />
           <Skeleton className="h-10 w-full" />
           <Skeleton className="h-10 w-full" />

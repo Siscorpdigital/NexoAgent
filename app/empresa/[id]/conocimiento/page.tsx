@@ -42,7 +42,7 @@ export default async function ConocimientoPage({
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-5 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-6">
         <div className="bg-white rounded-xl p-5" style={{ border: "1px solid #E2E9F0" }}>
           <p className="text-3xl font-bold font-sora" style={{ color: "#0E2436" }}>{documentos.length}</p>
           <p className="text-sm mt-1" style={{ color: "#73869A" }}>Documentos</p>

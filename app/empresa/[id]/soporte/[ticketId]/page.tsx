@@ -157,7 +157,7 @@ export default async function TicketDetailPage({
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Conversación */}
           <div className="col-span-2 space-y-6">
             {/* Mensajes */}

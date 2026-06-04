@@ -48,7 +48,7 @@ export default async function EmpresaHomePage({ params }: { params: Promise<{ id
         </div>
       )}
 
-      <div className="grid grid-cols-3 gap-5 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
         <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:shadow-md transition-shadow">
           <div className="flex items-start justify-between mb-2">
             <div>

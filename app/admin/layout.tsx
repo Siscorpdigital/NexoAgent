@@ -3,13 +3,39 @@ import Image from "next/image";
 import { auth } from "@/lib/auth";
 import { logout } from "@/app/actions/auth";
 import KeyboardShortcutsHelp from "@/app/components/KeyboardShortcutsHelp";
+import MobileMenu from "@/app/components/MobileMenu";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
 
+  const navItems = [
+    {
+      href: "/admin",
+      label: "Panel General",
+      icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>,
+    },
+    {
+      href: "/admin/usuarios",
+      label: "Usuarios",
+      icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>,
+    },
+  ];
+
   return (
     <div className="min-h-screen flex" style={{ background: "#F4F7FA" }}>
-      <aside className="w-60 flex flex-col fixed h-full bg-white shadow-lg" style={{ borderRight: "2px solid #10B981", boxShadow: "4px 0 12px rgba(16, 185, 129, 0.1)" }}>
+      {/* Mobile Menu Component */}
+      <MobileMenu
+        navItems={navItems}
+        userName={session?.user.name || "Usuario"}
+        userRole={session?.user.rol || "PROVEEDOR"}
+        onLogout={async () => {
+          "use server";
+          await logout();
+        }}
+      />
+
+      {/* Desktop Sidebar - Hidden on mobile */}
+      <aside className="hidden lg:flex w-60 flex-col fixed h-full bg-white shadow-lg" style={{ borderRight: "2px solid #10B981", boxShadow: "4px 0 12px rgba(16, 185, 129, 0.1)" }}>
         {/* Logo */}
         <div className="px-5 py-6" style={{ borderBottom: "1px solid #E5E7EB" }}>
           <div className="mb-3">
@@ -63,7 +89,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         </div>
       </aside>
 
-      <main className="flex-1 ml-60">
+      {/* Main Content - Responsive */}
+      <main className="flex-1 lg:ml-60 pt-16 lg:pt-0">
         {children}
         <KeyboardShortcutsHelp />
       </main>

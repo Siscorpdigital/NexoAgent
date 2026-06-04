@@ -8,14 +8,14 @@ export default function LoginPage({
   searchParams: { success?: string };
 }) {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-cyan-50 to-emerald-50 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-cyan-50 to-emerald-50 relative overflow-hidden px-4 sm:px-6">
       {/* Decorative elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-20 w-64 h-64 bg-blue-400/10 rounded-full blur-3xl animate-float"></div>
         <div className="absolute bottom-20 right-20 w-96 h-96 bg-emerald-400/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
       </div>
 
-      <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md border border-gray-100 relative z-10 animate-fade-in-up">
+      <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-2xl w-full max-w-md border border-gray-100 relative z-10 animate-fade-in-up">
         <div className="text-center mb-6">
           <div className="flex justify-center mb-4">
             <Image
@@ -24,7 +24,7 @@ export default function LoginPage({
               width={576}
               height={180}
               priority
-              className="w-auto h-28"
+              className="w-auto h-20 sm:h-28"
             />
           </div>
           <p className="text-gray-600 text-sm">Inicia sesión para continuar</p>

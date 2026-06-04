@@ -41,7 +41,7 @@ export default async function AutomatizacionesPage({
         </p>
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Lista de automatizaciones */}
         <div className="space-y-3">
           {automatizaciones.length === 0 ? (

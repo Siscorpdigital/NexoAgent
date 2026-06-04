@@ -74,12 +74,12 @@ export default function ChatMessages({
           className={`flex ${m.rol === "CLIENTE" ? "justify-start" : "justify-end"}`}
         >
           <div
-            className={`max-w-sm ${
+            className={`max-w-[85%] sm:max-w-md lg:max-w-lg ${
               m.rol === "CLIENTE" ? "items-start" : "items-end"
             } flex flex-col gap-1`}
           >
             <div
-              className={`px-4 py-3 rounded-2xl text-sm leading-relaxed ${
+              className={`px-3 py-2.5 sm:px-4 sm:py-3 rounded-2xl text-sm leading-relaxed ${
                 m.rol === "CLIENTE"
                   ? "bg-gray-100 text-gray-800 rounded-tl-sm"
                   : "bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-tr-sm shadow-sm"

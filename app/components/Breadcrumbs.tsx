@@ -42,7 +42,7 @@ export default function Breadcrumbs({
   }
 
   return (
-    <nav className="flex items-center space-x-2 text-sm mb-6" aria-label="Breadcrumb">
+    <nav className="flex items-center flex-wrap gap-1 sm:gap-0 sm:space-x-2 text-xs sm:text-sm mb-4 sm:mb-6" aria-label="Breadcrumb">
       {breadcrumbItems.map((item, index) => {
         const isLast = index === breadcrumbItems.length - 1;
 
@@ -50,7 +50,7 @@ export default function Breadcrumbs({
           <div key={index} className="flex items-center">
             {index > 0 && (
               <svg
-                className="w-4 h-4 text-gray-400 mx-2"
+                className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400 mx-1 sm:mx-2"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -65,11 +65,11 @@ export default function Breadcrumbs({
             )}
 
             {isLast || !item.href ? (
-              <span className="text-gray-900 font-medium">{item.label}</span>
+              <span className="text-gray-900 font-medium truncate max-w-[120px] sm:max-w-none">{item.label}</span>
             ) : (
               <Link
                 href={item.href}
-                className="text-gray-500 hover:text-gray-700 transition-colors"
+                className="text-gray-500 hover:text-gray-700 transition-colors truncate max-w-[100px] sm:max-w-none"
               >
                 {item.label}
               </Link>
