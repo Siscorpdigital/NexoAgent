@@ -20,7 +20,21 @@ export default function PlanSelector({ planes, planActualId }: PlanSelectorProps
   const [seleccionado, setSeleccionado] = useState(planActualId);
 
   return (
-    <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+    <div
+      className="plan-grid"
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(1, 1fr)',
+        gap: '16px'
+      }}
+    >
+      <style jsx>{`
+        @media (min-width: 768px) {
+          .plan-grid {
+            grid-template-columns: repeat(3, 1fr) !important;
+          }
+        }
+      `}</style>
       {planes.map((plan) => {
         const isSelected = seleccionado === plan.id;
         return (
@@ -32,8 +46,6 @@ export default function PlanSelector({ planes, planActualId }: PlanSelectorProps
             }}
             style={{
               width: '100%',
-              maxWidth: 'calc(33.333% - 11px)',
-              minWidth: '280px',
               height: '300px',
               padding: '20px',
               border: '3px solid',
