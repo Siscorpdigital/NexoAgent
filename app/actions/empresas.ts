@@ -82,22 +82,28 @@ export async function editarEmpresa(formData: FormData) {
 
     // Validar que el RIF no esté en uso por otra empresa (si se proporcionó)
     if (validated.rif) {
-      const empresaConRif = await prisma.empresa.findUnique({
-        where: { rif: validated.rif },
+      const empresaConRif = await prisma.empresa.findFirst({
+        where: {
+          rif: validated.rif,
+          id: { not: validated.id },
+        },
       });
 
-      if (empresaConRif && empresaConRif.id !== validated.id) {
+      if (empresaConRif) {
         redirect(`/admin/empresas/${validated.id}/editar?error=${encodeURIComponent("Ya existe una empresa con ese RIF")}`);
       }
     }
 
     // Validar que el NIF no esté en uso por otra empresa (si se proporcionó)
     if (validated.nif) {
-      const empresaConNif = await prisma.empresa.findUnique({
-        where: { nif: validated.nif },
+      const empresaConNif = await prisma.empresa.findFirst({
+        where: {
+          nif: validated.nif,
+          id: { not: validated.id },
+        },
       });
 
-      if (empresaConNif && empresaConNif.id !== validated.id) {
+      if (empresaConNif) {
         redirect(`/admin/empresas/${validated.id}/editar?error=${encodeURIComponent("Ya existe una empresa con ese NIF")}`);
       }
     }
