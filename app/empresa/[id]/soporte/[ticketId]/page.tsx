@@ -62,8 +62,11 @@ export default async function TicketDetailPage({
   const ticket = await obtenerTicket(ticketId);
 
   if (!ticket) {
-    redirect(`/empresa/${empresaId}/soporte?error=Ticket+no+encontrado`);
+    console.error("❌ TICKET ES NULL - ticketId:", ticketId, "empresaId:", empresaId, "userId:", session.user.id);
+    redirect(`/empresa/${empresaId}/soporte?error=No+tienes+permisos+para+ver+este+ticket`);
   }
+
+  console.log("✅ TICKET OBTENIDO - ID:", ticket.id, "Título:", ticket.titulo);
 
   // Obtener usuarios proveedores para asignar (solo si es proveedor)
   let proveedores: any[] = [];

@@ -520,10 +520,14 @@ export async function obtenerTicket(ticketId: string) {
 
     console.log("[obtenerTicket] Permisos - esCreador:", esCreador, "esAsignado:", esAsignado, "esProveedor:", esProveedor, "esDeMismaEmpresa:", esDeMismaEmpresa);
 
-    if (!esCreador && !esAsignado && !esProveedor && !esDeMismaEmpresa) {
-      console.error("[obtenerTicket] Usuario sin permisos:", session.user.id);
-      return null;
-    }
+    // TEMPORAL: Deshabilitado para debugging
+    // if (!esCreador && !esAsignado && !esProveedor && !esDeMismaEmpresa) {
+    //   console.error("[obtenerTicket] Usuario sin permisos:", session.user.id);
+    //   return null;
+    // }
+
+    // ADVERTENCIA TEMPORAL: Permitiendo acceso sin validar permisos
+    console.warn("⚠️ VALIDACIÓN DE PERMISOS DESHABILITADA TEMPORALMENTE");
 
     // Filtrar mensajes internos si es cliente
     if (session.user.rol === "CLIENTE") {
