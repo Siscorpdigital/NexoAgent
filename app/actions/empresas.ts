@@ -80,7 +80,7 @@ export async function editarEmpresa(formData: FormData) {
       },
     });
 
-    redirect(`/empresa/${validated.id}/configuracion?editado=1`);
+    redirect(`/admin/empresas/${validated.id}/editar?editado=1`);
   } catch (error) {
     if (isRedirectError(error)) throw error;
     if (error instanceof z.ZodError) {

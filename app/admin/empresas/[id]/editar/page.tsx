@@ -54,7 +54,7 @@ export default async function EditarEmpresaPage({
         )}
 
         <form action={editarEmpresa} className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 space-y-6">
-          <input type="hidden" name="empresaId" value={empresa.id} />
+          <input type="hidden" name="id" value={empresa.id} />
 
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2">
@@ -136,7 +136,7 @@ export default async function EditarEmpresaPage({
               </label>
               <input
                 type="text"
-                name="telefonoWhatsapp"
+                name="telefono"
                 required
                 defaultValue={empresa.telefonoWhatsapp}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"

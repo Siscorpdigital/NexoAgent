@@ -86,6 +86,9 @@ export default async function AdminPage({
             </h2>
           </div>
 
+          {/* Wrapper con scroll horizontal solo en la tabla */}
+          <div className="overflow-x-auto">
+
           {empresas.length === 0 ? (
             <div className="px-6 py-10">
               <EmptyState
@@ -97,7 +100,7 @@ export default async function AdminPage({
           ) : (
             <>
               {/* Vista de tabla para desktop */}
-              <table className="min-w-full hidden md:table">
+              <table className="w-full hidden md:table" style={{ minWidth: "1200px" }}>
                 <thead style={{ background: "#FAFCFE" }}>
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider" style={{ color: "#73869A" }}>
@@ -334,6 +337,7 @@ export default async function AdminPage({
                 </div>
               ))}
             </div>
+          </div>
             </>
           )}
         </div>
