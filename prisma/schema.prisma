@@ -52,9 +52,9 @@ model Empresa {
   googleTokenExpiry     DateTime?
   direccion             String?
   email                 String?
-  nif                   String?
+  nif                   String?            @unique
   responsable           String?
-  rif                   String?
+  rif                   String?            @unique
   telefono              String?
 
   // Relaciones
