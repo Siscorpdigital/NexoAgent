@@ -1,0 +1,11 @@
+[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m
+[0;34m  🚀 VALIDACIÓN DE PRODUCCIÓN - NEXOAGENT[0m
+[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m
+
+URL: https://nexoagent-sage.vercel.app
+Timeout: 10s por request
+
+[0;34m1. HEALTH CHECKS[0m
+[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m
+  Testing: Health endpoint responds... [0;32m✅ PASS[0m
+  Testing: Homepage loads (200 OK)... [0;31m❌ FAIL[0m
