@@ -1,5 +1,22 @@
 import type { NextConfig } from "next";
 
+// Orígenes autorizados a EMBEBER esta app en un iframe (p. ej. el panel del
+// cotizador de Previsión Familiar). Se configuran con la variable de entorno
+// COTIZADOR_ORIGIN en Vercel, p. ej.:
+//   COTIZADOR_ORIGIN="https://app.tudominio.com"
+// Se aceptan varios orígenes separados por espacio o coma.
+// Si la variable NO está definida, se mantiene el bloqueo total (comportamiento
+// original anti-clickjacking): frame-ancestors 'none' + X-Frame-Options: DENY.
+const embedOrigins = (process.env.COTIZADOR_ORIGIN || "")
+  .split(/[\s,]+/)
+  .map((s) => s.trim())
+  .filter(Boolean);
+
+const frameAncestors =
+  embedOrigins.length > 0
+    ? `frame-ancestors 'self' ${embedOrigins.join(" ")}`
+    : "frame-ancestors 'none'";
+
 const nextConfig: NextConfig = {
   turbopack: {
     root: __dirname,
@@ -11,11 +28,12 @@ const nextConfig: NextConfig = {
       {
         source: "/:path*",
         headers: [
-          // Previene ataques de clickjacking
-          {
-            key: "X-Frame-Options",
-            value: "DENY",
-          },
+          // Previene clickjacking. X-Frame-Options no admite lista de orígenes,
+          // por eso solo se envía cuando NO se autoriza el embebido; cuando sí,
+          // el control fino lo hace la CSP (frame-ancestors), más moderna.
+          ...(embedOrigins.length === 0
+            ? [{ key: "X-Frame-Options", value: "DENY" }]
+            : []),
           // Previene MIME type sniffing
           {
             key: "X-Content-Type-Options",
@@ -46,7 +64,7 @@ const nextConfig: NextConfig = {
               "font-src 'self' https://fonts.gstatic.com",
               "img-src 'self' data: https: blob:",
               "connect-src 'self' https://api.anthropic.com https://www.googleapis.com https://oauth2.googleapis.com",
-              "frame-ancestors 'none'",
+              frameAncestors,
               "base-uri 'self'",
               "form-action 'self'",
             ].join("; "),
