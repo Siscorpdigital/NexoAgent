@@ -1,16 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --ink:       #0E2436;
-  --ink-2:     #41566B;
-  --muted:     #73869A;
-  --blue:      #2B82F0;
-  --teal:      #15B8C9;
-  --green:     #22B26B;
-  --grad:      linear-gradient(100deg, #2B82F0 0%, #15B8C9 52%, #22B26B 100%);
-  --bg:        #FFFFFF;
-  --bg-soft:   #F4F7FA;
-  --line:      #E2E9F0;
+  /* ── Sistema de diseño Previsión Familiar ──
+     Los nombres de token se mantienen para que toda la app herede la
+     nueva paleta sin tocar cada componente. Basado en el cotizador. */
+  --ink:        #2D5750;   /* teal oscuro — sidebar, texto principal */
+  --ink-2:      #3D6E65;   /* teal medio — texto secundario */
+  --muted:      #5C7872;   /* texto atenuado, placeholders */
+  --blue:       #2BAA8A;   /* color primario interactivo (antes azul) */
+  --teal:       #44C4A4;   /* teal claro */
+  --green:      #166534;   /* éxito */
+  --accent:     #F2A020;   /* naranja institucional (acento) */
+  --accent-soft:#FEF3DC;   /* naranja muy suave */
+  --grad:       linear-gradient(120deg, #2D5750 0%, #3D6E65 55%, #2BAA8A 100%);
+  --bg:         #FFFFFF;
+  --bg-soft:    #F4F7F6;   /* crema — fondo principal */
+  --line:       #C8DAD6;   /* bordes, divisores */
 }
 
 @theme inline {
