@@ -3455,17 +3455,10 @@ function updateNexoAccess() {
 window.updateNexoAccess = updateNexoAccess;
 function openNexo() {
   if (!canAccessNexo()) { alert('No tiene acceso a este módulo.'); return; }
-  const frame = $('nexoFrame'), ph = $('nexoPlaceholder'), tab = $('nexoNewTab');
-  if (NEXO_URL) {
-    if (frame) { if (frame.getAttribute('src') !== NEXO_URL) frame.setAttribute('src', NEXO_URL); frame.style.display = 'block'; }
-    if (ph)  ph.style.display = 'none';
-    if (tab) { tab.href = NEXO_URL; tab.style.display = ''; }
-  } else {
-    if (frame) frame.style.display = 'none';
-    if (ph)  ph.style.display = 'flex';
-    if (tab) tab.style.display = 'none';
-  }
-  $('nexoScreen').classList.remove('hidden');
+  // NexoAgent es ahora una sección propia de la misma app (mismo dominio):
+  // se abre su panel en una pestaña nueva. Si aún no hay sesión de NexoAgent,
+  // /dashboard redirige a /login (mismas credenciales del cotizador).
+  window.open('/dashboard', '_blank', 'noopener');
   if (typeof closeSidebar === 'function') closeSidebar();
 }
 function closeNexo() { $('nexoScreen').classList.add('hidden'); }
