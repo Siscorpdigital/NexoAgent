@@ -23,6 +23,70 @@
   --font-jakarta: var(--font-jakarta);
 }
 
+/* ── U4: rebranding global ──
+   Redefinimos las escalas Tailwind que usaban las pantallas (azul/cyan/etc.)
+   para que apunten a la paleta de Previsión Familiar. Así toda la app hereda
+   el look sin editar cada componente. Verde/rojo/ámbar/grises se conservan
+   para éxito, error, aviso y neutros. */
+@theme {
+  /* Azul e índigo → teal oscuro institucional (#2D5750) */
+  --color-blue-50:  #EDF4F2;
+  --color-blue-100: #D3E4DF;
+  --color-blue-200: #AACCC4;
+  --color-blue-300: #79AEA3;
+  --color-blue-400: #4E8B7E;
+  --color-blue-500: #3A7466;
+  --color-blue-600: #2D5750;
+  --color-blue-700: #274A44;
+  --color-blue-800: #1F3A36;
+  --color-blue-900: #182D2A;
+
+  --color-indigo-50:  #EDF4F2;
+  --color-indigo-100: #D3E4DF;
+  --color-indigo-200: #AACCC4;
+  --color-indigo-300: #79AEA3;
+  --color-indigo-400: #4E8B7E;
+  --color-indigo-500: #3A7466;
+  --color-indigo-600: #2D5750;
+  --color-indigo-700: #274A44;
+  --color-indigo-800: #1F3A36;
+  --color-indigo-900: #182D2A;
+
+  /* Cyan, sky y emerald → teal claro de marca (#2BAA8A) */
+  --color-cyan-50:  #EBF8F4;
+  --color-cyan-100: #CFF0E7;
+  --color-cyan-200: #A4E2D2;
+  --color-cyan-300: #6ECFB9;
+  --color-cyan-400: #45BFA1;
+  --color-cyan-500: #2BAA8A;
+  --color-cyan-600: #23917A;
+  --color-cyan-700: #1E7365;
+  --color-cyan-800: #1B5D53;
+  --color-cyan-900: #184A44;
+
+  --color-sky-50:  #EBF8F4;
+  --color-sky-100: #CFF0E7;
+  --color-sky-200: #A4E2D2;
+  --color-sky-300: #6ECFB9;
+  --color-sky-400: #45BFA1;
+  --color-sky-500: #2BAA8A;
+  --color-sky-600: #23917A;
+  --color-sky-700: #1E7365;
+  --color-sky-800: #1B5D53;
+  --color-sky-900: #184A44;
+
+  --color-emerald-50:  #EBF8F4;
+  --color-emerald-100: #CFF0E7;
+  --color-emerald-200: #A4E2D2;
+  --color-emerald-300: #6ECFB9;
+  --color-emerald-400: #45BFA1;
+  --color-emerald-500: #2BAA8A;
+  --color-emerald-600: #23917A;
+  --color-emerald-700: #1E7365;
+  --color-emerald-800: #1B5D53;
+  --color-emerald-900: #184A44;
+}
+
 body {
   background: var(--bg);
   color: var(--ink);

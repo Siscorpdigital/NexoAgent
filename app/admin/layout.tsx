@@ -37,7 +37,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       />
 
       {/* Desktop Sidebar - Hidden on mobile */}
-      <aside className="hidden lg:flex w-60 flex-col fixed h-full bg-white shadow-lg" style={{ borderRight: "2px solid #10B981", boxShadow: "4px 0 12px rgba(16, 185, 129, 0.1)" }}>
+      <aside className="hidden lg:flex w-60 flex-col fixed h-full bg-white shadow-lg" style={{ borderRight: "2px solid #2BAA8A", boxShadow: "4px 0 12px rgba(43, 170, 138, 0.1)" }}>
         {/* Logo */}
         <div className="px-5 py-6" style={{ borderBottom: "1px solid #E5E7EB" }}>
           <div className="mb-3">

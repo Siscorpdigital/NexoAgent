@@ -81,7 +81,7 @@ export default function MobileMenu({
         className={`lg:hidden fixed top-0 left-0 bottom-0 w-72 bg-white shadow-2xl z-50 transform transition-transform duration-300 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
-        style={{ borderRight: "2px solid #10B981" }}
+        style={{ borderRight: "2px solid #2BAA8A" }}
       >
         {/* Logo */}
         <div className="px-5 py-5 border-b border-gray-200">
@@ -99,7 +99,7 @@ export default function MobileMenu({
             <div className="flex items-center gap-2.5 pt-3 border-t border-gray-200">
               <div
                 className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 font-bold text-white text-sm"
-                style={{ background: "linear-gradient(135deg, #0EA5E9 0%, #10B981 100%)" }}
+                style={{ background: "linear-gradient(135deg, #2BAA8A 0%, #2BAA8A 100%)" }}
               >
                 {empresaInicial}
               </div>

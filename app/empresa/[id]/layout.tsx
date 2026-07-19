@@ -99,7 +99,7 @@ export default async function EmpresaLayout({
       />
 
       {/* Desktop Sidebar - Hidden on mobile */}
-      <aside className="hidden lg:flex w-60 flex-col fixed h-full bg-white shadow-lg" style={{ borderRight: "2px solid #10B981", boxShadow: "4px 0 12px rgba(16, 185, 129, 0.1)" }}>
+      <aside className="hidden lg:flex w-60 flex-col fixed h-full bg-white shadow-lg" style={{ borderRight: "2px solid #2BAA8A", boxShadow: "4px 0 12px rgba(43, 170, 138, 0.1)" }}>
         {/* Logo + empresa */}
         <div className="px-5 py-5" style={{ borderBottom: "1px solid #E5E7EB" }}>
           <Link href="/admin" className="flex items-center gap-1.5 mb-4 text-gray-500 hover:text-gray-700 transition-colors">
@@ -117,7 +117,7 @@ export default async function EmpresaLayout({
             />
           </div>
           <div className="flex items-center gap-2.5 pt-3" style={{ borderTop: "1px solid #E5E7EB" }}>
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 font-sora font-bold text-white text-sm" style={{ background: "linear-gradient(135deg, #0EA5E9 0%, #10B981 100%)" }}>
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 font-sora font-bold text-white text-sm" style={{ background: "linear-gradient(135deg, #2BAA8A 0%, #2BAA8A 100%)" }}>
               {empresa.nombre[0]}
             </div>
             <div className="min-w-0">
