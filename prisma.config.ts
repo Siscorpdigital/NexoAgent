@@ -9,6 +9,11 @@ export default defineConfig({
     path: "prisma/migrations",
   },
   datasource: {
-    url: process.env["DATABASE_URL"],
+    // Las migraciones necesitan una conexión directa/sesión (puerto 5432).
+    // El Transaction pooler (6543) NO soporta los locks de `migrate deploy` y
+    // deja el build colgado. Por eso aquí usamos DIRECT_URL (Session pooler,
+    // 5432) y solo caemos a DATABASE_URL si DIRECT_URL no está definida.
+    // El runtime de la app sigue usando DATABASE_URL (pooler 6543) en lib/prisma.ts.
+    url: process.env["DIRECT_URL"] || process.env["DATABASE_URL"],
   },
 });
