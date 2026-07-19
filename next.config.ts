@@ -5,13 +5,22 @@ const nextConfig: NextConfig = {
     root: __dirname,
   },
 
-  // El cotizador (estático, en public/cotizador) sigue accesible en /cotizador
-  // igual que en el sitio anterior, para no romper el acceso de los asesores.
+  // Enrutado del dominio Previsión Familiar (un solo dominio para todo):
+  //  - "/"           → landing pública de marketing (public/inicio.html), como antes.
+  //  - "/cotizador"  → cotizador estático (asesores), como antes.
+  //  - El resto de rutas (/login, /dashboard, /admin, …) las maneja NexoAgent.
+  // Se usa `beforeFiles` para que "/" muestre la landing ANTES que la ruta de la app
+  // (app/page.tsx), que de lo contrario redirige a /dashboard.
   async rewrites() {
-    return [
-      { source: "/cotizador", destination: "/cotizador/Cotizador.html" },
-      { source: "/cotizador/", destination: "/cotizador/Cotizador.html" },
-    ];
+    return {
+      beforeFiles: [
+        { source: "/", destination: "/inicio.html" },
+        { source: "/cotizador", destination: "/cotizador/Cotizador.html" },
+        { source: "/cotizador/", destination: "/cotizador/Cotizador.html" },
+      ],
+      afterFiles: [],
+      fallback: [],
+    };
   },
 
   // Headers de seguridad HTTP

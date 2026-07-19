@@ -27,5 +27,9 @@ export default auth((req) => {
 });
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+  // El middleware de autenticación corre SOLO en las rutas privadas del agente.
+  // La landing pública ("/"), el cotizador ("/cotizador") y el login ("/login")
+  // quedan fuera para que NUNCA pasen por NextAuth (así lo público no depende del
+  // agente y no puede romperse por su autenticación).
+  matcher: ["/dashboard/:path*", "/admin/:path*", "/empresa/:path*"],
 };
