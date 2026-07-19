@@ -5,6 +5,15 @@ const nextConfig: NextConfig = {
     root: __dirname,
   },
 
+  // El cotizador (estático, en public/cotizador) sigue accesible en /cotizador
+  // igual que en el sitio anterior, para no romper el acceso de los asesores.
+  async rewrites() {
+    return [
+      { source: "/cotizador", destination: "/cotizador/Cotizador.html" },
+      { source: "/cotizador/", destination: "/cotizador/Cotizador.html" },
+    ];
+  },
+
   // Headers de seguridad HTTP
   async headers() {
     return [
