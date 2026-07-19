@@ -45,9 +45,11 @@ export const auth = cache(async (): Promise<Session | null> => {
   } = await supabase.auth.getUser();
   if (!user) return null;
 
+  // select("*") en vez de columnas puntuales: así la consulta no falla (400) si
+  // alguna columna opcional (p. ej. acceso_nexo) aún no existe en `profiles`.
   const { data: profile } = await supabase
     .from("profiles")
-    .select("rol, nombre, acceso_nexo")
+    .select("*")
     .eq("id", user.id)
     .maybeSingle();
 

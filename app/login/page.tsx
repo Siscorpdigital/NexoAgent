@@ -29,9 +29,10 @@ export default function LoginPage() {
       }
 
       // Verificar acceso al módulo agente antes de entrar.
+      // select("*") para no fallar (400) si falta alguna columna opcional.
       const { data: profile } = await supabase
         .from("profiles")
-        .select("rol, acceso_nexo")
+        .select("*")
         .eq("id", data.user.id)
         .maybeSingle();
       const { authorized } = mapAcceso(

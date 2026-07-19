@@ -43,7 +43,7 @@ export async function middleware(req: NextRequest) {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("rol, acceso_nexo")
+    .select("*")
     .eq("id", user.id)
     .maybeSingle();
 
