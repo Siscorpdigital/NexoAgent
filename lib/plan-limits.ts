@@ -134,13 +134,15 @@ function checkConversacionesLimit(
 ): LimitCheck {
   const current = empresa.conversacionesEsteMes;
   const max = plan.maxConversacionesMes;
+  const ilimitado = max === -1;
 
   return {
-    allowed: current < max,
+    allowed: ilimitado || current < max,
     current,
-    max,
-    message:
-      current >= max
+    max: ilimitado ? -1 : max,
+    message: ilimitado
+      ? "Conversaciones ilimitadas"
+      : current >= max
         ? `Has alcanzado el límite de ${max} conversaciones este mes. Actualiza tu plan o espera al próximo ciclo.`
         : `Has usado ${current} de ${max} conversaciones este mes.`,
   };

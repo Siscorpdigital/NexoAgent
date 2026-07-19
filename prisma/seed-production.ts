@@ -31,26 +31,52 @@ async function main() {
   console.log("   Rol:", admin.rol);
   console.log("");
 
-  // Crear empresa demo
-  const empresa = await prisma.empresa.upsert({
-    where: { telefonoWhatsapp: "+584121234567" },
+  // Plan interno ILIMITADO (single-tenant Previsión Familiar).
+  // max = -1 significa sin límite; checkPlanLimit lo interpreta así.
+  const planIlimitado = await prisma.plan.upsert({
+    where: { nombre: "Previsión Familiar (Ilimitado)" },
     update: {},
     create: {
-      nombre: "Empresa Demo",
-      telefonoWhatsapp: "+584121234567",
-      email: "contacto@empresademo.com",
-      responsable: "Administrador",
-      promptSistema: `Eres Katy, la asistente virtual de Empresa Demo.
+      nombre: "Previsión Familiar (Ilimitado)",
+      descripcion: "Plan interno sin límites",
+      precio: 0,
+      maxWhatsApps: -1,
+      maxAgentes: -1,
+      maxConversacionesMes: -1,
+      maxDocumentosMB: -1,
+      transferenciaAgentes: true,
+      ruteoInteligente: true,
+      analyticsAvanzados: true,
+      apiPersonalizada: true,
+      soportePrioritario: true,
+      horariosPersonalizados: true,
+      visible: false,
+      orden: 0,
+    },
+  });
+  console.log("✅ Plan ilimitado listo:", planIlimitado.nombre);
 
-Eres amable, profesional y siempre dispuesta a ayudar. Nunca revelas que eres una IA.
+  // Empresa única (single-tenant): Previsión Familiar
+  const empresa = await prisma.empresa.upsert({
+    where: { telefonoWhatsapp: "+584121234567" },
+    update: { planId: planIlimitado.id },
+    create: {
+      nombre: "Previsión Familiar",
+      telefonoWhatsapp: "+584121234567",
+      email: "contacto@previsionfamiliar.com.ve",
+      responsable: "Administrador",
+      planId: planIlimitado.id,
+      promptSistema: `Eres el asistente virtual de Previsión Familiar, C.A.
+
+Eres amable, profesional y cercano. Nunca revelas que eres una IA.
 
 Tu misión es:
-- Atender consultas de clientes
-- Agendar citas
-- Proporcionar información sobre productos y servicios
-- Capturar leads
+- Atender consultas sobre planes de previsión y servicios funerarios
+- Orientar sobre coberturas, afiliación y formas de pago
+- Agendar citas y capturar datos de clientes potenciales
+- Derivar a un asesor humano cuando sea necesario
 
-Siempre respondes en español de forma clara y concisa.`,
+Siempre respondes en español de forma clara, cálida y concisa.`,
     },
   });
 

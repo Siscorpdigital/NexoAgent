@@ -1,17 +1,21 @@
 import type { Metadata } from "next";
-import { Sora, Plus_Jakarta_Sans } from "next/font/google";
+// Tipografías del sistema Previsión Familiar (mismas variables --font-sora /
+// --font-jakarta que usa la app; ahora resuelven a las fuentes del cotizador):
+//   - Títulos: Cormorant Garamond (serif institucional)
+//   - Cuerpo:  Inter
+import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
 import { ToastProvider } from "@/lib/context/ToastContext";
 import ToastContainer from "@/app/components/ui/ToastContainer";
 import SkipLinks from "@/app/components/a11y/SkipLinks";
 
-const sora = Sora({
+const sora = Cormorant_Garamond({
   variable: "--font-sora",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700"],
 });
 
-const jakarta = Plus_Jakarta_Sans({
+const jakarta = Inter({
   variable: "--font-jakarta",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
