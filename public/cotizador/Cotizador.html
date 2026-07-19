@@ -215,6 +215,11 @@ tbody td .sw .fsel{padding:0 24px 0 8px}
 /* Botones de acción de la cotización: más compactos y que bajen de línea en vez de cortarse. */
 .bact .btn{height:40px;padding:0 14px;font-size:13px}
 @media(max-width:860px){.bact .br{flex:1 1 100%}.bact .br .btn{flex:1 1 auto;min-width:120px;padding:0 10px;font-size:12.5px}}
+/* Campo de fecha con teclado + botón de calendario */
+.pf-date-wrap{display:flex;align-items:center;gap:4px}
+.pf-date-wrap>input{flex:1;min-width:0}
+.pf-cal-btn{flex:none;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--border);background:#fff;border-radius:6px;cursor:pointer;padding:0 7px;height:34px;font-size:15px;line-height:1}
+.pf-cal-btn:hover{background:var(--cream)}
 
 /* ── CONFIG STRIP ── */
 .cstrip{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:11px 15px;background:linear-gradient(135deg,var(--pf-slate-dk) 0%,var(--pf-slate) 100%);border-radius:var(--rsm);margin-bottom:18px;border-left:3px solid var(--pf-orange)}
@@ -1309,11 +1314,11 @@ body{padding-bottom:36px}
             </div>
             <div class="pl-field">
               <label class="pl-field-lbl">Vigencia Desde <span class="pl-req">*</span></label>
-              <input class="pl-input" type="text" placeholder="dd/mm/aaaa" maxlength="10" oninput="plFmtDate(this)">
+              <div class="pf-date-wrap"><input class="pl-input" type="text" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10" oninput="plFmtDate(this)"><button type="button" class="pf-cal-btn" title="Elegir en calendario" onclick="pfOpenCalendar(this.previousElementSibling)">📅</button></div>
             </div>
             <div class="pl-field">
               <label class="pl-field-lbl">Vigencia Hasta <span class="pl-req">*</span></label>
-              <input class="pl-input" type="text" placeholder="dd/mm/aaaa" maxlength="10" oninput="plFmtDate(this)">
+              <div class="pf-date-wrap"><input class="pl-input" type="text" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10" oninput="plFmtDate(this)"><button type="button" class="pf-cal-btn" title="Elegir en calendario" onclick="pfOpenCalendar(this.previousElementSibling)">📅</button></div>
             </div>
             <div class="pl-field pl-span2">
               <label class="pl-field-lbl">Frecuencia de Pago</label>
@@ -1369,7 +1374,7 @@ body{padding-bottom:36px}
             </div>
             <div class="pl-field">
               <label class="pl-field-lbl">Fecha de Nacimiento</label>
-              <input class="pl-input" type="text" placeholder="dd/mm/aaaa" maxlength="10" oninput="plFmtDate(this)">
+              <div class="pf-date-wrap"><input class="pl-input" type="text" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10" oninput="plFmtDate(this)" onchange="(function(el){var a=pfCalcAgeFlexible(el.value);var e=document.getElementById('pl-tom-edad');if(e)e.value=(a!=null?a:'');})(this)"><button type="button" class="pf-cal-btn" title="Elegir en calendario" onclick="pfOpenCalendar(this.previousElementSibling)">📅</button></div>
             </div>
             <div class="pl-field">
               <label class="pl-field-lbl">Edad</label>
@@ -1438,7 +1443,7 @@ body{padding-bottom:36px}
                   <td><div class="pl-sel-wrap"><select class="pl-select pl-select-sm pl-par" onchange="plGrupoChange(this,1)"><option>Titular</option><option>Cónyuge</option><option>Padre</option><option>Madre</option><option>Suegro</option><option>Suegra</option><option>Hijo/a</option><option>Hermano/a</option><option>Nieto/a</option></select></div></td>
                   <td><input class="pl-input pl-nom" type="text" placeholder="Nombre completo"></td>
                   <td><input class="pl-input pl-ci" type="text" placeholder="V-00.000.000"></td>
-                  <td><input class="pl-input pl-fnac" type="text" placeholder="dd/mm/aaaa" maxlength="10" onchange="plCalcAge(this,this.closest('tr').querySelector('.pl-age'))" oninput="plFmtDate(this)"></td>
+                  <td><div class="pf-date-wrap"><input class="pl-input pl-fnac" type="text" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10" onchange="plCalcAge(this,this.closest('tr').querySelector('.pl-age'))" oninput="plFmtDate(this)"><button type="button" class="pf-cal-btn" title="Elegir en calendario" onclick="pfOpenCalendar(this.previousElementSibling)">📅</button></div></td>
                   <td><input class="pl-input pl-age" type="text" readonly style="background:var(--cream);text-align:center"></td>
                   <td><div class="pl-sel-wrap"><select class="pl-select pl-select-sm pl-sex"><option>M</option><option>F</option></select></div></td>
                 </tr>
@@ -1446,7 +1451,7 @@ body{padding-bottom:36px}
                   <td><div class="pl-sel-wrap"><select class="pl-select pl-select-sm pl-par"><option>Cónyuge</option><option>Titular</option><option>Padre</option><option>Madre</option><option>Suegro</option><option>Suegra</option><option>Hijo/a</option><option>Hermano/a</option><option>Nieto/a</option></select></div></td>
                   <td><input class="pl-input pl-nom" type="text" placeholder="Nombre completo"></td>
                   <td><input class="pl-input pl-ci" type="text" placeholder="V-00.000.000"></td>
-                  <td><input class="pl-input pl-fnac" type="text" placeholder="dd/mm/aaaa" maxlength="10" onchange="plCalcAge(this,this.closest('tr').querySelector('.pl-age'))" oninput="plFmtDate(this)"></td>
+                  <td><div class="pf-date-wrap"><input class="pl-input pl-fnac" type="text" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10" onchange="plCalcAge(this,this.closest('tr').querySelector('.pl-age'))" oninput="plFmtDate(this)"><button type="button" class="pf-cal-btn" title="Elegir en calendario" onclick="pfOpenCalendar(this.previousElementSibling)">📅</button></div></td>
                   <td><input class="pl-input pl-age" type="text" readonly style="background:var(--cream);text-align:center"></td>
                   <td><div class="pl-sel-wrap"><select class="pl-select pl-select-sm pl-sex"><option>M</option><option>F</option></select></div></td>
                 </tr>
@@ -1454,7 +1459,7 @@ body{padding-bottom:36px}
                   <td><div class="pl-sel-wrap"><select class="pl-select pl-select-sm pl-par"><option>Hijo/a</option><option>Titular</option><option>Cónyuge</option><option>Padre</option><option>Madre</option><option>Suegro</option><option>Suegra</option><option>Hermano/a</option><option>Nieto/a</option></select></div></td>
                   <td><input class="pl-input pl-nom" type="text" placeholder="Nombre completo"></td>
                   <td><input class="pl-input pl-ci" type="text" placeholder="V-00.000.000"></td>
-                  <td><input class="pl-input pl-fnac" type="text" placeholder="dd/mm/aaaa" maxlength="10" onchange="plCalcAge(this,this.closest('tr').querySelector('.pl-age'))" oninput="plFmtDate(this)"></td>
+                  <td><div class="pf-date-wrap"><input class="pl-input pl-fnac" type="text" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10" onchange="plCalcAge(this,this.closest('tr').querySelector('.pl-age'))" oninput="plFmtDate(this)"><button type="button" class="pf-cal-btn" title="Elegir en calendario" onclick="pfOpenCalendar(this.previousElementSibling)">📅</button></div></td>
                   <td><input class="pl-input pl-age" type="text" readonly style="background:var(--cream);text-align:center"></td>
                   <td><div class="pl-sel-wrap"><select class="pl-select pl-select-sm pl-sex"><option>M</option><option>F</option></select></div></td>
                 </tr>
@@ -1462,7 +1467,7 @@ body{padding-bottom:36px}
                   <td><div class="pl-sel-wrap"><select class="pl-select pl-select-sm pl-par"><option>Hijo/a</option><option>Titular</option><option>Cónyuge</option><option>Padre</option><option>Madre</option><option>Suegro</option><option>Suegra</option><option>Hermano/a</option><option>Nieto/a</option></select></div></td>
                   <td><input class="pl-input pl-nom" type="text" placeholder="Nombre completo"></td>
                   <td><input class="pl-input pl-ci" type="text" placeholder="V-00.000.000"></td>
-                  <td><input class="pl-input pl-fnac" type="text" placeholder="dd/mm/aaaa" maxlength="10" onchange="plCalcAge(this,this.closest('tr').querySelector('.pl-age'))" oninput="plFmtDate(this)"></td>
+                  <td><div class="pf-date-wrap"><input class="pl-input pl-fnac" type="text" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10" onchange="plCalcAge(this,this.closest('tr').querySelector('.pl-age'))" oninput="plFmtDate(this)"><button type="button" class="pf-cal-btn" title="Elegir en calendario" onclick="pfOpenCalendar(this.previousElementSibling)">📅</button></div></td>
                   <td><input class="pl-input pl-age" type="text" readonly style="background:var(--cream);text-align:center"></td>
                   <td><div class="pl-sel-wrap"><select class="pl-select pl-select-sm pl-sex"><option>M</option><option>F</option></select></div></td>
                 </tr>
@@ -1470,7 +1475,7 @@ body{padding-bottom:36px}
                   <td><div class="pl-sel-wrap"><select class="pl-select pl-select-sm pl-par"><option>Hijo/a</option><option>Titular</option><option>Cónyuge</option><option>Padre</option><option>Madre</option><option>Suegro</option><option>Suegra</option><option>Hermano/a</option><option>Nieto/a</option></select></div></td>
                   <td><input class="pl-input pl-nom" type="text" placeholder="Nombre completo"></td>
                   <td><input class="pl-input pl-ci" type="text" placeholder="V-00.000.000"></td>
-                  <td><input class="pl-input pl-fnac" type="text" placeholder="dd/mm/aaaa" maxlength="10" onchange="plCalcAge(this,this.closest('tr').querySelector('.pl-age'))" oninput="plFmtDate(this)"></td>
+                  <td><div class="pf-date-wrap"><input class="pl-input pl-fnac" type="text" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10" onchange="plCalcAge(this,this.closest('tr').querySelector('.pl-age'))" oninput="plFmtDate(this)"><button type="button" class="pf-cal-btn" title="Elegir en calendario" onclick="pfOpenCalendar(this.previousElementSibling)">📅</button></div></td>
                   <td><input class="pl-input pl-age" type="text" readonly style="background:var(--cream);text-align:center"></td>
                   <td><div class="pl-sel-wrap"><select class="pl-select pl-select-sm pl-sex"><option>M</option><option>F</option></select></div></td>
                 </tr>
@@ -2564,6 +2569,45 @@ function calcAge(dob) {
   if (t.getMonth() < b.getMonth() || (t.getMonth() === b.getMonth() && t.getDate() < b.getDate())) a--;
   return a < 0 ? 0 : a;
 }
+
+/* ── Fechas: teclado (dd/mm/aaaa) + calendario, en cotizador y planilla ── */
+function pfIsoToDmy(iso) {
+  if (!iso || typeof iso !== 'string') return '';
+  const p = iso.split('-');            // yyyy-mm-dd
+  return (p.length === 3 && p[0].length === 4) ? (p[2] + '/' + p[1] + '/' + p[0]) : '';
+}
+function pfDmyToIso(dmy) {
+  if (!dmy) return '';
+  const p = String(dmy).split('/');    // dd/mm/aaaa
+  return (p.length === 3 && p[2] && p[2].length === 4) ? (p[2] + '-' + p[1] + '-' + p[0]) : '';
+}
+// calcAge tolerante: acepta dd/mm/aaaa (teclado) o yyyy-mm-dd (calendario).
+function pfCalcAgeFlexible(val) {
+  if (!val) return null;
+  const iso = val.indexOf('/') >= 0 ? pfDmyToIso(val) : val;
+  return calcAge(iso);
+}
+// Abre el calendario nativo y vuelca la fecha (como dd/mm/aaaa) en el input de texto.
+function pfOpenCalendar(textEl) {
+  if (!textEl) return;
+  const dp = document.createElement('input');
+  dp.type = 'date';
+  dp.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0;pointer-events:none';
+  document.body.appendChild(dp);
+  const cur = pfDmyToIso(textEl.value);
+  if (cur) dp.value = cur;
+  dp.addEventListener('change', () => {
+    if (dp.value) {
+      textEl.value = pfIsoToDmy(dp.value);
+      textEl.dispatchEvent(new Event('input',  { bubbles: true }));
+      textEl.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+    setTimeout(() => dp.remove(), 0);
+  });
+  try { dp.showPicker(); } catch (e) { dp.focus(); dp.click(); }
+}
+// Paso 2 (grupo familiar del cotizador): actualiza dob desde texto dd/mm/aaaa.
+function updDobText(id, dmy) { upd(id, 'dob', pfDmyToIso(dmy)); }
 function fmtDate(d) {
   if (!d) return '—';
   return new Date(d + 'T12:00:00').toLocaleDateString('es-VE', { day:'2-digit', month:'long', year:'numeric' });
@@ -2757,7 +2801,7 @@ function renderTable() {
         <option value="M"${p.sex==='M'?' selected':''}>M</option>
         <option value="F"${p.sex==='F'?' selected':''}>F</option>
       </select></div></td>
-      <td data-label="F. Nacimiento"><input class="fi" type="date" value="${p.dob}" onchange="upd(${p.id},'dob',this.value)"></td>
+      <td data-label="F. Nacimiento"><div class="pf-date-wrap"><input class="fi" type="text" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10" value="${pfIsoToDmy(p.dob)}" oninput="plFmtDate(this)" onchange="updDobText(${p.id}, this.value)"><button type="button" class="pf-cal-btn" title="Elegir en calendario" onclick="pfOpenCalendar(this.previousElementSibling)">📅</button></div></td>
       <td data-label="Edad"><span class="${ageClass}">${p.age !== null ? p.age : '—'}</span></td>
       <td class="actions"><button class="bdel" onclick="delPerson(${p.id})" title="Eliminar" ${canDel ? '' : 'disabled'}>×</button></td>`;
     tbody.appendChild(tr);
@@ -4969,7 +5013,7 @@ function plSyncPlanPrincipal(val) {
 
 function plCalcAge(dobInput, ageInput) {
   if (!dobInput || !ageInput) return;
-  const age = calcAge(dobInput.value);
+  const age = pfCalcAgeFlexible(dobInput.value);   // acepta dd/mm/aaaa o yyyy-mm-dd
   ageInput.value = age !== null ? age : '';
 }
 
