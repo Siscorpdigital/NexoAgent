@@ -1,119 +1,81 @@
-import NextAuth from "next-auth";
-import Credentials from "next-auth/providers/credentials";
-import Google from "next-auth/providers/google";
-import { prisma } from "@/lib/prisma";
-import bcrypt from "bcryptjs";
+import { cache } from "react";
+import { createSupabaseServer } from "@/lib/supabase/server";
+import { getEmpresaId } from "@/lib/empresa";
+import { ensureUsuario } from "@/lib/usuario-sync";
+import { mapAcceso, type RolNexo } from "@/lib/acceso";
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
-  secret: process.env.AUTH_SECRET,
-  trustHost: true,
-  providers: [
-    Google({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),
-    Credentials({
-      credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          return null;
-        }
+export { mapAcceso };
+export type { RolNexo };
 
-        const usuario = await prisma.usuario.findUnique({
-          where: { email: credentials.email as string },
-          include: { empresa: true },
-        });
+/**
+ * Login unificado (U2): la identidad y los roles vienen de Supabase Auth +
+ * tabla `profiles` (la misma del cotizador). NexoAgent ya NO usa NextAuth para
+ * autenticar; `auth()` conserva la firma que esperan los server components y
+ * actions:  session.user = { id, email, name, rol, empresaId }.
+ *
+ * Acceso al módulo agente:
+ *   - superadmin / admin  → acceso por rol.
+ *   - coordinador / agente → acceso solo si profiles.acceso_nexo = true.
+ *   - resto → sin acceso (rol CLIENTE; el middleware lo redirige).
+ * Todos los autorizados operan como PROVEEDOR (staff, single-tenant).
+ */
 
-        if (!usuario) {
-          return null;
-        }
+export interface SessionUser {
+  id: string;
+  email: string;
+  name: string;
+  rol: RolNexo;
+  empresaId: string | null;
+  /** true si tiene acceso al módulo agente (admin/superadmin o acceso_nexo). */
+  authorized: boolean;
+}
 
-        // Si el usuario no tiene password (es OAuth), no puede hacer login con credentials
-        if (!usuario.password) {
-          return null;
-        }
+export interface Session {
+  user: SessionUser;
+}
 
-        const passwordMatch = await bcrypt.compare(
-          credentials.password as string,
-          usuario.password
-        );
+/**
+ * Devuelve la sesión del usuario o `null` si no hay sesión de Supabase.
+ * Cacheada por request (react cache) para no repetir consultas.
+ */
+export const auth = cache(async (): Promise<Session | null> => {
+  const supabase = await createSupabaseServer();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return null;
 
-        if (!passwordMatch) {
-          return null;
-        }
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("rol, nombre, acceso_nexo")
+    .eq("id", user.id)
+    .maybeSingle();
 
-        return {
-          id: usuario.id,
-          email: usuario.email,
-          name: usuario.nombre,
-          rol: usuario.rol,
-          empresaId: usuario.empresaId,
-        };
-      },
-    }),
-  ],
-  callbacks: {
-    async signIn({ user, account, profile }) {
-      // Si es login con Google, asegurar que el usuario tenga los campos necesarios
-      if (account?.provider === "google" && profile?.email) {
-        const existingUser = await prisma.usuario.findUnique({
-          where: { email: profile.email },
-        });
+  const { authorized, rol } = mapAcceso(profile?.rol, !!profile?.acceso_nexo);
+  const name = profile?.nombre || user.email?.split("@")[0] || "Usuario";
 
-        if (!existingUser) {
-          // Crear usuario desde Google
-          const newUser = await prisma.usuario.create({
-            data: {
-              email: profile.email,
-              nombre: profile.name || profile.email.split("@")[0],
-              image: profile.picture,
-              emailVerified: new Date(),
-              rol: "CLIENTE",
-            },
-          });
-          // Asignar el ID al user para que esté disponible en jwt callback
-          user.id = newUser.id;
-        } else {
-          user.id = existingUser.id;
-        }
-      }
-      return true;
+  let empresaId: string | null = null;
+  if (authorized) {
+    try {
+      empresaId = await getEmpresaId();
+    } catch {
+      /* sin empresa configurada: se resolverá al hacer seed */
+    }
+    try {
+      await ensureUsuario(user.id, user.email ?? "", name);
+    } catch {
+      /* no bloquear el acceso por un fallo de sincronización */
+    }
+  }
+
+  return {
+    user: {
+      id: user.id,
+      email: user.email ?? "",
+      name,
+      rol,
+      empresaId,
+      authorized,
     },
-    async jwt({ token, user, account }) {
-      // En el primer login, agregar info del usuario al token
-      if (user) {
-        const dbUser = await prisma.usuario.findUnique({
-          where: { id: user.id },
-        });
-
-        if (dbUser) {
-          token.id = dbUser.id;
-          token.rol = dbUser.rol;
-          token.empresaId = dbUser.empresaId;
-          token.nombre = dbUser.nombre;
-        }
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      // Pasar info del token a la sesión
-      if (session.user) {
-        session.user.id = token.id as string;
-        session.user.rol = token.rol as "PROVEEDOR" | "CLIENTE";
-        session.user.empresaId = token.empresaId as string | null;
-        session.user.name = token.nombre as string;
-      }
-      return session;
-    },
-  },
-  pages: {
-    signIn: "/login",
-  },
-  session: {
-    strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60, // 30 días
-  },
+  };
 });

@@ -1,24 +1,14 @@
 "use server";
 
-import { signIn, signOut } from "@/lib/auth";
+import { redirect } from "next/navigation";
+import { createSupabaseServer } from "@/lib/supabase/server";
 
-export async function login(formData: FormData) {
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
-
-  await signIn("credentials", {
-    email,
-    password,
-    redirectTo: "/dashboard",
-  });
-}
-
+/**
+ * Cierra la sesión de Supabase (login unificado) y vuelve al login.
+ * El inicio de sesión se hace en el cliente (app/login) con Supabase.
+ */
 export async function logout() {
-  await signOut({ redirectTo: "/login" });
-}
-
-export async function loginWithGoogle() {
-  await signIn("google", {
-    redirectTo: "/dashboard",
-  });
+  const supabase = await createSupabaseServer();
+  await supabase.auth.signOut();
+  redirect("/login");
 }
