@@ -65,7 +65,8 @@ const nextConfig: NextConfig = {
               "font-src 'self' https://fonts.gstatic.com",
               "img-src 'self' data: https: blob:",
               // Supabase (auth/datos + realtime) lo usan el cotizador y, más adelante, el agente.
-              "connect-src 'self' https://api.anthropic.com https://www.googleapis.com https://oauth2.googleapis.com https://*.supabase.co wss://*.supabase.co",
+              // cdnjs lo usa html2pdf (generación de PDF de cotizaciones).
+              "connect-src 'self' https://api.anthropic.com https://www.googleapis.com https://oauth2.googleapis.com https://*.supabase.co wss://*.supabase.co https://cdnjs.cloudflare.com",
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'",
