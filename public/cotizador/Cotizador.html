@@ -210,8 +210,11 @@ tbody td .sw .fsel{padding:0 24px 0 8px}
 .btn-email:hover{background:var(--pf-teal-lt);box-shadow:0 4px 14px rgba(43,170,138,.38);transform:translateY(-1px)}
 .btn-o{background:white;color:var(--navy);border:1.5px solid var(--border)}
 .btn-o:hover{border-color:var(--navy-lt);background:var(--cream)}
-.bact{display:flex;align-items:center;justify-content:space-between;margin-top:26px;padding-top:22px;border-top:1px solid var(--border)}
-.br{display:flex;gap:10px;align-items:center}
+.bact{display:flex;align-items:center;justify-content:space-between;margin-top:26px;padding-top:22px;border-top:1px solid var(--border);flex-wrap:wrap;gap:10px}
+.br{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+/* Botones de acción de la cotización: más compactos y que bajen de línea en vez de cortarse. */
+.bact .btn{height:40px;padding:0 14px;font-size:13px}
+@media(max-width:860px){.bact .br{flex:1 1 100%}.bact .br .btn{flex:1 1 auto;min-width:120px;padding:0 10px;font-size:12.5px}}
 
 /* ── CONFIG STRIP ── */
 .cstrip{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:11px 15px;background:linear-gradient(135deg,var(--pf-slate-dk) 0%,var(--pf-slate) 100%);border-radius:var(--rsm);margin-bottom:18px;border-left:3px solid var(--pf-orange)}
@@ -3983,12 +3986,30 @@ function renderPorEmitir() {
 
 // Restaura la cotización guardada en el estado y abre la planilla prellenada.
 function reopenForEmission(id) {
-  const rec = (window.DB && DB.cotizaciones) ? DB.cotizaciones.findById(id) : null;
+  // Búsqueda robusta: por findById y, si falla, por coincidencia laxa de id
+  // (por si difiere el tipo) tanto en la lista general como en "por emitir".
+  let rec = null;
+  try {
+    if (window.DB && DB.cotizaciones) {
+      rec = DB.cotizaciones.findById(id);
+      if (!rec && typeof DB.cotizaciones.list === 'function')
+        rec = (DB.cotizaciones.list() || []).find(r => String(r.id) === String(id)) || null;
+      if (!rec && typeof loadPorEmitir === 'function')
+        rec = (loadPorEmitir() || []).find(r => String(r.id) === String(id)) || null;
+    }
+  } catch (e) { console.warn('reopenForEmission lookup:', e); }
   if (!rec) { alert('No se encontró la cotización.'); return; }
+
+  // El titular/afiliados normalmente son objeto/array; toleramos que vengan como texto JSON.
+  let t = rec.titular || {};
+  if (typeof t === 'string') { try { t = JSON.parse(t) || {}; } catch (_) { t = {}; } }
+  let afil = rec.afiliados || [];
+  if (typeof afil === 'string') { try { afil = JSON.parse(afil) || []; } catch (_) { afil = []; } }
+  if (!Array.isArray(afil)) afil = [];
+  console.log('[Emitir]', rec.id, '| titular:', t && t.nombres ? (t.nombres + ' ' + (t.apellidos||'')) : '(vacío)', '| afiliados:', afil.length);
 
   const planKey = Object.keys(PLANES).find(k => PLANES[k].nombre === rec.plan) || st.plan;
   const pagoKey = Object.keys(PAGO_INFO).find(k => PAGO_INFO[k].label === rec.formaPago) || st.pago;
-  const t = rec.titular || {};
 
   st.plan  = planKey;
   st.cov   = Number(rec.cobertura) || st.cov;
@@ -4001,7 +4022,7 @@ function reopenForEmission(id) {
     telefono:  t.telefono  || '',
     email:     t.email     || '',
   };
-  st.ppl = (rec.afiliados || []).map(a => ({
+  st.ppl = afil.map(a => ({
     id: ++_id, rel: a.rel || '', name: a.name || '', sex: a.sex || 'M', dob: '', age: (a.age != null ? a.age : null)
   }));
 
