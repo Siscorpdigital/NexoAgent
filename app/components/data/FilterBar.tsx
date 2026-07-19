@@ -28,7 +28,7 @@ interface FilterBarProps {
  * <FilterBar
  *   filters={[
  *     { id: "all", label: "Todos", value: "all", count: 50 },
- *     { id: "lead", label: "Leads", value: "LEAD", count: 25, color: "#2B82F0" },
+ *     { id: "lead", label: "Leads", value: "LEAD", count: 25, color: "#2D5750" },
  *   ]}
  *   activeFilter={activeFilter}
  *   onChange={setActiveFilter}
@@ -63,8 +63,8 @@ export default function FilterBar({
               isActive && hasColor
                 ? { background: filter.color }
                 : isActive
-                ? { background: "#0E2436" }
-                : { border: "1px solid #E2E9F0", color: "#41566B" }
+                ? { background: "#2D5750" }
+                : { border: "1px solid #C8DAD6", color: "#3D6E65" }
             }
           >
             {filter.icon && (
@@ -82,7 +82,7 @@ export default function FilterBar({
                 style={
                   isActive
                     ? { color: "white" }
-                    : { color: filter.color || "#73869A" }
+                    : { color: filter.color || "#5C7872" }
                 }
               >
                 {filter.count}
@@ -150,8 +150,8 @@ export function FilterBarWithUrl({
               isActive && hasColor
                 ? { background: filter.color }
                 : isActive
-                ? { background: "#0E2436" }
-                : { border: "1px solid #E2E9F0", color: "#41566B" }
+                ? { background: "#2D5750" }
+                : { border: "1px solid #C8DAD6", color: "#3D6E65" }
             }
           >
             {filter.icon && <span className="text-base">{filter.icon}</span>}
@@ -163,7 +163,7 @@ export function FilterBarWithUrl({
                   isActive ? "bg-white/20" : "bg-gray-100"
                 )}
                 style={
-                  isActive ? { color: "white" } : { color: filter.color || "#73869A" }
+                  isActive ? { color: "white" } : { color: filter.color || "#5C7872" }
                 }
               >
                 {filter.count}

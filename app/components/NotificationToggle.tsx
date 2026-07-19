@@ -130,8 +130,8 @@ export default function NotificationToggle({ empresaId }: NotificationToggleProp
           disabled={loading}
           className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-50"
           style={{
-            background: "#F4F7FA",
-            color: "#41566B",
+            background: "#F4F7F6",
+            color: "#3D6E65",
           }}
           title="Desactivar notificaciones"
         >
@@ -146,7 +146,7 @@ export default function NotificationToggle({ empresaId }: NotificationToggleProp
           disabled={loading}
           className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-50"
           style={{
-            background: "linear-gradient(135deg, #22B26B 0%, #15B8C9 100%)",
+            background: "linear-gradient(135deg, #2BAA8A 0%, #2BAA8A 100%)",
             color: "white",
           }}
           title="Activar notificaciones"

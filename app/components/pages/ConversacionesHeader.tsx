@@ -15,10 +15,10 @@ export default function ConversacionesHeader({
   return (
     <div className="mb-6 flex items-center justify-between">
       <div>
-        <h1 className="text-2xl font-bold font-sora" style={{ color: "#0E2436" }}>
+        <h1 className="text-2xl font-bold font-sora" style={{ color: "#2D5750" }}>
           Conversaciones
         </h1>
-        <p className="text-sm mt-1" style={{ color: "#73869A" }}>
+        <p className="text-sm mt-1" style={{ color: "#5C7872" }}>
           {conversacionesCount} conversacion{conversacionesCount !== 1 ? "es" : ""} · Todos los chats recibidos por WhatsApp
         </p>
       </div>

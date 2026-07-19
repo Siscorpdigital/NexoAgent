@@ -36,7 +36,7 @@ export default function MemoriaForm({
   );
 
   return (
-    <form action={formAction} className="p-4 space-y-2" style={{ borderTop: "1px solid #F4F7FA", background: "#FAFCFE" }}>
+    <form action={formAction} className="p-4 space-y-2" style={{ borderTop: "1px solid #F4F7F6", background: "#FAFCFE" }}>
       <input type="hidden" name="empresaId" value={empresaId} />
       <input type="hidden" name="categoria" value={categoria} />
 
@@ -53,7 +53,7 @@ export default function MemoriaForm({
         required
         placeholder={placeholder}
         className="w-full rounded-lg px-3 py-2 text-xs focus:outline-none"
-        style={{ border: "1px solid #E2E9F0", color: "#0E2436" }}
+        style={{ border: "1px solid #C8DAD6", color: "#2D5750" }}
       />
       <input
         name="valor"
@@ -61,7 +61,7 @@ export default function MemoriaForm({
         required
         placeholder={placeholderValor}
         className="w-full rounded-lg px-3 py-2 text-xs focus:outline-none"
-        style={{ border: "1px solid #E2E9F0", color: "#0E2436" }}
+        style={{ border: "1px solid #C8DAD6", color: "#2D5750" }}
       />
       <LoadingButton
         type="submit"

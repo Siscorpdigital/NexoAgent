@@ -48,10 +48,10 @@ export default async function AdminPage({
 
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
           <div>
-            <h1 className="text-2xl font-bold font-sora" style={{ color: "#0E2436" }}>
+            <h1 className="text-2xl font-bold font-sora" style={{ color: "#2D5750" }}>
               Panel de Administración
             </h1>
-            <p className="text-sm mt-1" style={{ color: "#73869A" }}>
+            <p className="text-sm mt-1" style={{ color: "#5C7872" }}>
               Gestiona todas las empresas y usuarios
             </p>
           </div>
@@ -66,22 +66,22 @@ export default async function AdminPage({
         {/* Estadísticas */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           {[
-            { label: "Empresas", valor: empresas.length, color: "#2B82F0" },
-            { label: "Con usuario", valor: empresas.filter((e) => e.usuario).length, color: "#22B26B" },
-            { label: "Conversaciones", valor: empresas.reduce((acc, e) => acc + e._count.conversaciones, 0), color: "#15B8C9" },
-            { label: "Contactos", valor: empresas.reduce((acc, e) => acc + e._count.contactos, 0), color: "#FB923C" },
+            { label: "Empresas", valor: empresas.length, color: "#2D5750" },
+            { label: "Con usuario", valor: empresas.filter((e) => e.usuario).length, color: "#2BAA8A" },
+            { label: "Conversaciones", valor: empresas.reduce((acc, e) => acc + e._count.conversaciones, 0), color: "#2BAA8A" },
+            { label: "Contactos", valor: empresas.reduce((acc, e) => acc + e._count.contactos, 0), color: "#F2A020" },
           ].map((stat) => (
-            <div key={stat.label} className="bg-white rounded-xl p-5" style={{ border: "1px solid #E2E9F0" }}>
+            <div key={stat.label} className="bg-white rounded-xl p-5" style={{ border: "1px solid #C8DAD6" }}>
               <p className="text-3xl font-bold font-sora" style={{ color: stat.color }}>{stat.valor}</p>
-              <p className="text-sm mt-1" style={{ color: "#73869A" }}>{stat.label}</p>
+              <p className="text-sm mt-1" style={{ color: "#5C7872" }}>{stat.label}</p>
             </div>
           ))}
         </div>
 
         {/* Lista de empresas */}
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden" style={{ border: "1px solid #E2E9F0" }}>
-          <div className="px-6 py-4" style={{ borderBottom: "1px solid #F4F7FA" }}>
-            <h2 className="font-semibold font-sora text-sm" style={{ color: "#0E2436" }}>
+        <div className="bg-white rounded-xl shadow-sm overflow-hidden" style={{ border: "1px solid #C8DAD6" }}>
+          <div className="px-6 py-4" style={{ borderBottom: "1px solid #F4F7F6" }}>
+            <h2 className="font-semibold font-sora text-sm" style={{ color: "#2D5750" }}>
               Empresas registradas · {empresas.length}
             </h2>
           </div>
@@ -103,40 +103,40 @@ export default async function AdminPage({
               <table className="w-full hidden md:table">
                 <thead style={{ background: "#FAFCFE" }}>
                   <tr>
-                    <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider" style={{ color: "#73869A" }}>
+                    <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider" style={{ color: "#5C7872" }}>
                       Empresa
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider" style={{ color: "#73869A" }}>
+                    <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider" style={{ color: "#5C7872" }}>
                       Contacto
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider" style={{ color: "#73869A" }}>
+                    <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider" style={{ color: "#5C7872" }}>
                       Plan
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider" style={{ color: "#73869A" }}>
+                    <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider" style={{ color: "#5C7872" }}>
                       Stats
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider" style={{ color: "#73869A" }}>
+                    <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider" style={{ color: "#5C7872" }}>
                       Acciones
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y" style={{ borderColor: "#F4F7FA" }}>
+                <tbody className="bg-white divide-y" style={{ borderColor: "#F4F7F6" }}>
                 {empresas.map((empresa) => (
                   <tr key={empresa.id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
                         <div
                           className="w-8 h-8 rounded-lg flex items-center justify-center font-semibold font-sora text-sm flex-shrink-0"
-                          style={{ background: "rgba(43,130,240,0.08)", color: "#2B82F0" }}
+                          style={{ background: "rgba(43,130,240,0.08)", color: "#2D5750" }}
                         >
                           {empresa.nombre[0]}
                         </div>
                         <div className="min-w-0">
-                          <div className="font-medium text-sm font-sora truncate" style={{ color: "#0E2436" }}>
+                          <div className="font-medium text-sm font-sora truncate" style={{ color: "#2D5750" }}>
                             {empresa.nombre}
                           </div>
                           {empresa.responsable && (
-                            <div className="text-xs truncate" style={{ color: "#73869A" }}>
+                            <div className="text-xs truncate" style={{ color: "#5C7872" }}>
                               {empresa.responsable}
                             </div>
                           )}
@@ -144,11 +144,11 @@ export default async function AdminPage({
                       </div>
                     </td>
                     <td className="px-4 py-3">
-                      <div className="text-xs" style={{ color: "#0E2436" }}>
+                      <div className="text-xs" style={{ color: "#2D5750" }}>
                         {empresa.email || empresa.telefonoWhatsapp}
                       </div>
                       {empresa.usuario && (
-                        <div className="text-xs mt-0.5" style={{ color: "#73869A" }}>
+                        <div className="text-xs mt-0.5" style={{ color: "#5C7872" }}>
                           👤 {empresa.usuario.nombre}
                         </div>
                       )}
@@ -156,7 +156,7 @@ export default async function AdminPage({
                     <td className="px-4 py-3">
                       {empresa.plan ? (
                         <div>
-                          <div className="text-xs font-medium" style={{ color: "#0E2436" }}>
+                          <div className="text-xs font-medium" style={{ color: "#2D5750" }}>
                             {empresa.plan.nombre}
                           </div>
                           <span className={`inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] font-medium ${
@@ -172,13 +172,13 @@ export default async function AdminPage({
                         <Link
                           href={`/admin/empresas/${empresa.id}/plan`}
                           className="text-xs hover:underline"
-                          style={{ color: "#2B82F0" }}
+                          style={{ color: "#2D5750" }}
                         >
                           + Plan
                         </Link>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-xs" style={{ color: "#73869A" }}>
+                    <td className="px-4 py-3 text-xs" style={{ color: "#5C7872" }}>
                       <div>{empresa._count.conversaciones} conv</div>
                       <div>{empresa._count.contactos} cont</div>
                     </td>
@@ -187,14 +187,14 @@ export default async function AdminPage({
                         <Link
                           href={`/empresa/${empresa.id}`}
                           className="hover:underline"
-                          style={{ color: "#2B82F0" }}
+                          style={{ color: "#2D5750" }}
                         >
                           Ver
                         </Link>
                         <Link
                           href={`/admin/empresas/${empresa.id}/editar`}
                           className="hover:underline"
-                          style={{ color: "#73869A" }}
+                          style={{ color: "#5C7872" }}
                         >
                           Editar
                         </Link>
@@ -206,22 +206,22 @@ export default async function AdminPage({
             </table>
 
             {/* Vista de cards para móvil */}
-            <div className="md:hidden divide-y" style={{ borderColor: "#F4F7FA" }}>
+            <div className="md:hidden divide-y" style={{ borderColor: "#F4F7F6" }}>
               {empresas.map((empresa) => (
                 <div key={empresa.id} className="p-4">
                   <div className="flex items-start gap-3 mb-3">
                     <div
                       className="w-10 h-10 rounded-lg flex items-center justify-center font-semibold font-sora flex-shrink-0"
-                      style={{ background: "rgba(43,130,240,0.08)", color: "#2B82F0" }}
+                      style={{ background: "rgba(43,130,240,0.08)", color: "#2D5750" }}
                     >
                       {empresa.nombre[0]}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="font-medium text-sm font-sora" style={{ color: "#0E2436" }}>
+                      <div className="font-medium text-sm font-sora" style={{ color: "#2D5750" }}>
                         {empresa.nombre}
                       </div>
                       {empresa.rif && (
-                        <div className="text-xs mt-0.5" style={{ color: "#73869A" }}>
+                        <div className="text-xs mt-0.5" style={{ color: "#5C7872" }}>
                           {empresa.rif}
                         </div>
                       )}
@@ -230,14 +230,14 @@ export default async function AdminPage({
 
                   <div className="space-y-2 text-sm mb-3">
                     <div>
-                      <span className="text-xs font-medium" style={{ color: "#73869A" }}>Responsable: </span>
-                      <span style={{ color: "#0E2436" }}>{empresa.responsable || "-"}</span>
+                      <span className="text-xs font-medium" style={{ color: "#5C7872" }}>Responsable: </span>
+                      <span style={{ color: "#2D5750" }}>{empresa.responsable || "-"}</span>
                     </div>
                     <div>
-                      <span className="text-xs font-medium" style={{ color: "#73869A" }}>Plan: </span>
+                      <span className="text-xs font-medium" style={{ color: "#5C7872" }}>Plan: </span>
                       {empresa.plan ? (
                         <>
-                          <span style={{ color: "#0E2436" }}>{empresa.plan.nombre}</span>
+                          <span style={{ color: "#2D5750" }}>{empresa.plan.nombre}</span>
                           <span className={`ml-2 px-2 py-0.5 rounded text-xs font-medium ${
                             empresa.estadoPlan === "ACTIVO" ? "bg-green-100 text-green-700" :
                             empresa.estadoPlan === "TRIAL" ? "bg-blue-100 text-blue-700" :
@@ -251,26 +251,26 @@ export default async function AdminPage({
                         <Link
                           href={`/admin/empresas/${empresa.id}/plan`}
                           className="text-xs hover:underline"
-                          style={{ color: "#2B82F0" }}
+                          style={{ color: "#2D5750" }}
                         >
                           + Asignar plan
                         </Link>
                       )}
                     </div>
                     <div>
-                      <span className="text-xs font-medium" style={{ color: "#73869A" }}>Contacto: </span>
-                      <span style={{ color: "#0E2436" }}>{empresa.email || "-"}</span>
+                      <span className="text-xs font-medium" style={{ color: "#5C7872" }}>Contacto: </span>
+                      <span style={{ color: "#2D5750" }}>{empresa.email || "-"}</span>
                       {empresa.telefonoWhatsapp && (
-                        <div className="text-xs mt-0.5" style={{ color: "#73869A" }}>
+                        <div className="text-xs mt-0.5" style={{ color: "#5C7872" }}>
                           {empresa.telefonoWhatsapp}
                         </div>
                       )}
                     </div>
                     {empresa.usuario ? (
                       <div>
-                        <span className="text-xs font-medium" style={{ color: "#73869A" }}>Usuario: </span>
-                        <span style={{ color: "#0E2436" }}>{empresa.usuario.nombre}</span>
-                        <div className="text-xs mt-0.5" style={{ color: "#73869A" }}>
+                        <span className="text-xs font-medium" style={{ color: "#5C7872" }}>Usuario: </span>
+                        <span style={{ color: "#2D5750" }}>{empresa.usuario.nombre}</span>
+                        <div className="text-xs mt-0.5" style={{ color: "#5C7872" }}>
                           {empresa.usuario.email}
                         </div>
                       </div>
@@ -278,12 +278,12 @@ export default async function AdminPage({
                       <Link
                         href={`/admin/empresas/${empresa.id}/usuario`}
                         className="text-xs hover:underline inline-block"
-                        style={{ color: "#2B82F0" }}
+                        style={{ color: "#2D5750" }}
                       >
                         + Crear usuario
                       </Link>
                     )}
-                    <div className="text-xs" style={{ color: "#73869A" }}>
+                    <div className="text-xs" style={{ color: "#5C7872" }}>
                       <div>{empresa._count.conversaciones} conv · {empresa._count.contactos} contactos · {empresa._count.citas} citas</div>
                     </div>
                   </div>
@@ -292,14 +292,14 @@ export default async function AdminPage({
                     <Link
                       href={`/empresa/${empresa.id}`}
                       className="flex-1 text-center px-3 py-2 rounded-lg hover:bg-blue-50 transition-colors"
-                      style={{ color: "#2B82F0", border: "1px solid #2B82F0" }}
+                      style={{ color: "#2D5750", border: "1px solid #2D5750" }}
                     >
                       Ver
                     </Link>
                     <Link
                       href={`/admin/empresas/${empresa.id}/editar`}
                       className="flex-1 text-center px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors"
-                      style={{ color: "#73869A", border: "1px solid #E2E9F0" }}
+                      style={{ color: "#5C7872", border: "1px solid #C8DAD6" }}
                     >
                       Editar
                     </Link>

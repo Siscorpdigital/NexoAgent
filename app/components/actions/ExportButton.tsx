@@ -45,7 +45,7 @@ export default function ExportButton({
       <button
         onClick={() => setShowMenu(!showMenu)}
         className={buttonClass}
-        style={variant === "secondary" ? { color: "#41566B", border: "1px solid #E2E9F0" } : undefined}
+        style={variant === "secondary" ? { color: "#3D6E65", border: "1px solid #C8DAD6" } : undefined}
       >
         <span className="flex items-center gap-2">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -71,19 +71,19 @@ export default function ExportButton({
           {/* Menu */}
           <div
             className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg z-20"
-            style={{ border: "1px solid #E2E9F0" }}
+            style={{ border: "1px solid #C8DAD6" }}
           >
             <button
               onClick={() => handleExport("csv")}
               className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 rounded-t-lg transition-colors"
-              style={{ color: "#0E2436" }}
+              style={{ color: "#2D5750" }}
             >
               📊 CSV
             </button>
             <button
               onClick={() => handleExport("json")}
               className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 rounded-b-lg transition-colors"
-              style={{ color: "#0E2436", borderTop: "1px solid #F4F7FA" }}
+              style={{ color: "#2D5750", borderTop: "1px solid #F4F7F6" }}
             >
               📄 JSON
             </button>

@@ -26,8 +26,8 @@ export default function CitaForm({ empresaId }: CitaFormProps) {
   );
 
   return (
-    <div className="bg-white rounded-xl p-6 mb-6" style={{ border: "1px solid #E2E9F0" }}>
-      <h2 className="text-lg font-semibold font-sora mb-5" style={{ color: "#0E2436" }}>
+    <div className="bg-white rounded-xl p-6 mb-6" style={{ border: "1px solid #C8DAD6" }}>
+      <h2 className="text-lg font-semibold font-sora mb-5" style={{ color: "#2D5750" }}>
         ➕ Agendar nueva cita/tarea
       </h2>
 
@@ -42,7 +42,7 @@ export default function CitaForm({ empresaId }: CitaFormProps) {
 
       {state.success && (
         <div className="mb-4 rounded-xl px-4 py-3 text-sm font-medium flex items-center gap-2"
-          style={{ background: "rgba(34,178,107,0.08)", border: "1px solid rgba(34,178,107,0.25)", color: "#22B26B" }}>
+          style={{ background: "rgba(43, 170, 138,0.08)", border: "1px solid rgba(43, 170, 138,0.25)", color: "#2BAA8A" }}>
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
@@ -54,7 +54,7 @@ export default function CitaForm({ empresaId }: CitaFormProps) {
         <input type="hidden" name="empresaId" value={empresaId} />
 
         <div>
-          <label className="block text-xs font-medium mb-1.5" style={{ color: "#41566B" }}>
+          <label className="block text-xs font-medium mb-1.5" style={{ color: "#3D6E65" }}>
             Nombre del cliente <span style={{ color: "#DC2626" }}>*</span>
           </label>
           <input
@@ -63,12 +63,12 @@ export default function CitaForm({ empresaId }: CitaFormProps) {
             required
             placeholder="Ej: Juan Pérez"
             className="w-full px-3 py-2.5 rounded-lg text-sm focus:outline-none"
-            style={{ border: "1px solid #E2E9F0", color: "#0E2436" }}
+            style={{ border: "1px solid #C8DAD6", color: "#2D5750" }}
           />
         </div>
 
         <div>
-          <label className="block text-xs font-medium mb-1.5" style={{ color: "#41566B" }}>
+          <label className="block text-xs font-medium mb-1.5" style={{ color: "#3D6E65" }}>
             Teléfono (WhatsApp) <span style={{ color: "#DC2626" }}>*</span>
           </label>
           <input
@@ -77,12 +77,12 @@ export default function CitaForm({ empresaId }: CitaFormProps) {
             required
             placeholder="+521234567890"
             className="w-full px-3 py-2.5 rounded-lg text-sm focus:outline-none"
-            style={{ border: "1px solid #E2E9F0", color: "#0E2436" }}
+            style={{ border: "1px solid #C8DAD6", color: "#2D5750" }}
           />
         </div>
 
         <div>
-          <label className="block text-xs font-medium mb-1.5" style={{ color: "#41566B" }}>
+          <label className="block text-xs font-medium mb-1.5" style={{ color: "#3D6E65" }}>
             Fecha y hora de inicio <span style={{ color: "#DC2626" }}>*</span>
           </label>
           <input
@@ -90,19 +90,19 @@ export default function CitaForm({ empresaId }: CitaFormProps) {
             name="inicio"
             required
             className="w-full px-3 py-2.5 rounded-lg text-sm focus:outline-none"
-            style={{ border: "1px solid #E2E9F0", color: "#0E2436" }}
+            style={{ border: "1px solid #C8DAD6", color: "#2D5750" }}
           />
         </div>
 
         <div>
-          <label className="block text-xs font-medium mb-1.5" style={{ color: "#41566B" }}>
+          <label className="block text-xs font-medium mb-1.5" style={{ color: "#3D6E65" }}>
             Duración <span style={{ color: "#DC2626" }}>*</span>
           </label>
           <select
             name="duracion"
             defaultValue="60"
             className="w-full px-3 py-2.5 rounded-lg text-sm focus:outline-none"
-            style={{ border: "1px solid #E2E9F0", color: "#0E2436" }}
+            style={{ border: "1px solid #C8DAD6", color: "#2D5750" }}
           >
             <option value="15">15 min</option>
             <option value="30">30 min</option>
@@ -114,7 +114,7 @@ export default function CitaForm({ empresaId }: CitaFormProps) {
         </div>
 
         <div className="md:col-span-2">
-          <label className="block text-xs font-medium mb-1.5" style={{ color: "#41566B" }}>
+          <label className="block text-xs font-medium mb-1.5" style={{ color: "#3D6E65" }}>
             Notas adicionales
           </label>
           <textarea
@@ -122,7 +122,7 @@ export default function CitaForm({ empresaId }: CitaFormProps) {
             rows={3}
             placeholder="Detalles de la cita o tarea..."
             className="w-full px-3 py-2.5 rounded-lg text-sm focus:outline-none resize-none"
-            style={{ border: "1px solid #E2E9F0", color: "#0E2436" }}
+            style={{ border: "1px solid #C8DAD6", color: "#2D5750" }}
           />
         </div>
 

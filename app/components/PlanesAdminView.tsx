@@ -51,7 +51,7 @@ export default function PlanesAdminView({ planes }: PlanesAdminViewProps) {
             <div
               key={plan.id}
               className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden"
-              style={{ border: "2px solid #E2E9F0" }}
+              style={{ border: "2px solid #C8DAD6" }}
             >
               {/* Header */}
               <div
@@ -59,10 +59,10 @@ export default function PlanesAdminView({ planes }: PlanesAdminViewProps) {
                 style={{
                   background:
                     plan.nombre === "STARTER"
-                      ? "linear-gradient(135deg, #2B82F0 0%, #15B8C9 100%)"
+                      ? "linear-gradient(135deg, #2D5750 0%, #2BAA8A 100%)"
                       : plan.nombre === "BUSINESS"
-                      ? "linear-gradient(135deg, #15B8C9 0%, #22B26B 100%)"
-                      : "linear-gradient(135deg, #22B26B 0%, #2B82F0 100%)",
+                      ? "linear-gradient(135deg, #2BAA8A 0%, #2BAA8A 100%)"
+                      : "linear-gradient(135deg, #2BAA8A 0%, #2D5750 100%)",
                 }}
               >
                 <h3 className="text-xl font-bold text-white font-sora">
@@ -80,26 +80,26 @@ export default function PlanesAdminView({ planes }: PlanesAdminViewProps) {
               {/* Límites */}
               <div className="px-6 py-5 space-y-3">
                 <div className="flex items-center justify-between text-sm">
-                  <span style={{ color: "#41566B" }}>WhatsApp:</span>
-                  <span className="font-semibold" style={{ color: "#0E2436" }}>
+                  <span style={{ color: "#3D6E65" }}>WhatsApp:</span>
+                  <span className="font-semibold" style={{ color: "#2D5750" }}>
                     {formatearLimite(plan.maxWhatsApps, "")}
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span style={{ color: "#41566B" }}>Agentes:</span>
-                  <span className="font-semibold" style={{ color: "#0E2436" }}>
+                  <span style={{ color: "#3D6E65" }}>Agentes:</span>
+                  <span className="font-semibold" style={{ color: "#2D5750" }}>
                     {formatearLimite(plan.maxAgentes, "")}
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span style={{ color: "#41566B" }}>Conversaciones/mes:</span>
-                  <span className="font-semibold" style={{ color: "#0E2436" }}>
+                  <span style={{ color: "#3D6E65" }}>Conversaciones/mes:</span>
+                  <span className="font-semibold" style={{ color: "#2D5750" }}>
                     {plan.maxConversacionesMes.toLocaleString()}
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span style={{ color: "#41566B" }}>Documentos:</span>
-                  <span className="font-semibold" style={{ color: "#0E2436" }}>
+                  <span style={{ color: "#3D6E65" }}>Documentos:</span>
+                  <span className="font-semibold" style={{ color: "#2D5750" }}>
                     {formatearLimite(plan.maxDocumentosMB, "MB")}
                   </span>
                 </div>
@@ -108,9 +108,9 @@ export default function PlanesAdminView({ planes }: PlanesAdminViewProps) {
               {/* Features */}
               <div
                 className="px-6 py-4"
-                style={{ borderTop: "1px solid #E2E9F0" }}
+                style={{ borderTop: "1px solid #C8DAD6" }}
               >
-                <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "#73869A" }}>
+                <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "#5C7872" }}>
                   Características
                 </p>
                 <div className="space-y-2">
@@ -132,7 +132,7 @@ export default function PlanesAdminView({ planes }: PlanesAdminViewProps) {
                           <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
                         </svg>
                       )}
-                      <span style={{ color: "#41566B" }}>{feature.label}</span>
+                      <span style={{ color: "#3D6E65" }}>{feature.label}</span>
                     </div>
                   ))}
                 </div>
@@ -141,15 +141,15 @@ export default function PlanesAdminView({ planes }: PlanesAdminViewProps) {
               {/* Footer */}
               <div
                 className="px-6 py-4 flex items-center justify-between"
-                style={{ borderTop: "1px solid #E2E9F0", background: "#FAFCFE" }}
+                style={{ borderTop: "1px solid #C8DAD6", background: "#FAFCFE" }}
               >
-                <div className="text-xs" style={{ color: "#73869A" }}>
+                <div className="text-xs" style={{ color: "#5C7872" }}>
                   {plan._count.empresas} empresa{plan._count.empresas !== 1 ? "s" : ""}
                 </div>
                 <Link
                   href={`/admin/planes/${plan.id}/editar`}
                   className="text-xs font-medium hover:underline"
-                  style={{ color: "#2B82F0" }}
+                  style={{ color: "#2D5750" }}
                 >
                   Editar plan
                 </Link>

@@ -24,7 +24,7 @@ export default function CRMLoading() {
         <div className="col-span-2">
           <SkeletonList items={6} />
         </div>
-        <div className="bg-white rounded-xl p-5" style={{ border: "1px solid #E2E9F0" }}>
+        <div className="bg-white rounded-xl p-5" style={{ border: "1px solid #C8DAD6" }}>
           <Skeleton className="h-6 w-32 mb-4" />
           <div className="space-y-3">
             <Skeleton className="h-10 w-full" />

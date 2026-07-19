@@ -45,7 +45,7 @@ export default function ScrollToTop() {
       onClick={scrollToTop}
       className="fixed bottom-8 right-8 z-[9999] p-4 rounded-full shadow-2xl transition-all duration-300 hover:shadow-xl hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 animate-bounce-in"
       style={{
-        background: "linear-gradient(135deg, #2B82F0 0%, #15B8C9 100%)",
+        background: "linear-gradient(135deg, #2D5750 0%, #2BAA8A 100%)",
       }}
       aria-label="Volver arriba"
       title="Volver arriba"

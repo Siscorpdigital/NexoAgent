@@ -27,8 +27,8 @@ export default function ContactForm({ empresaId }: ContactFormProps) {
   );
 
   return (
-    <div className="bg-white rounded-xl p-5 h-fit" style={{ border: "1px solid #E2E9F0" }}>
-      <h2 className="font-semibold font-sora text-sm mb-4" style={{ color: "#0E2436" }}>
+    <div className="bg-white rounded-xl p-5 h-fit" style={{ border: "1px solid #C8DAD6" }}>
+      <h2 className="font-semibold font-sora text-sm mb-4" style={{ color: "#2D5750" }}>
         Nuevo contacto
       </h2>
 
@@ -45,7 +45,7 @@ export default function ContactForm({ empresaId }: ContactFormProps) {
         <input type="hidden" name="empresaId" value={empresaId} />
 
         <div>
-          <label className="block text-xs font-medium mb-1" style={{ color: "#41566B" }}>
+          <label className="block text-xs font-medium mb-1" style={{ color: "#3D6E65" }}>
             Nombre
           </label>
           <input
@@ -53,12 +53,12 @@ export default function ContactForm({ empresaId }: ContactFormProps) {
             type="text"
             placeholder="Ej: María García"
             className="w-full rounded-lg px-3 py-2 text-sm focus:outline-none"
-            style={{ border: "1px solid #E2E9F0", color: "#0E2436" }}
+            style={{ border: "1px solid #C8DAD6", color: "#2D5750" }}
           />
         </div>
 
         <div>
-          <label className="block text-xs font-medium mb-1" style={{ color: "#41566B" }}>
+          <label className="block text-xs font-medium mb-1" style={{ color: "#3D6E65" }}>
             Teléfono <span style={{ color: "#DC2626" }}>*</span>
           </label>
           <input
@@ -67,19 +67,19 @@ export default function ContactForm({ empresaId }: ContactFormProps) {
             required
             placeholder="Ej: +521234567890"
             className="w-full rounded-lg px-3 py-2 text-sm focus:outline-none"
-            style={{ border: "1px solid #E2E9F0", color: "#0E2436" }}
+            style={{ border: "1px solid #C8DAD6", color: "#2D5750" }}
           />
         </div>
 
         <div>
-          <label className="block text-xs font-medium mb-1 flex items-center gap-1" style={{ color: "#41566B" }}>
+          <label className="block text-xs font-medium mb-1 flex items-center gap-1" style={{ color: "#3D6E65" }}>
             Tipo
             <HelpIcon tooltip="Lead: contacto potencial | Cliente: ya compró | Proveedor: proveedor de servicios" />
           </label>
           <select
             name="tipo"
             className="w-full rounded-lg px-3 py-2 text-sm focus:outline-none"
-            style={{ border: "1px solid #E2E9F0", color: "#0E2436" }}
+            style={{ border: "1px solid #C8DAD6", color: "#2D5750" }}
           >
             <option value="LEAD">Lead</option>
             <option value="CLIENTE">Cliente</option>

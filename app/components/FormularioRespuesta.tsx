@@ -162,7 +162,7 @@ export default function FormularioRespuesta({
       case "error":
         return { background: "linear-gradient(135deg, #EF4444 0%, #DC2626 100%)" };
       default:
-        return { background: "linear-gradient(135deg, #2B82F0 0%, #15B8C9 100%)" };
+        return { background: "linear-gradient(135deg, #2D5750 0%, #2BAA8A 100%)" };
     }
   };
 
@@ -200,8 +200,8 @@ export default function FormularioRespuesta({
       </form>
 
       {!modoHumano && (
-        <div className="mt-3 flex flex-col items-center gap-3 p-3 rounded-lg" style={{ background: "rgba(251,146,60,0.08)", border: "1px solid rgba(251,146,60,0.2)" }}>
-          <p className="text-xs text-center font-medium" style={{ color: "#FB923C" }}>
+        <div className="mt-3 flex flex-col items-center gap-3 p-3 rounded-lg" style={{ background: "rgba(242, 160, 32,0.08)", border: "1px solid rgba(242, 160, 32,0.2)" }}>
+          <p className="text-xs text-center font-medium" style={{ color: "#F2A020" }}>
             🤖 La IA está respondiendo automáticamente
           </p>
           {activarModoHumano ? (
@@ -212,7 +212,7 @@ export default function FormularioRespuesta({
               <button
                 type="submit"
                 className="text-sm font-semibold px-6 py-3 rounded-lg text-white transition-all hover:shadow-lg hover:opacity-90"
-                style={{ background: "#FB923C" }}
+                style={{ background: "#F2A020" }}
               >
                 👤 Tomar control de la conversación
               </button>

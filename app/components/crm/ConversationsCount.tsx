@@ -15,7 +15,7 @@ export default function ConversationsCount({ count }: ConversationsCountProps) {
 
   return (
     <Tooltip content={tooltipText} position="bottom">
-      <span className="text-xs cursor-help" style={{ color: "#73869A" }}>
+      <span className="text-xs cursor-help" style={{ color: "#5C7872" }}>
         {count} conv.
       </span>
     </Tooltip>

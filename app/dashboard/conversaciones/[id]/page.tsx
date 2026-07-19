@@ -35,10 +35,10 @@ export default async function ConversacionDetallePage({
 
       <div className="mb-6 flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
         <div>
-          <h1 className="text-2xl font-bold font-sora" style={{ color: "#0E2436" }}>
+          <h1 className="text-2xl font-bold font-sora" style={{ color: "#2D5750" }}>
             {conversacion.numeroCliente}
           </h1>
-          <p className="text-sm mt-1" style={{ color: "#73869A" }}>
+          <p className="text-sm mt-1" style={{ color: "#5C7872" }}>
             {conversacion.empresa.nombre} · {conversacion.mensajes.length} mensajes
           </p>
         </div>
@@ -50,7 +50,7 @@ export default async function ConversacionDetallePage({
               <LoadingButton
                 type="submit"
                 className="text-xs font-medium px-4 py-2 rounded-lg transition-colors"
-                style={{ background: "rgba(251,146,60,0.1)", color: "#FB923C" }}
+                style={{ background: "rgba(242, 160, 32,0.1)", color: "#F2A020" }}
               >
                 ⚠️ Reactivar IA
               </LoadingButton>
@@ -70,7 +70,7 @@ export default async function ConversacionDetallePage({
 
       <div
         className="bg-white rounded-xl p-6 space-y-4 min-h-96 max-h-[600px] overflow-y-auto"
-        style={{ border: "1px solid #E2E9F0" }}
+        style={{ border: "1px solid #C8DAD6" }}
       >
         <ChatMessages mensajes={conversacion.mensajes} autoRefresh={true} />
       </div>
@@ -79,7 +79,7 @@ export default async function ConversacionDetallePage({
         <Link
           href="/dashboard/conversaciones"
           className="text-sm font-medium transition-colors hover:underline"
-          style={{ color: "#2B82F0" }}
+          style={{ color: "#2D5750" }}
         >
           ← Volver a conversaciones
         </Link>

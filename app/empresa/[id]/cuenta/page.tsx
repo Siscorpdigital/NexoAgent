@@ -25,10 +25,10 @@ export default async function CuentaPage({
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold font-sora" style={{ color: "#0E2436" }}>
+        <h1 className="text-2xl font-bold font-sora" style={{ color: "#2D5750" }}>
           Mi Cuenta
         </h1>
-        <p className="text-sm mt-1" style={{ color: "#73869A" }}>
+        <p className="text-sm mt-1" style={{ color: "#5C7872" }}>
           Gestiona tu información y seguridad
         </p>
       </div>

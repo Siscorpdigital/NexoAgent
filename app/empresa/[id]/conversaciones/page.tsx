@@ -47,10 +47,10 @@ export default async function EmpresaConversacionesPage({
       <Breadcrumbs empresaId={id} empresaNombre={empresa?.nombre} />
 
       <div className="mb-6">
-        <h1 className="text-2xl font-bold font-sora" style={{ color: "#0E2436" }}>
+        <h1 className="text-2xl font-bold font-sora" style={{ color: "#2D5750" }}>
           Conversaciones
         </h1>
-        <p className="text-sm mt-1" style={{ color: "#73869A" }}>
+        <p className="text-sm mt-1" style={{ color: "#5C7872" }}>
           {conversaciones.length} chat{conversaciones.length !== 1 ? "s" : ""} · Mensajes de WhatsApp
         </p>
       </div>
@@ -84,7 +84,7 @@ export default async function EmpresaConversacionesPage({
                   label: "Atención humana",
                   value: "humano",
                   count: pendientes.length,
-                  color: "#FB923C",
+                  color: "#F2A020",
                   icon: "⚠️",
                 },
                 {
@@ -92,7 +92,7 @@ export default async function EmpresaConversacionesPage({
                   label: "IA activa",
                   value: "ia",
                   count: normales.length,
-                  color: "#22B26B",
+                  color: "#2BAA8A",
                   icon: "🤖",
                 },
               ]}
@@ -103,7 +103,7 @@ export default async function EmpresaConversacionesPage({
 
           {/* Lista de conversaciones */}
           {conversacionesFiltradas.length === 0 ? (
-            <div className="bg-white rounded-xl p-10" style={{ border: "1px solid #E2E9F0" }}>
+            <div className="bg-white rounded-xl p-10" style={{ border: "1px solid #C8DAD6" }}>
               <EmptyState
                 icon="🔍"
                 title="No hay conversaciones en esta categoría"
@@ -111,7 +111,7 @@ export default async function EmpresaConversacionesPage({
               />
             </div>
           ) : (
-            <div className="bg-white rounded-xl shadow-sm divide-y" style={{ border: "1px solid #E2E9F0" }}>
+            <div className="bg-white rounded-xl shadow-sm divide-y" style={{ border: "1px solid #C8DAD6" }}>
               {conversacionesFiltradas.map((c) => <ConversacionItem key={c.id} c={c} empresaId={id} />)}
             </div>
           )}
@@ -138,45 +138,45 @@ function ConversacionItem({ c, empresaId }: { c: ConversacionItemProps; empresaI
     <Link href={`/empresa/${empresaId}/conversaciones/${c.id}`} className="flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-4 hover:bg-gray-50 transition-colors">
       <div
         className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center flex-shrink-0 font-semibold text-sm font-sora"
-        style={{ background: "rgba(34,178,107,0.08)", color: "#22B26B" }}
+        style={{ background: "rgba(43, 170, 138,0.08)", color: "#2BAA8A" }}
       >
         {c.numeroCliente[0]}
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1 flex-wrap">
-          <p className="text-sm font-medium font-sora" style={{ color: "#0E2436" }}>
+          <p className="text-sm font-medium font-sora" style={{ color: "#2D5750" }}>
             {c.numeroCliente}
           </p>
           {c.modoHumano && (
             <span
               className="text-xs px-2 py-0.5 rounded-full font-medium"
-              style={{ background: "rgba(251,146,60,0.08)", color: "#FB923C" }}
+              style={{ background: "rgba(242, 160, 32,0.08)", color: "#F2A020" }}
             >
               Atención humana
             </span>
           )}
         </div>
-        <p className="text-xs truncate" style={{ color: "#73869A" }}>
+        <p className="text-xs truncate" style={{ color: "#5C7872" }}>
           {c.mensajes[0]?.contenido ?? "Sin mensajes"}
         </p>
-        <div className="flex items-center gap-2 mt-1 sm:hidden text-xs" style={{ color: "#73869A" }}>
+        <div className="flex items-center gap-2 mt-1 sm:hidden text-xs" style={{ color: "#5C7872" }}>
           <span>{c._count.mensajes} msg</span>
           <span>·</span>
           <span>{formatTimeAgo(c.actualizadoEn)}</span>
         </div>
       </div>
       <div className="hidden sm:flex items-center gap-3 flex-shrink-0">
-        <span className="text-xs" style={{ color: "#73869A" }}>
+        <span className="text-xs" style={{ color: "#5C7872" }}>
           {c._count.mensajes} msg
         </span>
-        <span className="text-xs" style={{ color: "#73869A" }}>
+        <span className="text-xs" style={{ color: "#5C7872" }}>
           {formatTimeAgo(c.actualizadoEn)}
         </span>
-        <svg className="w-4 h-4" style={{ color: "#E2E9F0" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-4 h-4" style={{ color: "#C8DAD6" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
         </svg>
       </div>
-      <svg className="w-5 h-5 sm:hidden flex-shrink-0" style={{ color: "#E2E9F0" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg className="w-5 h-5 sm:hidden flex-shrink-0" style={{ color: "#C8DAD6" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
       </svg>
     </Link>

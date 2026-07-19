@@ -25,10 +25,10 @@ export default async function PlanesPage() {
       <div className="mb-8">
         <div className="flex items-center justify-between mb-2">
           <div>
-            <h1 className="text-3xl font-bold font-sora" style={{ color: "#0E2436" }}>
+            <h1 className="text-3xl font-bold font-sora" style={{ color: "#2D5750" }}>
               Planes y Suscripciones
             </h1>
-            <p className="text-sm mt-1" style={{ color: "#73869A" }}>
+            <p className="text-sm mt-1" style={{ color: "#5C7872" }}>
               Gestiona los planes comerciales disponibles
             </p>
           </div>

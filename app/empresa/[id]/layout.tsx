@@ -83,7 +83,7 @@ export default async function EmpresaLayout({
   }));
 
   return (
-    <div className="min-h-screen flex" style={{ background: "#F4F7FA" }}>
+    <div className="min-h-screen flex" style={{ background: "#F4F7F6" }}>
       {/* Mobile Menu Component */}
       <MobileMenu
         navItems={mobileNavItems}
@@ -123,8 +123,8 @@ export default async function EmpresaLayout({
             <div className="min-w-0">
               <p className="text-gray-900 text-sm font-semibold font-sora truncate leading-tight">{empresa.nombre}</p>
               <div className="flex items-center gap-1.5 mt-0.5">
-                <span className="w-1.5 h-1.5 rounded-full" style={{ background: "#22B26B" }}></span>
-                <span className="text-xs" style={{ color: "#73869A" }}>Activo</span>
+                <span className="w-1.5 h-1.5 rounded-full" style={{ background: "#2BAA8A" }}></span>
+                <span className="text-xs" style={{ color: "#5C7872" }}>Activo</span>
               </div>
             </div>
           </div>

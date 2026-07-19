@@ -55,7 +55,7 @@ export default function AutomatizacionForm({ empresaId }: AutomatizacionFormProp
       )}
 
       <div>
-        <label className="block text-xs font-medium mb-1.5" style={{ color: "#41566B" }}>
+        <label className="block text-xs font-medium mb-1.5" style={{ color: "#3D6E65" }}>
           Nombre
         </label>
         <input
@@ -64,18 +64,18 @@ export default function AutomatizacionForm({ empresaId }: AutomatizacionFormProp
           required
           placeholder="Ej: Bienvenida nuevos clientes"
           className="w-full rounded-lg px-3 py-2.5 text-sm focus:outline-none"
-          style={{ border: "1px solid #E2E9F0", color: "#0E2436" }}
+          style={{ border: "1px solid #C8DAD6", color: "#2D5750" }}
         />
       </div>
 
       <div>
-        <label className="block text-xs font-medium mb-1.5" style={{ color: "#41566B" }}>
+        <label className="block text-xs font-medium mb-1.5" style={{ color: "#3D6E65" }}>
           Tipo de disparador
         </label>
         <select
           name="trigger"
           className="w-full rounded-lg px-3 py-2.5 text-sm focus:outline-none"
-          style={{ border: "1px solid #E2E9F0", color: "#0E2436" }}
+          style={{ border: "1px solid #C8DAD6", color: "#2D5750" }}
         >
           {TRIGGERS.map((t) => (
             <option key={t.key} value={t.key}>
@@ -86,9 +86,9 @@ export default function AutomatizacionForm({ empresaId }: AutomatizacionFormProp
       </div>
 
       <div>
-        <label className="block text-xs font-medium mb-1.5" style={{ color: "#41566B" }}>
+        <label className="block text-xs font-medium mb-1.5" style={{ color: "#3D6E65" }}>
           Condición{" "}
-          <span className="font-normal" style={{ color: "#73869A" }}>
+          <span className="font-normal" style={{ color: "#5C7872" }}>
             (solo para Palabra clave y Fuera de horario)
           </span>
         </label>
@@ -97,12 +97,12 @@ export default function AutomatizacionForm({ empresaId }: AutomatizacionFormProp
           type="text"
           placeholder="Ej: precio, tarifa  ó  09:00-18:00"
           className="w-full rounded-lg px-3 py-2.5 text-sm focus:outline-none"
-          style={{ border: "1px solid #E2E9F0", color: "#0E2436" }}
+          style={{ border: "1px solid #C8DAD6", color: "#2D5750" }}
         />
       </div>
 
       <div>
-        <label className="block text-xs font-medium mb-1.5" style={{ color: "#41566B" }}>
+        <label className="block text-xs font-medium mb-1.5" style={{ color: "#3D6E65" }}>
           Mensaje a enviar
         </label>
         <textarea
@@ -111,7 +111,7 @@ export default function AutomatizacionForm({ empresaId }: AutomatizacionFormProp
           rows={4}
           placeholder="Ej: ¡Hola! Soy Katy 😊 ¿En qué te puedo ayudar hoy?"
           className="w-full rounded-lg px-3 py-2.5 text-sm focus:outline-none resize-none"
-          style={{ border: "1px solid #E2E9F0", color: "#0E2436" }}
+          style={{ border: "1px solid #C8DAD6", color: "#2D5750" }}
         />
       </div>
 

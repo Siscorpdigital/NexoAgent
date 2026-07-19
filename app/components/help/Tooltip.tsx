@@ -46,10 +46,10 @@ export default function Tooltip({
   };
 
   const arrowBorderClasses = {
-    top: "border-t-[#0E2436]",
-    bottom: "border-b-[#0E2436]",
-    left: "border-l-[#0E2436]",
-    right: "border-r-[#0E2436]",
+    top: "border-t-[#2D5750]",
+    bottom: "border-b-[#2D5750]",
+    left: "border-l-[#2D5750]",
+    right: "border-r-[#2D5750]",
   };
 
   return (
@@ -70,7 +70,7 @@ export default function Tooltip({
             positionClasses[position],
             className
           )}
-          style={{ background: "#0E2436" }}
+          style={{ background: "#2D5750" }}
           role="tooltip"
         >
           {content}

@@ -40,17 +40,17 @@ export default async function EmpresaConversacionDetallePage({
         <Link
           href={`/empresa/${id}/conversaciones`}
           className="transition-colors hover:opacity-70"
-          style={{ color: "#73869A" }}
+          style={{ color: "#5C7872" }}
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
         </Link>
         <div className="flex-1">
-          <h1 className="text-xl font-bold font-sora" style={{ color: "#0E2436" }}>
+          <h1 className="text-xl font-bold font-sora" style={{ color: "#2D5750" }}>
             {conversacion.numeroCliente}
           </h1>
-          <p className="text-xs mt-0.5" style={{ color: "#73869A" }}>
+          <p className="text-xs mt-0.5" style={{ color: "#5C7872" }}>
             {conversacion.mensajes.length} mensaje{conversacion.mensajes.length !== 1 ? "s" : ""}
           </p>
         </div>
@@ -61,7 +61,7 @@ export default async function EmpresaConversacionDetallePage({
               <LoadingButton
                 type="submit"
                 className="flex items-center gap-1.5 text-xs text-white px-3 py-1.5 rounded-lg font-medium transition-opacity hover:opacity-90"
-                style={{ background: "#FB923C" }}
+                style={{ background: "#F2A020" }}
               >
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -72,9 +72,9 @@ export default async function EmpresaConversacionDetallePage({
           ) : (
             <span
               className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg font-medium"
-              style={{ color: "#22B26B", background: "rgba(34,178,107,0.08)" }}
+              style={{ color: "#2BAA8A", background: "rgba(43, 170, 138,0.08)" }}
             >
-              <span className="w-1.5 h-1.5 rounded-full" style={{ background: "#22B26B" }}></span>
+              <span className="w-1.5 h-1.5 rounded-full" style={{ background: "#2BAA8A" }}></span>
               IA activa
             </span>
           )}
@@ -98,11 +98,11 @@ export default async function EmpresaConversacionDetallePage({
               {conversacion.agente.nombre[0]}
             </div>
             <div>
-              <p className="text-sm font-semibold" style={{ color: "#0E2436" }}>
+              <p className="text-sm font-semibold" style={{ color: "#2D5750" }}>
                 {conversacion.agente.nombre}
               </p>
               {conversacion.agente.descripcion && (
-                <p className="text-xs" style={{ color: "#73869A" }}>
+                <p className="text-xs" style={{ color: "#5C7872" }}>
                   {conversacion.agente.descripcion}
                 </p>
               )}
@@ -147,7 +147,7 @@ export default async function EmpresaConversacionDetallePage({
       {conversacion.modoHumano && (
         <div
           className="mb-4 rounded-xl px-4 py-3 text-sm"
-          style={{ background: "rgba(251,146,60,0.08)", border: "1px solid rgba(251,146,60,0.2)", color: "#FB923C" }}
+          style={{ background: "rgba(242, 160, 32,0.08)", border: "1px solid rgba(242, 160, 32,0.2)", color: "#F2A020" }}
         >
           💬 Modo humano activo. Puedes responder al cliente usando el formulario de abajo.
         </div>
@@ -156,7 +156,7 @@ export default async function EmpresaConversacionDetallePage({
       {/* Área de mensajes */}
       <div
         className="bg-white rounded-xl shadow-sm p-6 space-y-4 min-h-96 max-h-[600px] overflow-y-auto mb-4"
-        style={{ border: "1px solid #E2E9F0" }}
+        style={{ border: "1px solid #C8DAD6" }}
       >
         <ChatMessages mensajes={conversacion.mensajes} />
       </div>

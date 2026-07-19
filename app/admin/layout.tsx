@@ -24,7 +24,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   ];
 
   return (
-    <div className="min-h-screen flex" style={{ background: "#F4F7FA" }}>
+    <div className="min-h-screen flex" style={{ background: "#F4F7F6" }}>
       {/* Mobile Menu Component */}
       <MobileMenu
         navItems={navItems}

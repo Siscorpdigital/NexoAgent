@@ -17,9 +17,9 @@ const TIPOS = [
 ];
 
 const BADGE: Record<string, { label: string; color: string; bg: string }> = {
-  LEAD:      { label: "Lead",      color: "#2B82F0", bg: "rgba(43,130,240,0.08)" },
-  CLIENTE:   { label: "Cliente",   color: "#22B26B", bg: "rgba(34,178,107,0.08)" },
-  PROVEEDOR: { label: "Proveedor", color: "#73869A", bg: "rgba(115,134,154,0.08)" },
+  LEAD:      { label: "Lead",      color: "#2D5750", bg: "rgba(43,130,240,0.08)" },
+  CLIENTE:   { label: "Cliente",   color: "#2BAA8A", bg: "rgba(43, 170, 138,0.08)" },
+  PROVEEDOR: { label: "Proveedor", color: "#5C7872", bg: "rgba(115,134,154,0.08)" },
 };
 
 export default async function CRMPage({
@@ -88,7 +88,7 @@ export default async function CRMPage({
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Lista de contactos */}
-        <div className="lg:col-span-2 bg-white rounded-xl" style={{ border: "1px solid #E2E9F0" }}>
+        <div className="lg:col-span-2 bg-white rounded-xl" style={{ border: "1px solid #C8DAD6" }}>
           {contactos.length === 0 ? (
             <div className="py-16">
               <EmptyState
@@ -103,7 +103,7 @@ export default async function CRMPage({
               />
             </div>
           ) : (
-            <div className="divide-y" style={{ borderColor: "#F4F7FA" }}>
+            <div className="divide-y" style={{ borderColor: "#F4F7F6" }}>
               {contactos.map((c) => {
                 const badge = BADGE[c.tipo];
                 return (
@@ -116,10 +116,10 @@ export default async function CRMPage({
                       {(c.nombre ?? c.telefono)[0].toUpperCase()}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium truncate" style={{ color: "#0E2436" }}>
-                        {c.nombre ?? <span style={{ color: "#73869A" }}>Sin nombre</span>}
+                      <p className="text-sm font-medium truncate" style={{ color: "#2D5750" }}>
+                        {c.nombre ?? <span style={{ color: "#5C7872" }}>Sin nombre</span>}
                       </p>
-                      <p className="text-xs mt-0.5" style={{ color: "#73869A" }}>{c.telefono}</p>
+                      <p className="text-xs mt-0.5" style={{ color: "#5C7872" }}>{c.telefono}</p>
                     </div>
                     <div className="flex items-center gap-3 flex-shrink-0">
                       <ContactBadge
@@ -129,7 +129,7 @@ export default async function CRMPage({
                         bg={badge.bg}
                       />
                       <ConversationsCount count={c._count.conversaciones} />
-                      <svg className="w-4 h-4" style={{ color: "#E2E9F0" }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                      <svg className="w-4 h-4" style={{ color: "#C8DAD6" }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
                     </div>
                   </Link>
                 );

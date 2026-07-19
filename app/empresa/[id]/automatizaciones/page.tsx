@@ -7,9 +7,9 @@ import DeleteAutomatizacionButton from "@/app/components/actions/DeleteAutomatiz
 import AutomatizacionForm from "@/app/components/forms/AutomatizacionForm";
 
 const TRIGGER_MAP: Record<string, { label: string; color: string }> = {
-  PRIMER_MENSAJE: { label: "Primer mensaje", color: "#2B82F0" },
-  PALABRA_CLAVE: { label: "Palabra clave", color: "#15B8C9" },
-  FUERA_HORARIO: { label: "Fuera de horario", color: "#22B26B" },
+  PRIMER_MENSAJE: { label: "Primer mensaje", color: "#2D5750" },
+  PALABRA_CLAVE: { label: "Palabra clave", color: "#2BAA8A" },
+  FUERA_HORARIO: { label: "Fuera de horario", color: "#2BAA8A" },
 };
 
 export default async function AutomatizacionesPage({
@@ -33,10 +33,10 @@ export default async function AutomatizacionesPage({
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold font-sora" style={{ color: "#0E2436" }}>
+        <h1 className="text-2xl font-bold font-sora" style={{ color: "#2D5750" }}>
           Automatizaciones
         </h1>
-        <p className="text-sm mt-1" style={{ color: "#73869A" }}>
+        <p className="text-sm mt-1" style={{ color: "#5C7872" }}>
           Respuestas automáticas que se activan sin pasar por la IA
         </p>
       </div>
@@ -45,39 +45,39 @@ export default async function AutomatizacionesPage({
         {/* Lista de automatizaciones */}
         <div className="space-y-3">
           {automatizaciones.length === 0 ? (
-            <div className="bg-white rounded-xl p-10 text-center" style={{ border: "1px solid #E2E9F0" }}>
-              <div className="w-12 h-12 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ background: "#F4F7FA" }}>
-                <svg className="w-5 h-5" style={{ color: "#73869A" }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+            <div className="bg-white rounded-xl p-10 text-center" style={{ border: "1px solid #C8DAD6" }}>
+              <div className="w-12 h-12 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ background: "#F4F7F6" }}>
+                <svg className="w-5 h-5" style={{ color: "#5C7872" }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
               </div>
-              <p className="text-sm" style={{ color: "#73869A" }}>Sin automatizaciones todavía.</p>
-              <p className="text-xs mt-1" style={{ color: "#73869A" }}>Crea la primera con el formulario.</p>
+              <p className="text-sm" style={{ color: "#5C7872" }}>Sin automatizaciones todavía.</p>
+              <p className="text-xs mt-1" style={{ color: "#5C7872" }}>Crea la primera con el formulario.</p>
             </div>
           ) : (
             automatizaciones.map((a) => {
               const t = TRIGGER_MAP[a.trigger];
               return (
-                <div key={a.id} className="bg-white rounded-xl p-5" style={{ border: `1px solid ${a.activa ? "#E2E9F0" : "#F4F7FA"}`, opacity: a.activa ? 1 : 0.6 }}>
+                <div key={a.id} className="bg-white rounded-xl p-5" style={{ border: `1px solid ${a.activa ? "#C8DAD6" : "#F4F7F6"}`, opacity: a.activa ? 1 : 0.6 }}>
                   <div className="flex items-start justify-between gap-3 mb-3">
                     <div className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: t?.color ?? "#73869A" }}></span>
-                      <p className="font-semibold font-sora text-sm" style={{ color: "#0E2436" }}>{a.nombre}</p>
+                      <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: t?.color ?? "#5C7872" }}></span>
+                      <p className="font-semibold font-sora text-sm" style={{ color: "#2D5750" }}>{a.nombre}</p>
                     </div>
                     <div className="flex items-center gap-2 flex-shrink-0">
-                      <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: a.activa ? "rgba(34,178,107,0.08)" : "#F4F7FA", color: a.activa ? "#22B26B" : "#73869A" }}>
+                      <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: a.activa ? "rgba(43, 170, 138,0.08)" : "#F4F7F6", color: a.activa ? "#2BAA8A" : "#5C7872" }}>
                         {a.activa ? "Activa" : "Pausada"}
                       </span>
                     </div>
                   </div>
 
-                  <p className="text-xs mb-1" style={{ color: "#73869A" }}>
+                  <p className="text-xs mb-1" style={{ color: "#5C7872" }}>
                     {t?.label} {a.condicion ? `· ${a.condicion}` : ""}
                   </p>
-                  <p className="text-xs italic mb-4 line-clamp-2" style={{ color: "#41566B" }}>
+                  <p className="text-xs italic mb-4 line-clamp-2" style={{ color: "#3D6E65" }}>
                     &ldquo;{a.mensaje}&rdquo;
                   </p>
 
                   <div className="flex items-center justify-between">
-                    <span className="text-xs" style={{ color: "#73869A" }}>
+                    <span className="text-xs" style={{ color: "#5C7872" }}>
                       {a.ejecuciones} ejecuciones
                     </span>
                     <div className="flex gap-2">
@@ -85,7 +85,7 @@ export default async function AutomatizacionesPage({
                         <input type="hidden" name="id" value={a.id} />
                         <input type="hidden" name="empresaId" value={id} />
                         <input type="hidden" name="activa" value={String(a.activa)} />
-                        <button type="submit" className="text-xs font-medium transition-colors hover:underline" style={{ color: "#2B82F0" }}>
+                        <button type="submit" className="text-xs font-medium transition-colors hover:underline" style={{ color: "#2D5750" }}>
                           {a.activa ? "Pausar" : "Activar"}
                         </button>
                       </form>
@@ -103,8 +103,8 @@ export default async function AutomatizacionesPage({
         </div>
 
         {/* Formulario nueva automatización */}
-        <div className="bg-white rounded-xl p-6 h-fit" style={{ border: "1px solid #E2E9F0" }}>
-          <h2 className="font-semibold font-sora text-sm mb-5" style={{ color: "#0E2436" }}>
+        <div className="bg-white rounded-xl p-6 h-fit" style={{ border: "1px solid #C8DAD6" }}>
+          <h2 className="font-semibold font-sora text-sm mb-5" style={{ color: "#2D5750" }}>
             Nueva automatización
           </h2>
           <AutomatizacionForm empresaId={id} />
