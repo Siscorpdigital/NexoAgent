@@ -59,11 +59,13 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline'", // unsafe-inline requerido por Next.js
+              // jsdelivr y cdnjs los usa el cotizador (supabase-js y html2pdf).
+              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com",
               "img-src 'self' data: https: blob:",
-              "connect-src 'self' https://api.anthropic.com https://www.googleapis.com https://oauth2.googleapis.com",
+              // Supabase (auth/datos + realtime) lo usan el cotizador y, más adelante, el agente.
+              "connect-src 'self' https://api.anthropic.com https://www.googleapis.com https://oauth2.googleapis.com https://*.supabase.co wss://*.supabase.co",
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'",
