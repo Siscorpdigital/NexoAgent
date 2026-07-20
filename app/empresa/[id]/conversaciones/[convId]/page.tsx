@@ -1,11 +1,11 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { reactivarIA, enviarMensajeHumano, activarModoHumanoFormData } from "@/app/actions/conversaciones";
+import { enviarMensajeHumano, cambiarControlConversacion } from "@/app/actions/conversaciones";
 import { transferirConversacion } from "@/app/actions/agentes";
 import FormularioRespuesta from "@/app/components/FormularioRespuesta";
 import ChatMessages from "@/app/components/ChatMessages";
-import LoadingButton from "@/app/components/ui/LoadingButton";
+import ControlAgenteSwitch from "@/app/components/ControlAgenteSwitch";
 
 export default async function EmpresaConversacionDetallePage({
   params,
@@ -54,31 +54,17 @@ export default async function EmpresaConversacionDetallePage({
             {conversacion.mensajes.length} mensaje{conversacion.mensajes.length !== 1 ? "s" : ""}
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          {conversacion.modoHumano ? (
-            <form action={reactivarIA}>
-              <input type="hidden" name="id" value={conversacion.id} />
-              <LoadingButton
-                type="submit"
-                className="flex items-center gap-1.5 text-xs text-white px-3 py-1.5 rounded-lg font-medium transition-opacity hover:opacity-90"
-                style={{ background: "#F2A020" }}
-              >
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-                Reactivar IA
-              </LoadingButton>
-            </form>
-          ) : (
-            <span
-              className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg font-medium"
-              style={{ color: "#2BAA8A", background: "rgba(43, 170, 138,0.08)" }}
-            >
-              <span className="w-1.5 h-1.5 rounded-full" style={{ background: "#2BAA8A" }}></span>
-              IA activa
-            </span>
-          )}
-        </div>
+      </div>
+
+      {/* Switch de control: IA ↔ Atención humana */}
+      <div className="mb-4">
+        <ControlAgenteSwitch
+          conversacionId={conversacion.id}
+          empresaId={id}
+          numeroCliente={conversacion.numeroCliente}
+          modoHumano={conversacion.modoHumano}
+          cambiarControl={cambiarControlConversacion}
+        />
       </div>
 
       {/* Info del agente asignado */}
@@ -144,15 +130,6 @@ export default async function EmpresaConversacionDetallePage({
         </div>
       )}
 
-      {conversacion.modoHumano && (
-        <div
-          className="mb-4 rounded-xl px-4 py-3 text-sm"
-          style={{ background: "rgba(242, 160, 32,0.08)", border: "1px solid rgba(242, 160, 32,0.2)", color: "#F2A020" }}
-        >
-          💬 Modo humano activo. Puedes responder al cliente usando el formulario de abajo.
-        </div>
-      )}
-
       {/* Área de mensajes */}
       <div
         className="bg-white rounded-xl shadow-sm p-6 space-y-4 min-h-96 max-h-[600px] overflow-y-auto mb-4"
@@ -168,7 +145,7 @@ export default async function EmpresaConversacionDetallePage({
         numeroCliente={conversacion.numeroCliente}
         modoHumano={conversacion.modoHumano}
         enviarMensajeHumano={enviarMensajeHumano}
-        activarModoHumano={activarModoHumanoFormData}
+        ocultarActivacion
       />
     </div>
   );

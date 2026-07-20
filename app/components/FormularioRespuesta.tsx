@@ -10,6 +10,8 @@ interface FormularioRespuestaProps {
   modoHumano: boolean;
   enviarMensajeHumano: (formData: FormData) => Promise<void>;
   activarModoHumano?: (formData: FormData) => Promise<void>;
+  /** Oculta el bloque de "tomar control" (cuando el switch ya lo gestiona). */
+  ocultarActivacion?: boolean;
 }
 
 type SendStatus = "idle" | "sending" | "sent" | "error";
@@ -21,6 +23,7 @@ export default function FormularioRespuesta({
   modoHumano,
   enviarMensajeHumano,
   activarModoHumano,
+  ocultarActivacion,
 }: FormularioRespuestaProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -199,7 +202,7 @@ export default function FormularioRespuesta({
         </button>
       </form>
 
-      {!modoHumano && (
+      {!modoHumano && !ocultarActivacion && (
         <div className="mt-3 flex flex-col items-center gap-3 p-3 rounded-lg" style={{ background: "rgba(242, 160, 32,0.08)", border: "1px solid rgba(242, 160, 32,0.2)" }}>
           <p className="text-xs text-center font-medium" style={{ color: "#F2A020" }}>
             🤖 La IA está respondiendo automáticamente

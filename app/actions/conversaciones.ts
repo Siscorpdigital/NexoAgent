@@ -37,6 +37,42 @@ export async function activarModoHumano(
   revalidatePath(`/empresa/${empresaId}/conversaciones/${conversacionId}`);
 }
 
+/**
+ * Alterna el control de una conversación entre el agente virtual (IA) y un
+ * humano según el campo `modo` ("humano" | "ia"). Revalida las rutas de la
+ * empresa para reflejar el cambio en la lista y el detalle.
+ */
+export async function cambiarControlConversacion(formData: FormData) {
+  const conversacionId = formData.get("conversacionId") as string;
+  const empresaId = formData.get("empresaId") as string;
+  const numeroCliente = (formData.get("numeroCliente") as string) || "";
+  const modo = formData.get("modo") as string;
+
+  if (!conversacionId || !empresaId) {
+    console.error("Datos incompletos para cambiar el control de la conversación");
+    return;
+  }
+
+  const modoHumano = modo === "humano";
+
+  await prisma.conversacion.update({
+    where: { id: conversacionId },
+    data: { modoHumano },
+  });
+
+  // Al pasar a humano, notificar al equipo
+  if (modoHumano) {
+    try {
+      await notificarModoHumano(empresaId, conversacionId, numeroCliente);
+    } catch (error) {
+      console.error("Error al enviar notificación de modo humano:", error);
+    }
+  }
+
+  revalidatePath(`/empresa/${empresaId}/conversaciones`);
+  revalidatePath(`/empresa/${empresaId}/conversaciones/${conversacionId}`);
+}
+
 export async function activarModoHumanoFormData(formData: FormData) {
   const conversacionId = formData.get("conversacionId") as string;
   const empresaId = formData.get("empresaId") as string;
