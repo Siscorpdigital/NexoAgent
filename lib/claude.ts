@@ -6,11 +6,12 @@ const anthropic = new Anthropic({
 });
 
 /**
- * Modelo de Anthropic a utilizar. Configurable por variable de entorno para
- * poder subir a la máxima calidad (más humanizado) sin tocar el código.
- * En Vercel se puede fijar ANTHROPIC_MODEL para máxima calidad de respuesta.
+ * Modelo de Anthropic a utilizar. Por defecto se usa el modelo de máxima
+ * calidad para lograr las respuestas más humanizadas posibles. Sigue siendo
+ * configurable con la variable de entorno ANTHROPIC_MODEL (por si se quiere
+ * priorizar velocidad/costo) sin necesidad de tocar el código.
  */
-const MODELO = process.env.ANTHROPIC_MODEL?.trim() || "claude-sonnet-5";
+const MODELO = process.env.ANTHROPIC_MODEL?.trim() || "claude-opus-4-8";
 
 type MensajeHistorial = {
   rol: Rol;
