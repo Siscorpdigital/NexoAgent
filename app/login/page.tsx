@@ -1,143 +1,140 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import Image from "next/image";
+import { createClient } from "@supabase/supabase-js";
 import { createSupabaseBrowser } from "@/lib/supabase/client";
 import { mapAcceso } from "@/lib/acceso";
 
-export default function LoginPage() {
-  const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPwd, setShowPwd] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+/**
+ * Login unificado (final): NexoAgent NO tiene formulario propio de login.
+ * El usuario inicia sesión una sola vez en el cotizador (Supabase). Como el
+ * cotizador y NexoAgent viven en el mismo dominio, comparten localStorage:
+ * aquí leemos esa sesión (clave "pf_supa_session"), verificamos que sea
+ * admin/superadmin/autorizado y la "puenteamos" a las cookies que usa NexoAgent.
+ * Si no hay sesión válida, se redirige al cotizador para iniciar sesión.
+ */
+export default function LoginBridgePage() {
+  const [estado, setEstado] = useState<
+    "verificando" | "sin_acceso" | "sin_sesion"
+  >("verificando");
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError(null);
-    setLoading(true);
-    const supabase = createSupabaseBrowser();
-    try {
-      const { data, error: signInError } =
-        await supabase.auth.signInWithPassword({ email, password });
-      if (signInError || !data.user) {
-        setError("Correo o contraseña incorrectos.");
-        setLoading(false);
+  useEffect(() => {
+    let cancelado = false;
+
+    (async () => {
+      const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+      const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+
+      // Cliente que lee la MISMA sesión que guardó el cotizador (localStorage).
+      const cotizadorClient = createClient(url, anon, {
+        auth: {
+          storageKey: "pf_supa_session",
+          persistSession: true,
+          autoRefreshToken: true,
+        },
+      });
+
+      const {
+        data: { session },
+      } = await cotizadorClient.auth.getSession();
+
+      if (!session) {
+        if (!cancelado) {
+          setEstado("sin_sesion");
+          setTimeout(() => {
+            window.location.replace("/cotizador");
+          }, 1500);
+        }
         return;
       }
 
-      // Verificar acceso al módulo agente antes de entrar.
-      // select("*") para no fallar (400) si falta alguna columna opcional.
-      const { data: profile } = await supabase
+      // Verificar acceso al agente (admin/superadmin o acceso_nexo).
+      const { data: profile } = await cotizadorClient
         .from("profiles")
         .select("*")
-        .eq("id", data.user.id)
+        .eq("id", session.user.id)
         .maybeSingle();
-      const { authorized } = mapAcceso(
-        profile?.rol,
-        !!profile?.acceso_nexo,
-      );
+      const { authorized } = mapAcceso(profile?.rol, !!profile?.acceso_nexo);
 
       if (!authorized) {
-        await supabase.auth.signOut();
-        setError(
-          "Tu usuario no tiene acceso al Agente. Solicítalo a un administrador.",
-        );
-        setLoading(false);
+        if (!cancelado) setEstado("sin_acceso");
         return;
       }
 
-      router.push("/dashboard");
-      router.refresh();
-    } catch {
-      setError("No se pudo iniciar sesión. Intenta de nuevo.");
-      setLoading(false);
-    }
-  }
+      // Puente: escribir la sesión en las cookies que usa NexoAgent (SSR).
+      const nexoClient = createSupabaseBrowser();
+      await nexoClient.auth.setSession({
+        access_token: session.access_token,
+        refresh_token: session.refresh_token,
+      });
+
+      if (!cancelado) window.location.replace("/dashboard");
+    })();
+
+    return () => {
+      cancelado = true;
+    };
+  }, []);
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden px-4 sm:px-6" style={{ background: "var(--bg-soft, #F4F7F6)" }}>
-      <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-2xl w-full max-w-md border border-gray-100 relative z-10">
-        <div className="text-center mb-6">
-          <div className="flex justify-center mb-4">
-            <Image
-              src="/logo.png"
-              alt="Previsión Familiar"
-              width={576}
-              height={180}
-              priority
-              className="w-auto h-20 sm:h-24"
-            />
-          </div>
-          <p className="text-gray-600 text-sm">
-            Agente Virtual · Inicia sesión para continuar
-          </p>
+    <div
+      className="min-h-screen flex items-center justify-center px-4"
+      style={{ background: "var(--bg-soft, #F4F7F6)" }}
+    >
+      <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border border-gray-100 text-center">
+        <div className="flex justify-center mb-5">
+          <Image
+            src="/logo.png"
+            alt="Previsión Familiar"
+            width={480}
+            height={150}
+            priority
+            className="w-auto h-16"
+          />
         </div>
 
-        {error && (
-          <div className="mb-5 p-3 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-red-800 text-sm text-center">{error}</p>
-          </div>
+        {estado === "verificando" && (
+          <>
+            <div
+              className="mx-auto mb-4 w-8 h-8 rounded-full border-2 border-t-transparent animate-spin"
+              style={{ borderColor: "#2BAA8A", borderTopColor: "transparent" }}
+            />
+            <p className="text-sm" style={{ color: "#5C7872" }}>
+              Verificando tu acceso al Agente…
+            </p>
+          </>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Correo electrónico
-            </label>
-            <input
-              type="email"
-              name="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent"
-              style={{ outlineColor: "var(--ink, #2D5750)" }}
-              placeholder="tu@correo.com"
-            />
-          </div>
+        {estado === "sin_acceso" && (
+          <>
+            <p className="text-base font-semibold mb-2" style={{ color: "#2D5750" }}>
+              Sin acceso al Agente
+            </p>
+            <p className="text-sm mb-5" style={{ color: "#5C7872" }}>
+              Tu usuario no tiene permiso para el Agente Virtual. Solicítalo a un
+              administrador.
+            </p>
+            <a
+              href="/cotizador"
+              className="inline-block px-5 py-2.5 rounded-lg text-white text-sm font-medium"
+              style={{ background: "#2D5750" }}
+            >
+              Volver al cotizador
+            </a>
+          </>
+        )}
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Contraseña
-            </label>
-            <div className="relative">
-              <input
-                type={showPwd ? "text" : "password"}
-                name="password"
-                required
-                autoComplete="current-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent"
-                placeholder="••••••••"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPwd((v) => !v)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm"
-                tabIndex={-1}
-              >
-                {showPwd ? "🙈" : "👁️"}
-              </button>
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full text-white py-3 rounded-lg transition-all duration-200 font-medium shadow-lg disabled:opacity-60"
-            style={{ background: "linear-gradient(120deg,#2D5750 0%,#3D6E65 55%,#2BAA8A 100%)" }}
-          >
-            {loading ? "Entrando…" : "Iniciar sesión"}
-          </button>
-        </form>
-
-        <p className="text-center text-sm text-gray-500 mt-5">
-          ¿Olvidaste tu contraseña? Contacta al administrador del sistema.
-        </p>
+        {estado === "sin_sesion" && (
+          <>
+            <p className="text-base font-semibold mb-2" style={{ color: "#2D5750" }}>
+              Inicia sesión en el cotizador
+            </p>
+            <p className="text-sm" style={{ color: "#5C7872" }}>
+              Te llevamos al inicio de sesión…
+            </p>
+          </>
+        )}
       </div>
     </div>
   );
