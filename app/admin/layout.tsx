@@ -55,6 +55,14 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
         {/* Nav */}
         <nav className="flex-1 px-3 py-4 space-y-0.5">
+          <Link
+            href="/dashboard"
+            className="flex items-center gap-2 px-3 py-2 mb-2 rounded-lg text-sm font-medium transition-colors"
+            style={{ color: "#2D5750", background: "#EBF5F2" }}
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+            Volver a Previsión Familiar
+          </Link>
           <p className="text-xs font-semibold uppercase tracking-wider px-3 py-2 text-gray-400" style={{ letterSpacing: "0.1em" }}>Administración</p>
 
           <ActiveNavLink

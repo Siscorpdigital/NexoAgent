@@ -28,6 +28,8 @@ export interface SessionUser {
   empresaId: string | null;
   /** true si tiene acceso al módulo agente (admin/superadmin o acceso_nexo). */
   authorized: boolean;
+  /** true si es admin o superadmin (para opciones de administración). */
+  esAdmin: boolean;
 }
 
 export interface Session {
@@ -53,7 +55,10 @@ export const auth = cache(async (): Promise<Session | null> => {
     .eq("id", user.id)
     .maybeSingle();
 
-  const { authorized, rol } = mapAcceso(profile?.rol, !!profile?.acceso_nexo);
+  const { authorized, rol, esAdmin } = mapAcceso(
+    profile?.rol,
+    !!profile?.acceso_nexo,
+  );
   const name = profile?.nombre || user.email?.split("@")[0] || "Usuario";
 
   let empresaId: string | null = null;
@@ -78,6 +83,7 @@ export const auth = cache(async (): Promise<Session | null> => {
       rol,
       empresaId,
       authorized,
+      esAdmin,
     },
   };
 });

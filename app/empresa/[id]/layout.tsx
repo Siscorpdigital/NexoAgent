@@ -1,7 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { logout } from "@/app/actions/auth";
-import Link from "next/link";
 import Image from "next/image";
 import { notFound, redirect } from "next/navigation";
 import MobileMenu from "@/app/components/MobileMenu";
@@ -23,6 +22,10 @@ type NavItem = {
   section?: string;
   /** Ítem anidado dentro de una sección (se muestra indentado). */
   indent?: boolean;
+  /** href absoluto (no relativo a /empresa/[id]). */
+  absolute?: boolean;
+  /** Solo visible para admin/superadmin. */
+  adminOnly?: boolean;
 };
 
 const NAV: NavItem[] = [
@@ -45,6 +48,9 @@ const NAV: NavItem[] = [
   { href: "/cuenta", label: "Mi Cuenta", section: "Cuenta", icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>, active: true },
   { href: "/configuracion", label: "Configuración", icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>, active: true },
   { href: "/soporte", label: "Soporte", icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" /></svg>, active: true },
+
+  // ── Sección ADMINISTRACIÓN (solo admin/superadmin) ──
+  { href: "/admin/usuarios", label: "Usuarios", section: "Administración", absolute: true, adminOnly: true, icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>, active: true },
 ];
 
 export default async function EmpresaLayout({
@@ -81,6 +87,10 @@ export default async function EmpresaLayout({
     if (!esProveedor && seccionesRestringidas.includes(item.label)) {
       return false;
     }
+    // Ítems solo para admin/superadmin
+    if (item.adminOnly && !session.user.esAdmin) {
+      return false;
+    }
     return true;
   });
 
@@ -112,10 +122,6 @@ export default async function EmpresaLayout({
       <aside className="hidden lg:flex w-60 flex-col fixed h-full bg-white shadow-lg" style={{ borderRight: "2px solid #2BAA8A", boxShadow: "4px 0 12px rgba(43, 170, 138, 0.1)" }}>
         {/* Logo + empresa */}
         <div className="px-5 py-5" style={{ borderBottom: "1px solid #E5E7EB" }}>
-          <Link href="/admin" className="flex items-center gap-1.5 mb-4 text-gray-500 hover:text-gray-700 transition-colors">
-            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-            <span className="text-xs">← Volver al panel</span>
-          </Link>
           <div className="mb-4 px-2">
             <Image
               src="/logo.png"
@@ -143,7 +149,7 @@ export default async function EmpresaLayout({
         {/* Nav */}
         <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
           {navFiltrada.map((item) => {
-            const href = `/empresa/${id}${item.href}`;
+            const href = item.absolute ? item.href : `/empresa/${id}${item.href}`;
             const padding = item.indent ? "pl-7 pr-3" : "px-3";
             return (
               <div key={item.label}>
