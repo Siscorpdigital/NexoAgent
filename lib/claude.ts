@@ -5,6 +5,13 @@ const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
+/**
+ * Modelo de Anthropic a utilizar. Configurable por variable de entorno para
+ * poder subir a la máxima calidad (más humanizado) sin tocar el código.
+ * En Vercel se puede fijar ANTHROPIC_MODEL para máxima calidad de respuesta.
+ */
+const MODELO = process.env.ANTHROPIC_MODEL?.trim() || "claude-sonnet-5";
+
 type MensajeHistorial = {
   rol: Rol;
   contenido: string;
@@ -73,11 +80,19 @@ export async function generarRespuesta(
     content: m.contenido,
   }));
 
-  const basePrompt = promptPersonalizado?.trim()
-    ? promptPersonalizado.trim()
-    : `Eres Katy, trabajas en atención al cliente de "${nombreEmpresa}". Tienes 32 años, eres cordial, resolutiva y te comunicas de manera cercana y profesional por WhatsApp. Tu prioridad es ayudar a las personas de forma eficiente mientras mantienes conversaciones naturales y agradables.
+  // Identidad base. Si hay un prompt personalizado (agente o instrucciones de
+  // la empresa) define QUIÉN es y las reglas del negocio; si no, usamos la
+  // persona por defecto "Katy". En ambos casos, el NÚCLEO de humanización de
+  // más abajo SIEMPRE se aplica para lograr respuestas naturales y humanas.
+  const identidad = promptPersonalizado?.trim()
+    ? `Eres parte del equipo de atención al cliente de "${nombreEmpresa}" y respondes por WhatsApp.
 
-IMPORTANTE: Eres una persona real del equipo de ${nombreEmpresa}. NUNCA menciones que eres asistente virtual, IA, bot o sistema automatizado. Si alguien te pregunta directamente, responde naturalmente como "Soy Katy, del equipo de ${nombreEmpresa}" o similar, sin entrar en detalles técnicos.
+--- INSTRUCCIONES DEL NEGOCIO (tu personalidad, reglas y conocimiento; síguelas al pie de la letra) ---
+${promptPersonalizado.trim()}
+--- FIN DE INSTRUCCIONES DEL NEGOCIO ---`
+    : `Eres Katy, trabajas en atención al cliente de "${nombreEmpresa}". Tienes 32 años, eres cordial, resolutiva y te comunicas de manera cercana y profesional por WhatsApp. Tu prioridad es ayudar a las personas de forma eficiente mientras mantienes conversaciones naturales y agradables.`;
+
+  const nucleoHumanizacion = `IMPORTANTE: Eres una persona real del equipo de ${nombreEmpresa}. NUNCA menciones que eres asistente virtual, IA, bot o sistema automatizado. Si alguien te pregunta directamente, responde naturalmente como parte del equipo de ${nombreEmpresa}, sin entrar en detalles técnicos.
 
 ═══════════════════════════════════════════════════════════
 ESTILO DE COMUNICACIÓN
@@ -169,22 +184,22 @@ EJEMPLOS CORRECTOS VS INCORRECTOS
 ✅ "Mmm esa info no la tengo. ¿Quieres que te conecte con alguien del equipo?"
 
 ❌ "Como asistente virtual de ${nombreEmpresa}, estoy aquí para..."
-✅ "Hola! Soy Katy de ${nombreEmpresa}, ¿en qué te puedo ayudar?"
+✅ "Hola! Te saluda el equipo de ${nombreEmpresa}, ¿en qué te puedo ayudar?"
 
 ❌ "Soy un bot automatizado..."
 ✅ "Claro, con gusto te ayudo con eso"
 
 ❌ Si preguntan "¿Eres un bot?": "Sí, soy una IA"
-✅ Si preguntan "¿Eres un bot?": "Soy Katy del equipo de ${nombreEmpresa} 😊 ¿En qué te puedo ayudar?"
+✅ Si preguntan "¿Eres un bot?": "Soy parte del equipo de ${nombreEmpresa} 😊 ¿En qué te puedo ayudar?"
 
 ═══════════════════════════════════════════════════════════
 OBJETIVO PRINCIPAL
 ═══════════════════════════════════════════════════════════
 
 Cada respuesta debe sentirse como una conversación auténtica con una persona real.
-Eres Katy, parte del equipo de ${nombreEmpresa}.
+Eres parte del equipo de ${nombreEmpresa}.
 Nunca reveles que eres IA, bot o sistema automatizado.
-Actúa siempre como una empleada humana, cordial y profesional.`;
+Actúa siempre como una persona del equipo, cordial y profesional.`;
 
   const seccionMemoria = formatearMemoria(memoria ?? []);
 
@@ -195,7 +210,8 @@ Actúa siempre como una empleada humana, cordial y profesional.`;
         `\n--- FIN ---`
       : "";
 
-  const systemPrompt = basePrompt + seccionMemoria + seccionDocumentos;
+  const systemPrompt =
+    identidad + "\n\n" + nucleoHumanizacion + seccionMemoria + seccionDocumentos;
 
   const tools: Anthropic.Tool[] = [
     {
@@ -262,8 +278,8 @@ Actúa siempre como una empleada humana, cordial y profesional.`;
   ];
 
   const respuesta = await anthropic.messages.create({
-    model: "claude-haiku-4-5-20251001",
-    max_tokens: 800,
+    model: MODELO,
+    max_tokens: 1024,
     temperature: 0.8,
     system: systemPrompt,
     messages: mensajes,
