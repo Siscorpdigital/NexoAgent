@@ -54,7 +54,7 @@ export const editarEmpresaSchema = z.object({
 export const actualizarPromptSchema = z.object({
   id: z.string().cuid("ID inválido"),
   prompt: z.string().max(5000, "El prompt no puede exceder 5000 caracteres").trim().nullable(),
-  origen: z.enum(["empresa", "admin"]).optional(),
+  origen: z.enum(["empresa", "admin", "agentes"]).optional(),
 });
 
 // ============================================

@@ -193,7 +193,13 @@ export async function actualizarPrompt(formData: FormData) {
     });
 
     revalidatePath(`/empresa/${validated.id}/configuracion`);
+    revalidatePath(`/empresa/${validated.id}/agentes`);
 
+    if (validated.origen === "agentes") {
+      redirect(
+        `/empresa/${validated.id}/agentes?success=${encodeURIComponent("Instrucciones del asistente guardadas")}`,
+      );
+    }
     if (validated.origen === "empresa") {
       redirect(`/empresa/${validated.id}/configuracion?guardado=1`);
     }

@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { checkPlanLimit } from "@/lib/plan-limits";
+import { actualizarPrompt } from "@/app/actions/empresas";
 
 export default async function AgentesPage({
   params,
@@ -72,6 +73,34 @@ export default async function AgentesPage({
           ⚠️ {decodeURIComponent(error)}
         </div>
       )}
+
+      {/* Instrucciones del asistente (movido desde Configuración) */}
+      <div className="mb-6 bg-white rounded-xl p-6" style={{ border: "1px solid #C8DAD6" }}>
+        <h2 className="font-semibold font-sora mb-1" style={{ color: "#2D5750" }}>
+          Instrucciones del asistente
+        </h2>
+        <p className="text-xs mb-4" style={{ color: "#5C7872" }}>
+          Define el tono, la personalidad y las reglas de comportamiento de la IA para todas las conversaciones.
+        </p>
+        <form action={actualizarPrompt} className="space-y-4">
+          <input type="hidden" name="id" value={empresa.id} />
+          <input type="hidden" name="origen" value="agentes" />
+          <textarea
+            name="prompt"
+            rows={6}
+            defaultValue={empresa.promptSistema ?? ""}
+            placeholder={`Ej: Eres el asistente de ${empresa.nombre}. Eres amable y profesional. Atendemos de lunes a viernes de 9am a 6pm. Si el cliente quiere cotizar, pídele su nombre y teléfono.`}
+            className="w-full rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 resize-none"
+            style={{ border: "1px solid #C8DAD6", color: "#2D5750" }}
+          />
+          <button
+            type="submit"
+            className="text-white text-sm font-medium py-2.5 px-5 rounded-lg transition-opacity hover:opacity-90 grad-bg"
+          >
+            Guardar instrucciones
+          </button>
+        </form>
+      </div>
 
       {/* Plan info */}
       <div className="mb-6 p-4 bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-xl">
