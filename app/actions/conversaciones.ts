@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { notificarModoHumano } from "@/lib/push-notifications";
+import { enviarMensajeWhatsApp } from "@/lib/whatsapp-meta";
 import { auth } from "@/lib/auth";
 
 export async function reactivarIA(formData: FormData) {
@@ -123,35 +124,15 @@ export async function enviarMensajeHumano(formData: FormData) {
       },
     });
 
-    // Enviar mensaje por WhatsApp usando Twilio
-    const accountSid = process.env.TWILIO_ACCOUNT_SID;
-    const authToken = process.env.TWILIO_AUTH_TOKEN;
-    const from = process.env.TWILIO_WHATSAPP_FROM;
-
-    if (accountSid && authToken && from) {
-      try {
-        const response = await fetch(
-          `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`,
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Basic ${Buffer.from(`${accountSid}:${authToken}`).toString("base64")}`,
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: new URLSearchParams({
-              From: from,
-              To: `whatsapp:${conversacion.numeroCliente}`,
-              Body: contenido.trim(),
-            }),
-          }
-        );
-
-        if (!response.ok) {
-          console.error("Error enviando mensaje por WhatsApp:", await response.text());
-        }
-      } catch (error) {
-        console.error("Error al enviar por Twilio:", error);
-      }
+    // Enviar mensaje por WhatsApp usando la Cloud API de Meta.
+    // En despliegue mono-empresa se usa WHATSAPP_PHONE_NUMBER_ID como emisor.
+    const enviado = await enviarMensajeWhatsApp(
+      process.env.WHATSAPP_PHONE_NUMBER_ID,
+      conversacion.numeroCliente,
+      contenido.trim(),
+    );
+    if (!enviado) {
+      console.error("[enviarMensajeHumano] No se pudo enviar el mensaje por WhatsApp (Meta).");
     }
 
     // Revalidar las rutas para actualizar la UI

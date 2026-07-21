@@ -46,36 +46,36 @@ export async function getSystemStatus(): Promise<EstadoCheck[]> {
     comoActivar: ia ? undefined : "Agrega ANTHROPIC_API_KEY en Vercel → Settings → Environment Variables.",
   });
 
-  // WhatsApp (Twilio) — envío/recepción de mensajes
-  const twilio = !!(
-    process.env.TWILIO_ACCOUNT_SID?.trim() &&
-    process.env.TWILIO_AUTH_TOKEN?.trim() &&
-    process.env.TWILIO_WHATSAPP_FROM?.trim()
-  );
+  // WhatsApp (Meta Cloud API) — envío/recepción de mensajes
+  const metaToken = !!process.env.WHATSAPP_TOKEN?.trim();
+  const metaPhone = !!process.env.WHATSAPP_PHONE_NUMBER_ID?.trim();
+  const metaOk = metaToken && metaPhone;
   checks.push({
     id: "whatsapp",
-    label: "WhatsApp (Twilio)",
-    ok: twilio,
+    label: "WhatsApp (Meta Cloud API)",
+    ok: metaOk,
     critico: true,
-    detalle: twilio
-      ? "Credenciales de Twilio configuradas."
-      : "Faltan credenciales de Twilio; el agente no puede enviar/recibir por WhatsApp.",
-    comoActivar: twilio
+    detalle: metaOk
+      ? "Credenciales de Meta configuradas (token + número)."
+      : `Faltan credenciales de Meta${!metaToken ? " (WHATSAPP_TOKEN)" : ""}${!metaPhone ? " (WHATSAPP_PHONE_NUMBER_ID)" : ""}; el agente no puede enviar/recibir por WhatsApp.`,
+    comoActivar: metaOk
       ? undefined
-      : "Agrega TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN y TWILIO_WHATSAPP_FROM en Vercel, y apunta el webhook de Twilio a /api/webhook.",
+      : "Agrega WHATSAPP_TOKEN y WHATSAPP_PHONE_NUMBER_ID en Vercel, y configura el webhook de Meta apuntando a /api/webhook.",
   });
 
-  // Token de verificación del webhook (Meta) — opcional
+  // Token de verificación del webhook (Meta) — requerido para conectar el webhook
   const verify = !!process.env.WHATSAPP_VERIFY_TOKEN?.trim();
   checks.push({
     id: "verify",
-    label: "Token de verificación del webhook",
+    label: "Token de verificación del webhook (Meta)",
     ok: verify,
-    critico: false,
+    critico: true,
     detalle: verify
-      ? "Configurado (necesario si verificas el webhook con Meta)."
-      : "No configurado (solo necesario si usas verificación de Meta).",
-    comoActivar: verify ? undefined : "Opcional: agrega WHATSAPP_VERIFY_TOKEN en Vercel.",
+      ? "Configurado. Permite que Meta verifique y active el webhook."
+      : "No configurado; Meta no podrá verificar el webhook para enviarte mensajes.",
+    comoActivar: verify
+      ? undefined
+      : "Define WHATSAPP_VERIFY_TOKEN en Vercel (un texto que tú inventas, ej. pf_nexo_verify_2026) y ponlo igual en la configuración del webhook de Meta.",
   });
 
   // Email transaccional (Resend)
