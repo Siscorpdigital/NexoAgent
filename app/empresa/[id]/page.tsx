@@ -260,7 +260,7 @@ export default async function EmpresaHomePage({ params }: { params: Promise<{ id
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <p className="text-sm font-medium font-sora" style={{ color: SLATE_DK }}>{c.numeroCliente}</p>
+                    <p className="text-sm font-medium font-roboto tracking-wide" style={{ color: SLATE_DK }}>{c.numeroCliente}</p>
                     {c.modoHumano && (
                       <span
                         className="text-xs px-1.5 py-0.5 rounded-full font-medium"

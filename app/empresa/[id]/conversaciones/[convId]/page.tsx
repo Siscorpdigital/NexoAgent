@@ -47,7 +47,7 @@ export default async function EmpresaConversacionDetallePage({
           </svg>
         </Link>
         <div className="flex-1">
-          <h1 className="text-xl font-bold font-sora" style={{ color: "#2D5750" }}>
+          <h1 className="text-xl font-bold font-roboto tracking-wide" style={{ color: "#2D5750" }}>
             {conversacion.numeroCliente}
           </h1>
           <p className="text-xs mt-0.5" style={{ color: "#5C7872" }}>

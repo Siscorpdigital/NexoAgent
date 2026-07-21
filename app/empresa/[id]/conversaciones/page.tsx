@@ -150,7 +150,7 @@ function ConversacionItem({ c, empresaId }: { c: ConversacionItemProps; empresaI
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <p className="text-sm font-medium font-sora" style={{ color: "#2D5750" }}>
+            <p className="text-sm font-medium font-roboto tracking-wide" style={{ color: "#2D5750" }}>
               {c.numeroCliente}
             </p>
           </div>
