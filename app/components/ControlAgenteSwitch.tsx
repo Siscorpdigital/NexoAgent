@@ -12,6 +12,8 @@ interface ControlAgenteSwitchProps {
 
 const TEAL = "#2BAA8A";
 const ORANGE = "#F2A020";
+const TEAL_TXT = "#1E7D66"; // teal para texto (contraste AA)
+const ORANGE_TXT = "#B4610A"; // naranja para texto (contraste AA)
 const SLATE_DK = "#2D5750";
 const MUTED = "#5C7872";
 const LINE = "#C8DAD6";
@@ -51,7 +53,8 @@ export default function ControlAgenteSwitch({
     });
   };
 
-  const activo = esHumano ? ORANGE : TEAL;
+  const activo = esHumano ? ORANGE : TEAL; // relleno decorativo (dot, track)
+  const activoTexto = esHumano ? ORANGE_TXT : TEAL_TXT; // texto (contraste AA)
 
   return (
     <div
@@ -69,8 +72,8 @@ export default function ControlAgenteSwitch({
           </h3>
         </div>
         <span
-          className="text-[11px] font-medium px-2.5 py-1 rounded-full transition-colors"
-          style={{ color: activo, background: `${activo}14` }}
+          className="text-[11px] font-semibold px-2.5 py-1 rounded-full transition-colors"
+          style={{ color: activoTexto, background: `${activo}1F` }}
         >
           {pendiente ? "Actualizando…" : esHumano ? "Atención humana" : "IA activa"}
         </span>
@@ -93,7 +96,7 @@ export default function ControlAgenteSwitch({
             <div>
               <p
                 className="text-sm font-semibold font-sora leading-tight"
-                style={{ color: !esHumano ? TEAL : MUTED }}
+                style={{ color: !esHumano ? TEAL_TXT : MUTED }}
               >
                 Agente Virtual
               </p>
@@ -148,7 +151,7 @@ export default function ControlAgenteSwitch({
             <div>
               <p
                 className="text-sm font-semibold font-sora leading-tight"
-                style={{ color: esHumano ? ORANGE : MUTED }}
+                style={{ color: esHumano ? ORANGE_TXT : MUTED }}
               >
                 Atención Humana
               </p>

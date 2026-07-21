@@ -11,7 +11,9 @@ interface ControlSwitchMiniProps {
 }
 
 const TEAL = "#2BAA8A";
-const ORANGE = "#F2A020";
+const ORANGE = "#F2A020"; // relleno del interruptor (decorativo)
+const ORANGE_TXT = "#B4610A"; // naranja para texto (contraste AA)
+const TEAL_TXT = "#1E7D66"; // teal para texto (contraste AA)
 const MUTED = "#5C7872";
 
 /**
@@ -53,12 +55,13 @@ export default function ControlSwitchMini({
   };
 
   const activo = esHumano ? ORANGE : TEAL;
+  const activoTexto = esHumano ? ORANGE_TXT : TEAL_TXT;
 
   return (
     <div className="flex items-center gap-2">
       <span
-        className="hidden sm:inline text-[11px] font-medium tabular-nums"
-        style={{ color: pendiente ? MUTED : activo, width: 52, textAlign: "right" }}
+        className="hidden sm:inline text-[11px] font-semibold tabular-nums"
+        style={{ color: pendiente ? MUTED : activoTexto, width: 52, textAlign: "right" }}
       >
         {esHumano ? "Humano" : "IA"}
       </span>

@@ -6,7 +6,8 @@ import { formatTimeAgo } from "@/lib/utils";
 const SLATE_DK = "#2D5750";
 const MUTED = "#5C7872";
 const TEAL = "#2BAA8A";
-const ORANGE = "#F2A020";
+const ORANGE = "#F2A020"; // relleno/decorativo (switch, tintes)
+const ORANGE_TXT = "#B4610A"; // naranja para TEXTO: cumple contraste AA sobre blanco
 const LINE = "#C8DAD6";
 
 export default async function EmpresaHomePage({ params }: { params: Promise<{ id: string }> }) {
@@ -183,7 +184,7 @@ export default async function EmpresaHomePage({ params }: { params: Promise<{ id
           <Link
             href={`/empresa/${id}/conversaciones?modo=humano`}
             className="text-xs text-white px-3 py-1.5 rounded-lg font-medium transition-opacity hover:opacity-90 flex-shrink-0"
-            style={{ background: ORANGE }}
+            style={{ background: ORANGE_TXT }}
           >
             Ver ahora
           </Link>
@@ -209,8 +210,8 @@ export default async function EmpresaHomePage({ params }: { params: Promise<{ id
         >
           <div className="flex items-start justify-between mb-2">
             <div>
-              <p className="text-sm" style={{ color: pendientes > 0 ? ORANGE : MUTED }}>Pendientes</p>
-              <p className="text-3xl font-bold mt-1 font-sora" style={{ color: pendientes > 0 ? ORANGE : SLATE_DK }}>
+              <p className="text-sm" style={{ color: pendientes > 0 ? ORANGE_TXT : MUTED }}>Pendientes</p>
+              <p className="text-3xl font-bold mt-1 font-sora" style={{ color: pendientes > 0 ? ORANGE_TXT : SLATE_DK }}>
                 {pendientes}
               </p>
               <p className="text-xs mt-1" style={{ color: MUTED }}>requieren humano</p>
@@ -221,7 +222,7 @@ export default async function EmpresaHomePage({ params }: { params: Promise<{ id
             <Link
               href={`/empresa/${id}/conversaciones?modo=humano`}
               className="text-xs font-medium mt-2 inline-block"
-              style={{ color: ORANGE }}
+              style={{ color: ORANGE_TXT }}
             >
               Atender ahora →
             </Link>
@@ -263,7 +264,7 @@ export default async function EmpresaHomePage({ params }: { params: Promise<{ id
                     {c.modoHumano && (
                       <span
                         className="text-xs px-1.5 py-0.5 rounded-full font-medium"
-                        style={{ background: `${ORANGE}14`, color: ORANGE }}
+                        style={{ background: `${ORANGE}1F`, color: ORANGE_TXT }}
                       >
                         Humano
                       </span>
