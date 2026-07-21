@@ -119,7 +119,7 @@ export default async function CRMPage({
                       <p className="text-sm font-medium truncate" style={{ color: "#2D5750" }}>
                         {c.nombre ?? <span style={{ color: "#5C7872" }}>Sin nombre</span>}
                       </p>
-                      <p className="text-xs mt-0.5" style={{ color: "#5C7872" }}>{c.telefono}</p>
+                      <p className="text-xs mt-0.5 font-roboto tracking-wide" style={{ color: "#5C7872" }}>{c.telefono}</p>
                     </div>
                     <div className="flex items-center gap-3 flex-shrink-0">
                       <ContactBadge

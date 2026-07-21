@@ -51,9 +51,9 @@ export default async function ContactoDetallePage({
         </div>
         <div>
           <h1 className="text-xl font-bold font-sora" style={{ color: "#2D5750" }}>
-            {contacto.nombre ?? contacto.telefono}
+            {contacto.nombre ?? <span className="font-roboto tracking-wide">{contacto.telefono}</span>}
           </h1>
-          <p className="text-xs" style={{ color: "#5C7872" }}>{contacto.telefono}</p>
+          <p className="text-xs font-roboto tracking-wide" style={{ color: "#5C7872" }}>{contacto.telefono}</p>
         </div>
         <ContactBadge
           tipo={contacto.tipo}

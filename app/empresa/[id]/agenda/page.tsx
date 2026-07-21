@@ -215,7 +215,7 @@ export default async function AgendaPage({
                         {cita.nombreCliente}
                       </h3>
                       <p className="text-xs mt-1" style={{ color: "#5C7872" }}>
-                        📞 {cita.telefono}
+                        📞 <span className="font-roboto tracking-wide">{cita.telefono}</span>
                       </p>
                       <p className="text-xs mt-1" style={{ color: "#3D6E65" }}>
                         🕒 {formatearFecha(cita.inicio)} - {formatearHora(cita.fin)}
@@ -307,7 +307,7 @@ export default async function AgendaPage({
                       {cita.nombreCliente}
                     </h3>
                     <p className="text-xs mt-0.5" style={{ color: "#5C7872" }}>
-                      {formatearFecha(cita.inicio)} • {cita.telefono}
+                      {formatearFecha(cita.inicio)} • <span className="font-roboto tracking-wide">{cita.telefono}</span>
                     </p>
                     {cita.notas && (
                       <p className="text-xs mt-1" style={{ color: "#5C7872" }}>
@@ -345,7 +345,7 @@ export default async function AgendaPage({
                   {cita.nombreCliente}
                 </h3>
                 <p className="text-xs mt-0.5" style={{ color: "#5C7872" }}>
-                  {formatearFecha(cita.inicio)} • {cita.telefono}
+                  {formatearFecha(cita.inicio)} • <span className="font-roboto tracking-wide">{cita.telefono}</span>
                 </p>
               </div>
             ))}
