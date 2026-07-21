@@ -28,7 +28,7 @@ export default async function EmpresaConfiguracionPage({
       <div>
         <h1 className="text-2xl font-bold font-sora" style={{ color: "#2D5750" }}>Configuración</h1>
         <p className="text-sm mt-1" style={{ color: "#5C7872" }}>
-          Gestiona los datos y el asistente de {empresa.nombre}
+          Datos de {empresa.nombre} y número de WhatsApp
         </p>
       </div>
 

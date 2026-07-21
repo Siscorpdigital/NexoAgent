@@ -6,6 +6,8 @@ import ScrollToTop from "@/app/components/ScrollToTop";
 import EmptyState from "@/app/components/help/EmptyState";
 import ConversacionesMobileActions from "@/app/components/ConversacionesMobileActions";
 import { FilterBarWithUrl } from "@/app/components/data/FilterBar";
+import ControlSwitchMini from "@/app/components/ControlSwitchMini";
+import { cambiarControlConversacion } from "@/app/actions/conversaciones";
 
 export default async function EmpresaConversacionesPage({
   params,
@@ -51,7 +53,7 @@ export default async function EmpresaConversacionesPage({
           Conversaciones
         </h1>
         <p className="text-sm mt-1" style={{ color: "#5C7872" }}>
-          {conversaciones.length} chat{conversaciones.length !== 1 ? "s" : ""} · Mensajes de WhatsApp
+          {conversaciones.length} chat{conversaciones.length !== 1 ? "s" : ""} · Usa el interruptor para atender tú o dejar que responda la IA
         </p>
       </div>
 
@@ -135,50 +137,44 @@ interface ConversacionItemProps {
 
 function ConversacionItem({ c, empresaId }: { c: ConversacionItemProps; empresaId: string }) {
   return (
-    <Link href={`/empresa/${empresaId}/conversaciones/${c.id}`} className="flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-4 hover:bg-gray-50 transition-colors">
-      <div
-        className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center flex-shrink-0 font-semibold text-sm font-sora"
-        style={{ background: "rgba(43, 170, 138,0.08)", color: "#2BAA8A" }}
+    <div className="flex items-center hover:bg-gray-50 transition-colors">
+      <Link
+        href={`/empresa/${empresaId}/conversaciones/${c.id}`}
+        className="flex-1 min-w-0 flex items-center gap-3 sm:gap-4 pl-4 sm:pl-5 pr-2 py-4"
       >
-        {c.numeroCliente[0]}
-      </div>
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-1 flex-wrap">
-          <p className="text-sm font-medium font-sora" style={{ color: "#2D5750" }}>
-            {c.numeroCliente}
+        <div
+          className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center flex-shrink-0 font-semibold text-sm font-sora"
+          style={{ background: "rgba(43, 170, 138,0.08)", color: "#2BAA8A" }}
+        >
+          {c.numeroCliente[0]}
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1">
+            <p className="text-sm font-medium font-sora" style={{ color: "#2D5750" }}>
+              {c.numeroCliente}
+            </p>
+          </div>
+          <p className="text-xs truncate" style={{ color: "#5C7872" }}>
+            {c.mensajes[0]?.contenido ?? "Sin mensajes"}
           </p>
-          {c.modoHumano && (
-            <span
-              className="text-xs px-2 py-0.5 rounded-full font-medium"
-              style={{ background: "rgba(242, 160, 32,0.08)", color: "#F2A020" }}
-            >
-              Atención humana
-            </span>
-          )}
+          <div className="flex items-center gap-2 mt-1 text-xs" style={{ color: "#5C7872" }}>
+            <span>{c._count.mensajes} msg</span>
+            <span>·</span>
+            <span>{formatTimeAgo(c.actualizadoEn)}</span>
+          </div>
         </div>
-        <p className="text-xs truncate" style={{ color: "#5C7872" }}>
-          {c.mensajes[0]?.contenido ?? "Sin mensajes"}
-        </p>
-        <div className="flex items-center gap-2 mt-1 sm:hidden text-xs" style={{ color: "#5C7872" }}>
-          <span>{c._count.mensajes} msg</span>
-          <span>·</span>
-          <span>{formatTimeAgo(c.actualizadoEn)}</span>
-        </div>
+      </Link>
+
+      {/* Switch de control rápido (fuera del enlace para no navegar al tocarlo) */}
+      <div className="flex-shrink-0 pr-4 sm:pr-5 pl-1">
+        <ControlSwitchMini
+          conversacionId={c.id}
+          empresaId={empresaId}
+          numeroCliente={c.numeroCliente}
+          modoHumano={c.modoHumano}
+          cambiarControl={cambiarControlConversacion}
+        />
       </div>
-      <div className="hidden sm:flex items-center gap-3 flex-shrink-0">
-        <span className="text-xs" style={{ color: "#5C7872" }}>
-          {c._count.mensajes} msg
-        </span>
-        <span className="text-xs" style={{ color: "#5C7872" }}>
-          {formatTimeAgo(c.actualizadoEn)}
-        </span>
-        <svg className="w-4 h-4" style={{ color: "#C8DAD6" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-        </svg>
-      </div>
-      <svg className="w-5 h-5 sm:hidden flex-shrink-0" style={{ color: "#C8DAD6" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-      </svg>
-    </Link>
+    </div>
   );
 }

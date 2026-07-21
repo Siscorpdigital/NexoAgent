@@ -34,10 +34,10 @@ export default async function AutomatizacionesPage({
     <div>
       <div className="mb-6">
         <h1 className="text-2xl font-bold font-sora" style={{ color: "#2D5750" }}>
-          Automatizaciones
+          Respuestas automáticas
         </h1>
         <p className="text-sm mt-1" style={{ color: "#5C7872" }}>
-          Respuestas automáticas que se activan sin pasar por la IA
+          Mensajes que se envían solos ante ciertas situaciones (primer saludo, palabra clave, fuera de horario)
         </p>
       </div>
 

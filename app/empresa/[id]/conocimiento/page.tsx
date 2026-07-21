@@ -29,16 +29,15 @@ export default async function ConocimientoPage({
       <div className="mb-6 flex items-start justify-between">
         <div>
           <h1 className="text-2xl font-bold font-sora" style={{ color: "#2D5750" }}>
-            Centro de conocimiento
+            Documentos y conocimiento
           </h1>
           <p className="text-sm mt-1" style={{ color: "#5C7872" }}>
-            {documentos.length} documento{documentos.length !== 1 ? "s" : ""} ·{" "}
-            {totalChunks} fragmentos indexados
+            Sube tus planes, precios y respuestas frecuentes para que el asistente los use · {documentos.length} documento{documentos.length !== 1 ? "s" : ""}
           </p>
         </div>
         <div className="flex items-center gap-2 text-xs px-3 py-1.5 rounded-full font-medium" style={{ background: "rgba(43, 170, 138,0.08)", color: "#2BAA8A", border: "1px solid rgba(43, 170, 138,0.2)" }}>
           <span className="w-1.5 h-1.5 rounded-full" style={{ background: "#2BAA8A" }}></span>
-          Búsqueda por relevancia activa
+          El asistente ya los está usando
         </div>
       </div>
 
@@ -49,7 +48,7 @@ export default async function ConocimientoPage({
         </div>
         <div className="bg-white rounded-xl p-5" style={{ border: "1px solid #C8DAD6" }}>
           <p className="text-3xl font-bold font-sora" style={{ color: "#2D5750" }}>{totalChunks}</p>
-          <p className="text-sm mt-1" style={{ color: "#5C7872" }}>Fragmentos indexados</p>
+          <p className="text-sm mt-1" style={{ color: "#5C7872" }}>Secciones de texto</p>
         </div>
         <div className="bg-white rounded-xl p-5" style={{ border: "1px solid #C8DAD6" }}>
           <p className="text-3xl font-bold font-sora" style={{ color: "#2BAA8A" }}>
