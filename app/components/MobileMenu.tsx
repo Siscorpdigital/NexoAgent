@@ -153,7 +153,11 @@ export default function MobileMenu({
           >
             Cerrar sesión
           </button>
-          <p className="text-xs text-gray-400">NexoAgent · Empleado virtual IA</p>
+          <p className="text-[10px] leading-tight text-gray-400">
+            Sistemas Diseñados y Desarrollados por{" "}
+            <a href="https://www.siscorpdigital.com" target="_blank" rel="noopener" className="font-semibold hover:underline" style={{ color: "#2BAA8A" }}>SISCORPDIGITAL</a>
+            {" "}· Todos los derechos reservados
+          </p>
         </div>
       </div>
     </>

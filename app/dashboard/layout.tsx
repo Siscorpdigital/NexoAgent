@@ -94,7 +94,11 @@ export default async function DashboardLayout({ children }: { children: React.Re
               Cerrar sesión
             </button>
           </form>
-          <p className="text-xs text-gray-400">NexoAgent · v1.0</p>
+          <p className="text-[10px] leading-tight text-gray-400">
+            Sistemas Diseñados y Desarrollados por{" "}
+            <a href="https://www.siscorpdigital.com" target="_blank" rel="noopener" className="font-semibold hover:underline" style={{ color: "#2BAA8A" }}>SISCORPDIGITAL</a>
+            {" "}· Todos los derechos reservados
+          </p>
         </div>
       </aside>
 
