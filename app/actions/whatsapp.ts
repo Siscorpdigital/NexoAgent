@@ -78,18 +78,32 @@ export async function eliminarNumeroWhatsApp(formData: FormData) {
       redirect(`/empresa/${session.user.empresaId}/whatsapp?error=No+autorizado`);
     }
 
-    // Verificar que no sea el principal
     const numero = await prisma.numeroWhatsApp.findUnique({
       where: { id: numeroId },
     });
 
-    if (!numero || numero.esPrincipal) {
-      redirect(`/empresa/${empresaId}/whatsapp?error=No+puedes+eliminar+el+número+principal`);
+    if (!numero || numero.empresaId !== empresaId) {
+      redirect(`/empresa/${empresaId}/whatsapp?error=Número+no+encontrado`);
     }
 
     await prisma.numeroWhatsApp.delete({
       where: { id: numeroId },
     });
+
+    // Si se eliminó el principal y quedan otros números, asignar uno nuevo como
+    // principal (el más antiguo) para no dejar a la empresa sin número principal.
+    if (numero.esPrincipal) {
+      const siguiente = await prisma.numeroWhatsApp.findFirst({
+        where: { empresaId },
+        orderBy: { creadoEn: "asc" },
+      });
+      if (siguiente) {
+        await prisma.numeroWhatsApp.update({
+          where: { id: siguiente.id },
+          data: { esPrincipal: true },
+        });
+      }
+    }
 
     redirect(`/empresa/${empresaId}/whatsapp?success=Número+eliminado+correctamente`);
   } catch (error) {

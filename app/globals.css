@@ -21,6 +21,7 @@
 @theme inline {
   --font-sora:    var(--font-sora);
   --font-jakarta: var(--font-jakarta);
+  --font-roboto:  var(--font-roboto);
 }
 
 /* ── U4: rebranding global ──
@@ -109,6 +110,8 @@ summary,
 
 .font-sora    { font-family: var(--font-sora), "Sora", sans-serif; }
 .font-jakarta { font-family: var(--font-jakarta), "Plus Jakarta Sans", sans-serif; }
+/* Números (teléfonos): Roboto para máxima legibilidad, con dígitos alineados. */
+.font-roboto  { font-family: var(--font-roboto), Roboto, system-ui, sans-serif; font-variant-numeric: tabular-nums; letter-spacing: 0.01em; }
 
 .grad-text {
   background: var(--grad);

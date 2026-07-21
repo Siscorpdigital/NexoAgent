@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 // --font-jakarta que usa la app; ahora resuelven a las fuentes del cotizador):
 //   - Títulos: Cormorant Garamond (serif institucional)
 //   - Cuerpo:  Inter
-import { Cormorant_Garamond, Inter } from "next/font/google";
+import { Cormorant_Garamond, Inter, Roboto } from "next/font/google";
 import "./globals.css";
 import { ToastProvider } from "@/lib/context/ToastContext";
 import ToastContainer from "@/app/components/ui/ToastContainer";
@@ -19,6 +19,13 @@ const jakarta = Inter({
   variable: "--font-jakarta",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+});
+
+// Roboto: para mostrar números (teléfonos) con máxima legibilidad.
+const roboto = Roboto({
+  variable: "--font-roboto",
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
 });
 
 export const metadata: Metadata = {
@@ -46,7 +53,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className={`${sora.variable} ${jakarta.variable} h-full antialiased`}>
+    <html lang="es" className={`${sora.variable} ${jakarta.variable} ${roboto.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col font-jakarta">
         <ToastProvider>
           <SkipLinks />

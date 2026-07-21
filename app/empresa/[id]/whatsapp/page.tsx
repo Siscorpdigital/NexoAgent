@@ -1,8 +1,9 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import { agregarNumeroWhatsApp, eliminarNumeroWhatsApp, marcarComoPrincipal, toggleActivoWhatsApp } from "@/app/actions/whatsapp";
+import { agregarNumeroWhatsApp, marcarComoPrincipal, toggleActivoWhatsApp } from "@/app/actions/whatsapp";
 import { checkPlanLimit } from "@/lib/plan-limits";
+import EliminarNumeroButton from "./EliminarNumeroButton";
 
 export default async function WhatsAppPage({
   params,
@@ -89,7 +90,7 @@ export default async function WhatsAppPage({
                 type="text"
                 name="telefono"
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-roboto tracking-wide"
                 placeholder="+584241234567"
               />
               <p className="text-xs text-gray-500 mt-1">Formato internacional</p>
@@ -144,13 +145,18 @@ export default async function WhatsAppPage({
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-semibold font-sora" style={{ color: "#2D5750" }}>{numero.telefono}</h3>
+                    <h3 className="font-roboto text-lg font-semibold tracking-wide" style={{ color: "#2D5750" }}>{numero.telefono}</h3>
                     {numero.esPrincipal && (
                       <span className="px-2 py-0.5 text-xs font-medium rounded" style={{ background: "rgba(43,170,138,0.12)", color: "#2BAA8A" }}>
                         Principal
                       </span>
                     )}
-                    {!numero.activo && (
+                    {numero.activo ? (
+                      <span className="px-2 py-0.5 text-xs font-medium rounded inline-flex items-center gap-1" style={{ background: "rgba(43,170,138,0.10)", color: "#1E7D66" }}>
+                        <span className="w-1.5 h-1.5 rounded-full" style={{ background: "#2BAA8A" }}></span>
+                        Activo
+                      </span>
+                    ) : (
                       <span className="px-2 py-0.5 bg-gray-100 text-gray-600 text-xs font-medium rounded">
                         Inactivo
                       </span>
@@ -164,14 +170,14 @@ export default async function WhatsAppPage({
                   </p>
                 </div>
 
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 w-36">
                   {!numero.esPrincipal && (
                     <form action={marcarComoPrincipal}>
                       <input type="hidden" name="empresaId" value={empresaId} />
                       <input type="hidden" name="numeroId" value={numero.id} />
                       <button
                         type="submit"
-                        className="px-3 py-1.5 text-xs rounded-lg transition-opacity hover:opacity-80 font-medium"
+                        className="w-full px-3 py-1.5 text-xs rounded-lg transition-opacity hover:opacity-80 font-medium"
                         style={{ background: "rgba(43,170,138,0.12)", color: "#2BAA8A" }}
                       >
                         Marcar principal
@@ -184,7 +190,7 @@ export default async function WhatsAppPage({
                     <input type="hidden" name="numeroId" value={numero.id} />
                     <button
                       type="submit"
-                      className={`px-3 py-1.5 text-xs rounded-lg transition font-medium ${
+                      className={`w-full px-3 py-1.5 text-xs rounded-lg transition font-medium ${
                         numero.activo
                           ? "bg-gray-100 text-gray-700 hover:bg-gray-200"
                           : "bg-green-100 text-green-700 hover:bg-green-200"
@@ -194,23 +200,11 @@ export default async function WhatsAppPage({
                     </button>
                   </form>
 
-                  {!numero.esPrincipal && (
-                    <form action={eliminarNumeroWhatsApp}>
-                      <input type="hidden" name="empresaId" value={empresaId} />
-                      <input type="hidden" name="numeroId" value={numero.id} />
-                      <button
-                        type="submit"
-                        className="px-3 py-1.5 text-xs bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition font-medium"
-                        onClick={(e) => {
-                          if (!confirm("¿Seguro que deseas eliminar este número?")) {
-                            e.preventDefault();
-                          }
-                        }}
-                      >
-                        Eliminar
-                      </button>
-                    </form>
-                  )}
+                  <EliminarNumeroButton
+                    empresaId={empresaId}
+                    numeroId={numero.id}
+                    telefono={numero.telefono}
+                  />
                 </div>
               </div>
             </div>
