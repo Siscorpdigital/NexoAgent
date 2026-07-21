@@ -55,15 +55,15 @@ export default async function AgentesPage({
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Agentes Virtuales</h1>
-        <p className="text-gray-600 mt-2">
-          Gestiona los agentes especializados de tu empresa
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold font-sora" style={{ color: "#2D5750" }}>Tu Asistente Virtual</h1>
+        <p className="text-sm mt-1" style={{ color: "#5C7872" }}>
+          Define cómo habla, qué sabe y cómo atiende a tus clientes
         </p>
       </div>
 
       {success && (
-        <div className="mb-6 px-4 py-3 bg-green-50 border border-green-200 rounded-lg text-green-700">
+        <div className="mb-6 px-4 py-3 rounded-lg text-sm font-medium" style={{ background: "rgba(43,170,138,0.08)", border: "1px solid rgba(43,170,138,0.25)", color: "#2BAA8A" }}>
           ✓ {decodeURIComponent(success)}
         </div>
       )}
@@ -103,17 +103,17 @@ export default async function AgentesPage({
       </div>
 
       {/* Plan info */}
-      <div className="mb-6 p-4 bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-xl">
+      <div className="mb-6 p-4 rounded-xl" style={{ background: "rgba(43,170,138,0.06)", border: "1px solid rgba(43,170,138,0.22)" }}>
         <div className="flex items-start justify-between flex-wrap gap-3">
           <div>
-            <h3 className="font-semibold text-gray-900">{empresa.plan?.nombre || "Sin plan"}</h3>
-            <p className="text-sm text-gray-600 mt-1">{limitCheck.message}</p>
+            <h3 className="font-semibold font-sora" style={{ color: "#2D5750" }}>{empresa.plan?.nombre || "Sin plan"}</h3>
+            <p className="text-sm mt-1" style={{ color: "#5C7872" }}>{limitCheck.message}</p>
           </div>
           <div className="text-right">
-            <p className="text-2xl font-bold text-gray-900">
+            <p className="text-2xl font-bold font-sora" style={{ color: "#2D5750" }}>
               {limitCheck.current} / {limitCheck.max === -1 ? "∞" : limitCheck.max}
             </p>
-            <p className="text-xs text-gray-500">agentes activos</p>
+            <p className="text-xs" style={{ color: "#5C7872" }}>asistentes activos</p>
           </div>
         </div>
       </div>
@@ -123,7 +123,7 @@ export default async function AgentesPage({
         <div className="mb-6">
           <Link
             href={`/empresa/${empresaId}/agentes/nuevo`}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition font-medium shadow-md"
+            className="inline-flex items-center gap-2 px-6 py-3 text-white rounded-lg transition-opacity hover:opacity-90 font-medium shadow-sm grad-bg"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -153,22 +153,20 @@ export default async function AgentesPage({
             return (
               <div
                 key={agente.id}
-                className={`bg-white rounded-xl border shadow-sm p-5 hover:shadow-md transition ${
-                  agente.esPrincipal
-                    ? "border-purple-300 bg-gradient-to-br from-purple-50/50 to-transparent"
-                    : "border-gray-200"
-                }`}
+                className="bg-white rounded-xl border shadow-sm p-5 hover:shadow-md transition"
                 style={{
+                  borderColor: agente.esPrincipal ? "rgba(43,170,138,0.35)" : "#C8DAD6",
+                  background: agente.esPrincipal ? "rgba(43,170,138,0.05)" : "#fff",
                   borderLeftWidth: "4px",
-                  borderLeftColor: agente.color || "#9333EA",
+                  borderLeftColor: agente.color || "#2BAA8A",
                 }}
               >
                 <div className="flex items-start justify-between gap-3 mb-3">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-bold text-gray-900">{agente.nombre}</h3>
+                      <h3 className="font-bold font-sora" style={{ color: "#2D5750" }}>{agente.nombre}</h3>
                       {agente.esPrincipal && (
-                        <span className="px-2 py-0.5 bg-purple-100 text-purple-700 text-xs font-medium rounded">
+                        <span className="px-2 py-0.5 text-xs font-medium rounded" style={{ background: "rgba(43,170,138,0.12)", color: "#2BAA8A" }}>
                           Principal
                         </span>
                       )}
@@ -222,13 +220,15 @@ export default async function AgentesPage({
                 <div className="flex gap-2 pt-3 border-t border-gray-100">
                   <Link
                     href={`/empresa/${empresaId}/agentes/${agente.id}`}
-                    className="flex-1 px-3 py-1.5 text-center text-xs bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition font-medium"
+                    className="flex-1 px-3 py-1.5 text-center text-xs rounded-lg transition-opacity hover:opacity-80 font-medium"
+                    style={{ background: "rgba(61,110,101,0.10)", color: "#3D6E65" }}
                   >
                     Editar
                   </Link>
                   <Link
                     href={`/empresa/${empresaId}/agentes/${agente.id}/test`}
-                    className="flex-1 px-3 py-1.5 text-center text-xs bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition font-medium"
+                    className="flex-1 px-3 py-1.5 text-center text-xs rounded-lg transition-opacity hover:opacity-80 font-medium"
+                    style={{ background: "rgba(43,170,138,0.12)", color: "#2BAA8A" }}
                   >
                     Probar
                   </Link>
