@@ -259,7 +259,7 @@ footer a{color:var(--teal-txt);font-weight:700;text-decoration:none}
         <div>
           <div class="sec-t">Vista previa de la tarjeta</div>
           <div class="prev-card" id="prevCard"><span>Escribe el nombre para ver la tarjeta</span></div>
-          <div class="nota" id="edNota">El QR se genera automáticamente al guardar. Cada persona tiene un QR único.</div>
+          <div class="nota" id="edNota">El QR se genera automáticamente al guardar. Cada persona tiene su propio QR y su dirección lleva su nombre.</div>
         </div>
       </div>
     </div>
@@ -542,7 +542,7 @@ function abrirEditor(id) {
   $('edError').classList.add('hidden');
   $('edNota').textContent = t
     ? 'Al guardar, la tarjeta se actualiza al instante. El QR no cambia: sigue sirviendo el mismo que ya repartiste.'
-    : 'El QR se genera automáticamente al guardar. Cada persona tiene un QR único.';
+    : 'El QR se genera automáticamente al guardar. Cada persona tiene su propio QR y su dirección lleva su nombre (por ejemplo …/t/rohely-fajardo-k7x2m).';
   $('prevCard').innerHTML = '<span>Escribe el nombre para ver la tarjeta</span>';
   if (!$('mFicha').classList.contains('hidden')) cerrar('mFicha');
   abrir('mEditor');
@@ -752,7 +752,7 @@ function alternarDesdeFicha() { if (fichaId) alternar(fichaId); }
 async function regenerarQR() {
   const t = tarjetas.find((x) => x.id === fichaId);
   if (!t) return;
-  if (!confirm('Se generará un QR nuevo para ' + t.nombre + '.\n\nEl QR anterior dejará de funcionar (si ya lo imprimiste o compartiste, habrá que reemplazarlo). ¿Continuar?')) return;
+  if (!confirm('Se generará un QR nuevo para ' + t.nombre + ', con una dirección basada en su nombre actual.\n\nEl QR anterior dejará de funcionar (si ya lo imprimiste o compartiste, habrá que reemplazarlo). ¿Continuar?')) return;
   try {
     const json = await apiJson('/' + t.id + '/regenerar', { method: 'POST' });
     reemplazar(json.tarjeta);

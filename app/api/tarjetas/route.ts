@@ -32,7 +32,7 @@ export async function POST(req: Request) {
         data: {
           ...datos,
           extras: extras as unknown as Prisma.InputJsonValue,
-          token: generarToken(),
+          token: generarToken(datos.nombre),
           creadoPor: admin.email,
         },
       });

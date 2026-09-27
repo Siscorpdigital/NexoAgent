@@ -23,23 +23,50 @@ export interface DatosTarjeta {
   extras: ContactoExtra[];
 }
 
-/** Sin 0/O/1/l/I para evitar confusiones si alguien transcribe la URL. */
-const ALFABETO = "abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+/** Minúsculas sin 0/o/1/l/i para evitar confusiones si alguien transcribe la URL. */
+const ALFABETO = "abcdefghjkmnpqrstuvwxyz23456789";
 
-/** Token aleatorio no adivinable para la URL oculta (/t/<token>). */
-export function generarToken(longitud = 10): string {
+function codigoAleatorio(longitud: number): string {
   const limite = 256 - (256 % ALFABETO.length); // evita sesgo de módulo
-  let token = "";
-  while (token.length < longitud) {
+  let codigo = "";
+  while (codigo.length < longitud) {
     for (const b of randomBytes(longitud * 2)) {
-      if (b < limite && token.length < longitud) token += ALFABETO[b % ALFABETO.length];
+      if (b < limite && codigo.length < longitud) codigo += ALFABETO[b % ALFABETO.length];
     }
   }
-  return token;
+  return codigo;
 }
 
+/**
+ * Parte legible de la URL a partir del nombre: primer nombre + primer
+ * apellido, sin iniciales ni acentos.
+ *   "Rohely C. Fajardo G."                → "rohely-fajardo"
+ *   "María Alejandra Fernández Rodríguez" → "maria-fernandez"
+ */
+export function slugPersona(nombre: string): string {
+  const palabras = nombre
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, " ")
+    .split(/\s+/)
+    .filter((p) => p.length > 1);
+  const elegidas = palabras.length <= 2 ? palabras : [palabras[0], palabras[palabras.length - 2]];
+  return elegidas.join("-").slice(0, 30).replace(/-+$/, "") || "tarjeta";
+}
+
+/**
+ * Segmento de la URL pública (/t/<token>): el nombre de la persona más un
+ * código corto aleatorio, para que sea legible pero no se pueda adivinar.
+ *   → "rohely-fajardo-k7x2m"
+ */
+export function generarToken(nombre: string): string {
+  return `${slugPersona(nombre)}-${codigoAleatorio(5)}`;
+}
+
+/** Acepta el formato con nombre y el formato anterior (solo código). */
 export function tokenValido(token: string): boolean {
-  return /^[A-Za-z0-9]{6,32}$/.test(token);
+  return /^[A-Za-z0-9-]{6,64}$/.test(token);
 }
 
 function texto(v: unknown, max: number): string | null {

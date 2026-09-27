@@ -18,7 +18,7 @@ export async function POST(req: Request, ctx: ContextoId) {
     try {
       const tarjeta = await prisma.tarjetaDigital.update({
         where: { id: r.tarjeta.id },
-        data: { token: generarToken() },
+        data: { token: generarToken(r.tarjeta.nombre) },
       });
       return Response.json({ tarjeta: serializar(tarjeta, urlBase(req.headers)) }, { headers: SIN_CACHE });
     } catch (error) {
