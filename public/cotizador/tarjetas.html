@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Tarjetas digitales — Previsión Familiar</title>
+<link rel="icon" type="image/png" href="/favicon-pf.png">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="/cotizador/supabase-config.js"></script>
+<style>
+:root{
+  --slate:#3D6E65; --slate-dk:#2D5750; --orange:#F2A020; --orange-txt:#B4610A; --orange-pale:#FEF3DC;
+  --teal:#2BAA8A; --teal-txt:#1E7D66; --teal-pale:#E6F7F3;
+  --cream:#F4F7F6; --text:#1C2B28; --muted:#5C7872; --light:#9AB6B0; --border:#C8DAD6; --line:#E5EDEB;
+  --err:#991B1B; --err-bg:#FEF2F2;
+  --sh:0 4px 18px rgba(45,87,80,.09),0 1px 4px rgba(45,87,80,.05);
+  --shlg:0 14px 44px rgba(45,87,80,.16),0 4px 12px rgba(45,87,80,.07);
+  --grad:linear-gradient(120deg,#2D5750,#3D6E65,#2BAA8A);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:linear-gradient(160deg,#EEF4F2 0%,#F4F7F6 100%);color:var(--text);min-height:100vh;font-size:14.5px;line-height:1.55;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
+a{color:inherit}
+.hidden{display:none!important}
+button{font-family:inherit;cursor:pointer}
+input,select{font-family:inherit;font-size:14px}
+
+/* Cabecera */
+.top{background:var(--grad);color:#fff;box-shadow:var(--sh)}
+.top-in{max-width:1180px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.brand img{width:38px;height:38px;border-radius:50%;background:#fff;padding:3px}
+.brand b{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:700;display:block;line-height:1.05}
+.brand small{font-size:11.5px;opacity:.75;letter-spacing:.02em}
+.top-r{display:flex;align-items:center;gap:12px;font-size:12.5px}
+.top-r #quien{opacity:.85}
+.btn-top{color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.35);padding:7px 12px;border-radius:9px;font-weight:600;white-space:nowrap}
+.btn-top:hover{background:rgba(255,255,255,.12)}
+
+.wrap{max-width:1180px;width:100%;margin:0 auto;padding:26px 20px 40px;flex:1}
+.estado{background:#fff;border:1px solid var(--line);border-radius:14px;padding:36px 24px;text-align:center;color:var(--muted);box-shadow:var(--sh)}
+.estado h2{font-family:'Cormorant Garamond',serif;color:var(--slate-dk);font-size:24px;margin-bottom:6px}
+
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+.page-head h1{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--slate-dk);line-height:1.1}
+.page-head p{color:var(--muted);font-size:13.5px;max-width:640px;margin-top:4px}
+
+.btn{border:1px solid var(--border);background:#fff;color:var(--slate-dk);padding:9px 14px;border-radius:10px;font-weight:600;font-size:13px;display:inline-flex;align-items:center;gap:6px;transition:.15s;text-decoration:none;white-space:nowrap}
+.btn:hover{border-color:var(--teal);background:var(--teal-pale)}
+.btn-sm{padding:6px 10px;font-size:12px;border-radius:8px}
+.btn-primary{background:var(--grad);color:#fff;border:none;padding:11px 18px;border-radius:11px;font-weight:700;font-size:14px;box-shadow:0 6px 16px rgba(43,170,138,.22)}
+.btn-primary:hover{filter:brightness(1.05);background:var(--grad)}
+.btn-primary:disabled{opacity:.6;cursor:wait}
+.btn-danger{color:var(--err);border-color:#FECACA}
+.btn-danger:hover{background:var(--err-bg);border-color:var(--err)}
+.btn-warn{color:var(--orange-txt);border-color:#F6D8A8}
+.btn-warn:hover{background:var(--orange-pale);border-color:var(--orange)}
+
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:var(--sh)}
+.kpi b{font-family:'Anton',sans-serif;font-weight:400;font-size:28px;color:var(--slate-dk);display:block;line-height:1.1}
+.kpi span{font-size:12px;color:var(--muted)}
+
+.toolbar{display:flex;gap:10px;margin-bottom:14px}
+.toolbar input{flex:1;height:42px;border:1px solid var(--border);border-radius:11px;padding:0 14px;background:#fff;outline:none}
+.toolbar input:focus,.fld input:focus,.fld select:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(43,170,138,.15)}
+.toolbar select{height:42px;border:1px solid var(--border);border-radius:11px;padding:0 12px;background:#fff}
+
+.lista{display:grid;gap:12px}
+.item{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:14px;box-shadow:var(--sh);transition:.15s}
+.item:hover{border-color:var(--border)}
+.item.off{opacity:.62}
+.av{width:52px;height:52px;border-radius:50%;flex-shrink:0;object-fit:cover;border:2px solid var(--teal)}
+.av-ini{display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;background:linear-gradient(135deg,#2D5750,#2BAA8A);border:none}
+.item-info{flex:1;min-width:0}
+.item-info h3{font-size:15.5px;color:var(--slate-dk);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item-info .sub{font-size:12.5px;color:var(--orange-txt);font-weight:600}
+.item-info .meta{font-size:12px;color:var(--muted);margin-top:3px;display:flex;flex-wrap:wrap;gap:4px 12px}
+.item-act{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px}
+.badge.on{background:var(--teal-pale);color:var(--teal-txt)}
+.badge.off{background:#F1F5F4;color:var(--muted)}
+
+/* Interruptor */
+.sw{position:relative;width:44px;height:24px;border-radius:99px;border:none;background:#C8DAD6;transition:.2s;flex-shrink:0}
+.sw::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:.2s}
+.sw.on{background:var(--teal)}
+.sw.on::after{left:23px}
+
+.vacio{background:#fff;border:1px dashed var(--border);border-radius:14px;padding:40px 20px;text-align:center;color:var(--muted)}
+.vacio b{display:block;color:var(--slate-dk);font-size:16px;margin-bottom:4px}
+
+/* Modales */
+.modal-bg{position:fixed;inset:0;background:rgba(28,43,40,.45);backdrop-filter:blur(3px);display:flex;align-items:flex-start;justify-content:center;padding:28px 14px;z-index:50;overflow-y:auto}
+.modal{background:#fff;border-radius:18px;box-shadow:var(--shlg);width:100%;max-width:1040px;position:relative}
+.modal-h{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px}
+.modal-h h2{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--slate-dk);font-weight:700}
+.x{border:none;background:var(--cream);width:34px;height:34px;border-radius:50%;font-size:18px;color:var(--muted)}
+.modal-b{padding:20px 22px}
+.modal-f{padding:14px 22px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+.cols{display:grid;grid-template-columns:1.05fr .95fr;gap:24px}
+.sec-t{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:18px 0 10px}
+.sec-t:first-child{margin-top:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fld label{display:block;font-size:12px;font-weight:600;color:var(--slate-dk);margin-bottom:5px}
+.fld input,.fld select{width:100%;height:40px;border:1px solid var(--border);border-radius:10px;padding:0 12px;background:#fff;outline:none}
+.fld .hint{font-size:11.5px;color:var(--muted);margin-top:4px}
+.req{color:var(--orange-txt)}
+.foto-box{display:flex;align-items:center;gap:14px}
+.foto-prev{width:84px;height:84px;border-radius:50%;object-fit:cover;border:3px solid var(--teal);background:var(--cream)}
+.foto-ph{width:84px;height:84px;border-radius:50%;border:2px dashed var(--border);display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--light)}
+.extra{display:grid;grid-template-columns:120px 1fr 150px 34px;gap:8px;margin-bottom:8px}
+.extra select,.extra input{height:38px;border:1px solid var(--border);border-radius:9px;padding:0 10px;background:#fff;outline:none;width:100%}
+.extra button{border:none;background:var(--err-bg);color:var(--err);border-radius:9px;font-size:16px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px dashed var(--teal);background:var(--teal-pale);color:var(--teal-txt);padding:6px 11px;border-radius:99px;font-size:12px;font-weight:600}
+.chip:hover{background:#d6f1ea}
+.prev-card{position:relative;border-radius:14px;background:var(--cream);aspect-ratio:1387/843;display:flex;align-items:center;justify-content:center;color:var(--light);font-size:12px}
+.prev-card img{width:100%;height:auto;display:block;filter:drop-shadow(0 8px 18px rgba(45,87,80,.18))}
+.prev-card .cargando{position:absolute;right:10px;top:10px;background:rgba(255,255,255,.9);border-radius:99px;padding:4px 10px;font-size:11px;color:var(--muted)}
+.nota{background:var(--teal-pale);border-left:3px solid var(--teal);border-radius:0 10px 10px 0;padding:10px 12px;font-size:12.5px;color:var(--teal-txt);margin-top:14px}
+.err{background:var(--err-bg);color:var(--err);border-radius:10px;padding:10px 12px;font-size:13px;margin-top:12px}
+
+/* Ficha */
+.ficha-h{display:flex;align-items:center;gap:14px}
+.ficha-h .av{width:64px;height:64px}
+.link-box{display:flex;gap:8px}
+.link-box input{flex:1;height:40px;border:1px solid var(--border);border-radius:10px;padding:0 12px;background:var(--cream);font-size:12.5px;color:var(--slate-dk)}
+.dl{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.mini-kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.mini-kpis div{background:var(--cream);border-radius:12px;padding:12px}
+.mini-kpis b{font-family:'Anton',sans-serif;font-weight:400;font-size:22px;color:var(--slate-dk);display:block;line-height:1.1}
+.mini-kpis span{font-size:11.5px;color:var(--muted)}
+.bars{display:flex;align-items:flex-end;gap:3px;height:80px;background:var(--cream);border-radius:12px;padding:10px}
+.bars div{flex:1;background:var(--teal);border-radius:3px 3px 0 0;min-height:2px;opacity:.85}
+.bars div.cero{background:var(--border);opacity:.6}
+.tabla{width:100%;border-collapse:collapse;font-size:12.5px}
+.tabla th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:8px 6px;border-bottom:1px solid var(--line)}
+.tabla td{padding:8px 6px;border-bottom:1px solid var(--line);color:var(--text)}
+.tabla-wrap{max-height:260px;overflow-y:auto;border:1px solid var(--line);border-radius:12px}
+
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--slate-dk);color:#fff;padding:11px 18px;border-radius:12px;font-size:13.5px;font-weight:600;box-shadow:var(--shlg);z-index:80}
+.toast.error{background:var(--err)}
+footer{text-align:center;font-size:11px;color:var(--light);padding:18px}
+footer a{color:var(--teal-txt);font-weight:700;text-decoration:none}
+
+@media (max-width:900px){
+  .cols{grid-template-columns:1fr}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:640px){
+  .top-r #quien{display:none}
+  .item{flex-wrap:wrap}
+  .item-act{width:100%;justify-content:flex-start}
+  .grid2{grid-template-columns:1fr}
+  .extra{grid-template-columns:1fr 1fr 34px}
+  .extra input.et{grid-column:1 / 3}
+  .page-head h1{font-size:27px}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="/cotizador/">
+      <img src="/favicon-pf.png" alt="">
+      <div><b>Previsión Familiar</b><small>Tarjetas de presentación digitales</small></div>
+    </a>
+    <div class="top-r">
+      <span id="quien"></span>
+      <a class="btn-top" href="/cotizador/">← Volver al cotizador</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="estado" class="estado">Cargando…</div>
+
+  <section id="app" class="hidden">
+    <div class="page-head">
+      <div>
+        <h1>Tarjetas digitales</h1>
+        <p>Cada empleado tiene su propia tarjeta con su QR. El QR abre una dirección oculta del sitio que solo se puede visitar escaneándolo; desde ahí se puede llamar, escribir por WhatsApp o guardar el contacto en el teléfono.</p>
+      </div>
+      <button class="btn-primary" type="button" onclick="abrirEditor()">＋ Nueva persona</button>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi"><b id="kTotal">0</b><span>Personas</span></div>
+      <div class="kpi"><b id="kActivas">0</b><span>Tarjetas activas</span></div>
+      <div class="kpi"><b id="kEscaneos">0</b><span>Escaneos totales</span></div>
+      <div class="kpi"><b id="kContactos">0</b><span>Contactos guardados</span></div>
+    </div>
+
+    <div class="toolbar">
+      <input id="buscar" type="search" placeholder="Buscar por nombre, cargo o email…" oninput="render()">
+      <select id="filtro" onchange="render()">
+        <option value="">Todas</option>
+        <option value="activas">Activas</option>
+        <option value="inactivas">Inactivas</option>
+      </select>
+    </div>
+
+    <div id="lista" class="lista"></div>
+  </section>
+</main>
+
+<!-- ══ Editor ══ -->
+<div class="modal-bg hidden" id="mEditor">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="edTitulo">
+    <div class="modal-h">
+      <h2 id="edTitulo">Nueva persona</h2>
+      <button class="x" type="button" onclick="cerrar('mEditor')" aria-label="Cerrar">×</button>
+    </div>
+    <div class="modal-b">
+      <div class="cols">
+        <div>
+          <div class="sec-t">Foto carnet</div>
+          <div class="foto-box">
+            <div id="fotoPh" class="foto-ph">👤</div>
+            <img id="fotoPrev" class="foto-prev hidden" alt="Foto carnet">
+            <div>
+              <label class="btn btn-sm" for="fotoInput">📷 Cargar foto</label>
+              <input id="fotoInput" type="file" accept="image/*" class="hidden" onchange="cargarFoto(this)">
+              <button id="fotoQuitar" class="btn btn-sm btn-danger hidden" type="button" onclick="quitarFoto()">Quitar</button>
+              <div class="fld"><div class="hint">Aparece en el perfil y en el contacto guardado. La tarjeta mantiene el diseño original.</div></div>
+            </div>
+          </div>
+
+          <div class="sec-t">Datos</div>
+          <div class="fld">
+            <label for="fNombre">Nombre en la tarjeta <span class="req">*</span></label>
+            <input id="fNombre" maxlength="60" placeholder="Ej: Rohely C. Fajardo G." oninput="programarVistaPrevia()">
+            <div class="hint">Tal como debe verse en la tarjeta.</div>
+          </div>
+          <div class="grid2" style="margin-top:12px">
+            <div class="fld"><label for="fCargo">Cargo</label><input id="fCargo" maxlength="80" placeholder="Ej: Director / CEO"></div>
+            <div class="fld"><label for="fEmail">Email</label><input id="fEmail" type="email" maxlength="120" placeholder="nombre@previsionfamiliar.com.ve"></div>
+            <div class="fld"><label for="fTelefono">Teléfono</label><input id="fTelefono" type="tel" maxlength="30" placeholder="+58 212 000 0000"></div>
+            <div class="fld"><label for="fCelular">Celular</label><input id="fCelular" type="tel" maxlength="30" placeholder="+58 414 000 0000"></div>
+            <div class="fld"><label for="fWhatsapp">WhatsApp</label><input id="fWhatsapp" type="tel" maxlength="30" placeholder="Si se deja vacío, usa el celular"></div>
+            <div class="fld"><label for="fWeb">Web</label><input id="fWeb" maxlength="120" placeholder="www.previsionfamiliar.com.ve"></div>
+          </div>
+          <div class="fld"><div class="hint">Escribe los números en formato internacional (+58…). Si usas formato local (0414…) se convierte a +58 automáticamente.</div></div>
+
+          <div class="sec-t">Contactos adicionales</div>
+          <div id="extras"></div>
+          <div class="chips">
+            <button class="chip" type="button" onclick="agregarExtra('whatsapp')">＋ WhatsApp</button>
+            <button class="chip" type="button" onclick="agregarExtra('email')">＋ Email</button>
+            <button class="chip" type="button" onclick="agregarExtra('telefono')">＋ Teléfono</button>
+            <button class="chip" type="button" onclick="agregarExtra('celular')">＋ Celular</button>
+          </div>
+          <div id="edError" class="err hidden"></div>
+        </div>
+
+        <div>
+          <div class="sec-t">Vista previa de la tarjeta</div>
+          <div class="prev-card" id="prevCard"><span>Escribe el nombre para ver la tarjeta</span></div>
+          <div class="nota" id="edNota">El QR se genera automáticamente al guardar. Cada persona tiene un QR único.</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-f">
+      <button class="btn" type="button" onclick="cerrar('mEditor')">Cancelar</button>
+      <button class="btn-primary" id="btnGuardar" type="button" onclick="guardar()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ Ficha ══ -->
+<div class="modal-bg hidden" id="mFicha">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="fcNombre">
+    <div class="modal-h">
+      <div class="ficha-h" id="fcCabecera"></div>
+      <button class="x" type="button" onclick="cerrar('mFicha')" aria-label="Cerrar">×</button>
+    </div>
+    <div class="modal-b">
+      <div class="cols">
+        <div>
+          <div class="sec-t">Tarjeta digital</div>
+          <div class="prev-card" id="fcTarjeta"><span>Cargando tarjeta…</span></div>
+
+          <div class="sec-t">Enlace oculto (solo con el QR)</div>
+          <div class="link-box">
+            <input id="fcLink" readonly>
+            <button class="btn btn-sm" type="button" onclick="copiarLink()">Copiar</button>
+            <a class="btn btn-sm" id="fcAbrir" target="_blank" rel="noopener">Abrir</a>
+          </div>
+
+          <div class="sec-t">Descargas</div>
+          <div class="dl">
+            <button class="btn" type="button" onclick="descargarDe('qr?formato=png')">⬇ QR en PNG</button>
+            <button class="btn" type="button" onclick="descargarDe('qr?formato=svg')">⬇ QR en SVG</button>
+            <button class="btn" type="button" onclick="descargarDe('tarjeta?descargar=1')">⬇ Tarjeta en PNG</button>
+            <button class="btn" type="button" onclick="descargarDe('vcard')">⬇ Contacto (vCard)</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="sec-t">Escaneos</div>
+          <div class="mini-kpis">
+            <div><b id="fcEsc">—</b><span>Escaneos totales</span></div>
+            <div><b id="fcVcf">—</b><span>Guardaron el contacto</span></div>
+            <div><b id="fc30">—</b><span>Últimos 30 días</span></div>
+            <div><b id="fcUlt" style="font-family:Inter,sans-serif;font-size:14px;font-weight:700;padding-top:6px">—</b><span>Último escaneo</span></div>
+          </div>
+          <div class="sec-t">Actividad (30 días)</div>
+          <div class="bars" id="fcBarras"></div>
+          <div class="sec-t">Detalle reciente</div>
+          <div class="tabla-wrap">
+            <table class="tabla">
+              <thead><tr><th>Fecha y hora</th><th>Acción</th><th>Dispositivo</th><th>Ubicación</th></tr></thead>
+              <tbody id="fcEventos"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-f" style="justify-content:space-between">
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-warn" type="button" onclick="regenerarQR()">🔄 Generar QR nuevo</button>
+        <button class="btn btn-danger" type="button" onclick="eliminar()">🗑 Eliminar</button>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" id="fcEstado" type="button" onclick="alternarDesdeFicha()"></button>
+        <button class="btn-primary" type="button" onclick="abrirEditor(fichaId)">✏️ Editar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+
+<footer>
+  Previsión Familiar y Asociados, C.A. · RIF: J-402246722 · Sistemas Diseñados Y Desarrollados Por
+  <a href="https://www.siscorpdigital.com" target="_blank" rel="noopener">SISCORPDIGITAL</a>
+</footer>
+
+<script>
+/* ═══════════════ Sesión (la misma del cotizador) ═══════════════ */
+const cfg = window.SUPABASE_CONFIG || {};
+const supa = window.supabase.createClient(cfg.url, cfg.anonKey, {
+  auth: { persistSession: true, autoRefreshToken: true, storageKey: 'pf_supa_session' }
+});
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+let tarjetas = [];
+let editandoId = null;
+let fichaId = null;
+let fotoActual = null;
+let urlsBlob = [];
+
+function toast(msg, error) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (error ? ' error' : '');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => t.classList.add('hidden'), 3200);
+}
+
+async function token() {
+  const { data } = await supa.auth.getSession();
+  return data.session ? data.session.access_token : null;
+}
+
+async function api(ruta, opciones = {}) {
+  const tk = await token();
+  if (!tk) { mostrarEstado('sin-sesion'); throw new Error('Sesión expirada'); }
+  const headers = Object.assign({ Authorization: 'Bearer ' + tk }, opciones.headers || {});
+  if (opciones.body && typeof opciones.body === 'string') headers['Content-Type'] = 'application/json';
+  const res = await fetch('/api/tarjetas' + ruta, Object.assign({}, opciones, { headers }));
+  if (res.status === 401) { mostrarEstado('sin-sesion'); throw new Error('Sesión expirada'); }
+  if (res.status === 403) { mostrarEstado('sin-permiso'); throw new Error('Sin permiso'); }
+  return res;
+}
+
+async function apiJson(ruta, opciones) {
+  const res = await api(ruta, opciones);
+  const json = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(json.error || ('Error ' + res.status));
+  return json;
+}
+
+function nuevaUrlBlob(blob) {
+  const u = URL.createObjectURL(blob);
+  urlsBlob.push(u);
+  if (urlsBlob.length > 30) URL.revokeObjectURL(urlsBlob.shift());
+  return u;
+}
+
+function mostrarEstado(tipo) {
+  const e = $('estado');
+  $('app').classList.add('hidden');
+  e.classList.remove('hidden');
+  if (tipo === 'sin-sesion') {
+    e.innerHTML = '<h2>Inicia sesión</h2><p>Entra al cotizador con tu usuario para administrar las tarjetas.</p><p style="margin-top:16px"><a class="btn-primary" style="text-decoration:none" href="/cotizador/">Ir al cotizador</a></p>';
+  } else if (tipo === 'sin-permiso') {
+    e.innerHTML = '<h2>Acceso restringido</h2><p>Solo los usuarios Admin y Superadmin pueden gestionar las tarjetas digitales.</p><p style="margin-top:16px"><a class="btn" href="/cotizador/">← Volver al cotizador</a></p>';
+  }
+}
+
+async function iniciar() {
+  const { data } = await supa.auth.getSession();
+  const sesion = data.session;
+  if (!sesion) return mostrarEstado('sin-sesion');
+  const { data: perfil } = await supa.from('profiles').select('*').eq('id', sesion.user.id).maybeSingle();
+  const rol = String((perfil && perfil.rol) || '').toLowerCase();
+  if (rol !== 'admin' && rol !== 'superadmin') return mostrarEstado('sin-permiso');
+  $('quien').textContent = ((perfil && perfil.nombre) || sesion.user.email) + ' · ' + (rol === 'superadmin' ? 'Superadmin' : 'Admin');
+  await cargar();
+  $('estado').classList.add('hidden');
+  $('app').classList.remove('hidden');
+}
+
+async function cargar() {
+  const json = await apiJson('');
+  tarjetas = json.tarjetas || [];
+  render();
+}
+
+/* ═══════════════ Lista ═══════════════ */
+function iniciales(nombre) {
+  return String(nombre || '').split(/\s+/).filter((p) => /^\p{L}/u.test(p)).slice(0, 2).map((p) => p[0].toUpperCase()).join('');
+}
+function avatar(t, clase) {
+  return t.foto
+    ? '<img class="av ' + (clase || '') + '" src="' + esc(t.foto) + '" alt="">'
+    : '<div class="av av-ini ' + (clase || '') + '">' + esc(iniciales(t.nombre)) + '</div>';
+}
+function haceCuanto(fecha) {
+  if (!fecha) return 'nunca';
+  const s = (new Date(fecha).getTime() - Date.now()) / 1000;
+  const rtf = new Intl.RelativeTimeFormat('es', { numeric: 'auto' });
+  const pasos = [[60, 'second'], [3600, 'minute', 60], [86400, 'hour', 3600], [2592000, 'day', 86400], [31536000, 'month', 2592000], [Infinity, 'year', 31536000]];
+  for (const [lim, unidad, div] of pasos) {
+    if (Math.abs(s) < lim) return rtf.format(Math.round(s / (div || 1)), unidad);
+  }
+  return '';
+}
+function fechaHora(fecha) {
+  return new Date(fecha).toLocaleString('es-VE', { timeZone: 'America/Caracas', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+}
+
+function render() {
+  const q = $('buscar').value.trim().toLowerCase();
+  const f = $('filtro').value;
+  $('kTotal').textContent = tarjetas.length;
+  $('kActivas').textContent = tarjetas.filter((t) => t.activa).length;
+  $('kEscaneos').textContent = tarjetas.reduce((a, t) => a + t.escaneos, 0).toLocaleString('es-VE');
+  $('kContactos').textContent = tarjetas.reduce((a, t) => a + t.contactosGuardados, 0).toLocaleString('es-VE');
+
+  const lista = tarjetas.filter((t) => {
+    if (f === 'activas' && !t.activa) return false;
+    if (f === 'inactivas' && t.activa) return false;
+    if (!q) return true;
+    return [t.nombre, t.cargo, t.email].some((v) => String(v || '').toLowerCase().includes(q));
+  });
+
+  if (!tarjetas.length) {
+    $('lista').innerHTML = '<div class="vacio"><b>Aún no hay tarjetas</b>Crea la primera con «＋ Nueva persona».</div>';
+    return;
+  }
+  if (!lista.length) {
+    $('lista').innerHTML = '<div class="vacio">No hay resultados para esa búsqueda.</div>';
+    return;
+  }
+
+  $('lista').innerHTML = lista.map((t) => (
+    '<div class="item' + (t.activa ? '' : ' off') + '">' +
+      avatar(t) +
+      '<div class="item-info">' +
+        '<h3>' + esc(t.nombre) + '</h3>' +
+        (t.cargo ? '<div class="sub">' + esc(t.cargo) + '</div>' : '') +
+        '<div class="meta">' +
+          '<span>📈 <b>' + t.escaneos + '</b> escaneo' + (t.escaneos === 1 ? '' : 's') + '</span>' +
+          '<span>🕒 último: ' + esc(haceCuanto(t.ultimoEscaneo)) + '</span>' +
+          '<span>👤 ' + t.contactosGuardados + ' guardado' + (t.contactosGuardados === 1 ? '' : 's') + '</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="item-act">' +
+        '<span class="badge ' + (t.activa ? 'on' : 'off') + '">' + (t.activa ? 'Activa' : 'Inactiva') + '</span>' +
+        '<button class="sw' + (t.activa ? ' on' : '') + '" type="button" role="switch" aria-checked="' + t.activa + '" title="' + (t.activa ? 'Desactivar' : 'Activar') + '" onclick="alternar(\'' + t.id + '\')"></button>' +
+        '<button class="btn btn-sm" type="button" onclick="abrirFicha(\'' + t.id + '\')">🪪 Tarjeta y QR</button>' +
+        '<button class="btn btn-sm" type="button" onclick="abrirEditor(\'' + t.id + '\')">✏️ Editar</button>' +
+      '</div>' +
+    '</div>'
+  )).join('');
+}
+
+function reemplazar(t) {
+  const i = tarjetas.findIndex((x) => x.id === t.id);
+  if (i >= 0) tarjetas[i] = t; else tarjetas.unshift(t);
+  render();
+}
+
+async function alternar(id) {
+  const t = tarjetas.find((x) => x.id === id);
+  if (!t) return;
+  try {
+    const json = await apiJson('/' + id + '/estado', { method: 'POST', body: JSON.stringify({ activa: !t.activa }) });
+    reemplazar(json.tarjeta);
+    toast(json.tarjeta.activa ? 'Tarjeta activada' : 'Tarjeta desactivada: su QR ya no abre el perfil');
+    if (fichaId === id) pintarCabeceraFicha(json.tarjeta);
+  } catch (e) { toast(e.message, true); }
+}
+
+/* ═══════════════ Modales ═══════════════ */
+function abrir(id) { $(id).classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
+function cerrar(id) {
+  $(id).classList.add('hidden');
+  if ($('mEditor').classList.contains('hidden') && $('mFicha').classList.contains('hidden')) document.body.style.overflow = '';
+  if (id === 'mFicha') fichaId = null;
+}
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape') return;
+  if (!$('mEditor').classList.contains('hidden')) cerrar('mEditor');
+  else if (!$('mFicha').classList.contains('hidden')) cerrar('mFicha');
+});
+
+/* ═══════════════ Editor ═══════════════ */
+const TIPOS = { whatsapp: 'WhatsApp', email: 'Email', telefono: 'Teléfono', celular: 'Celular' };
+
+function abrirEditor(id) {
+  editandoId = id || null;
+  const t = id ? tarjetas.find((x) => x.id === id) : null;
+  $('edTitulo').textContent = t ? 'Editar persona' : 'Nueva persona';
+  $('fNombre').value = t ? t.nombre : '';
+  $('fCargo').value = t ? (t.cargo || '') : '';
+  $('fEmail').value = t ? (t.email || '') : '';
+  $('fTelefono').value = t ? (t.telefono || '') : '';
+  $('fCelular').value = t ? (t.celular || '') : '';
+  $('fWhatsapp').value = t ? (t.whatsapp || '') : '';
+  $('fWeb').value = t ? (t.web || '') : 'www.previsionfamiliar.com.ve';
+  $('extras').innerHTML = '';
+  (t ? t.extras : []).forEach((e) => agregarExtra(e.tipo, e.valor, e.etiqueta));
+  ponerFoto(t ? t.foto : null);
+  $('edError').classList.add('hidden');
+  $('edNota').textContent = t
+    ? 'Al guardar, la tarjeta se actualiza al instante. El QR no cambia: sigue sirviendo el mismo que ya repartiste.'
+    : 'El QR se genera automáticamente al guardar. Cada persona tiene un QR único.';
+  $('prevCard').innerHTML = '<span>Escribe el nombre para ver la tarjeta</span>';
+  if (!$('mFicha').classList.contains('hidden')) cerrar('mFicha');
+  abrir('mEditor');
+  if ($('fNombre').value) actualizarVistaPrevia();
+  setTimeout(() => $('fNombre').focus(), 50);
+}
+
+function agregarExtra(tipo, valor, etiqueta) {
+  if ($('extras').children.length >= 10) return toast('Máximo 10 contactos adicionales', true);
+  const fila = document.createElement('div');
+  fila.className = 'extra';
+  fila.innerHTML =
+    '<select aria-label="Tipo">' + Object.entries(TIPOS).map(([k, v]) => '<option value="' + k + '"' + (k === tipo ? ' selected' : '') + '>' + v + '</option>').join('') + '</select>' +
+    '<input class="val" maxlength="120" aria-label="Valor" placeholder="' + (tipo === 'email' ? 'correo@ejemplo.com' : '+58 414 000 0000') + '" value="' + esc(valor || '') + '">' +
+    '<input class="et" maxlength="40" aria-label="Etiqueta" placeholder="Etiqueta (opcional)" value="' + esc(etiqueta || '') + '">' +
+    '<button type="button" title="Quitar" aria-label="Quitar">×</button>';
+  fila.querySelector('button').onclick = () => fila.remove();
+  fila.querySelector('select').onchange = (e) => {
+    fila.querySelector('.val').placeholder = e.target.value === 'email' ? 'correo@ejemplo.com' : '+58 414 000 0000';
+  };
+  $('extras').appendChild(fila);
+  if (!valor) fila.querySelector('.val').focus();
+}
+
+function leerExtras() {
+  return [...$('extras').children].map((f) => ({
+    tipo: f.querySelector('select').value,
+    valor: f.querySelector('.val').value.trim(),
+    etiqueta: f.querySelector('.et').value.trim() || undefined,
+  })).filter((e) => e.valor);
+}
+
+function ponerFoto(dataUrl) {
+  fotoActual = dataUrl || null;
+  $('fotoPrev').classList.toggle('hidden', !fotoActual);
+  $('fotoPh').classList.toggle('hidden', !!fotoActual);
+  $('fotoQuitar').classList.toggle('hidden', !fotoActual);
+  if (fotoActual) $('fotoPrev').src = fotoActual;
+}
+function quitarFoto() { ponerFoto(null); $('fotoInput').value = ''; }
+
+/** Recorta a cuadrado (priorizando la parte superior, donde está la cara) y reduce a 480 px. */
+function procesarFoto(file) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const lado = Math.min(img.width, img.height);
+      const sx = (img.width - lado) / 2;
+      const sy = img.height > img.width ? (img.height - lado) * 0.25 : 0;
+      const salida = Math.min(480, lado);
+      const c = document.createElement('canvas');
+      c.width = c.height = salida;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, salida, salida);
+      ctx.drawImage(img, sx, sy, lado, lado, 0, 0, salida, salida);
+      URL.revokeObjectURL(img.src);
+      resolve(c.toDataURL('image/jpeg', 0.85));
+    };
+    img.onerror = () => reject(new Error('No se pudo leer la imagen'));
+    img.src = URL.createObjectURL(file);
+  });
+}
+async function cargarFoto(input) {
+  const f = input.files && input.files[0];
+  if (!f) return;
+  if (!f.type.startsWith('image/')) return toast('El archivo debe ser una imagen', true);
+  try { ponerFoto(await procesarFoto(f)); } catch (e) { toast(e.message, true); }
+}
+
+let temporizadorVista = null;
+let versionVista = 0;
+function programarVistaPrevia() {
+  clearTimeout(temporizadorVista);
+  temporizadorVista = setTimeout(actualizarVistaPrevia, 450);
+}
+async function actualizarVistaPrevia() {
+  const nombre = $('fNombre').value.trim();
+  const caja = $('prevCard');
+  if (!nombre) { caja.innerHTML = '<span>Escribe el nombre para ver la tarjeta</span>'; return; }
+  const v = ++versionVista;
+  if (!caja.querySelector('img')) caja.innerHTML = '<span>Generando vista previa…</span>';
+  else if (!caja.querySelector('.cargando')) caja.insertAdjacentHTML('beforeend', '<span class="cargando">Actualizando…</span>');
+  try {
+    const t = editandoId ? tarjetas.find((x) => x.id === editandoId) : null;
+    const res = await api('/vista-previa', { method: 'POST', body: JSON.stringify({ nombre, token: t ? t.token : undefined }) });
+    if (!res.ok) throw new Error('No se pudo generar la vista previa');
+    const url = nuevaUrlBlob(await res.blob());
+    if (v !== versionVista) return;
+    caja.innerHTML = '<img alt="Vista previa de la tarjeta" src="' + url + '">';
+  } catch (e) {
+    if (v === versionVista) caja.innerHTML = '<span>' + esc(e.message) + '</span>';
+  }
+}
+
+async function guardar() {
+  const datos = {
+    nombre: $('fNombre').value.trim(),
+    cargo: $('fCargo').value.trim(),
+    email: $('fEmail').value.trim(),
+    telefono: $('fTelefono').value.trim(),
+    celular: $('fCelular').value.trim(),
+    whatsapp: $('fWhatsapp').value.trim(),
+    web: $('fWeb').value.trim(),
+    foto: fotoActual,
+    extras: leerExtras(),
+  };
+  const err = $('edError');
+  err.classList.add('hidden');
+  if (datos.nombre.length < 2) { err.textContent = 'Escribe el nombre que irá en la tarjeta.'; err.classList.remove('hidden'); return; }
+
+  const btn = $('btnGuardar');
+  btn.disabled = true; btn.textContent = 'Guardando…';
+  try {
+    const json = editandoId
+      ? await apiJson('/' + editandoId, { method: 'PUT', body: JSON.stringify(datos) })
+      : await apiJson('', { method: 'POST', body: JSON.stringify(datos) });
+    reemplazar(json.tarjeta);
+    const nueva = !editandoId;
+    cerrar('mEditor');
+    toast(nueva ? 'Persona creada. Su QR ya está listo.' : 'Cambios guardados');
+    abrirFicha(json.tarjeta.id);
+  } catch (e) {
+    err.textContent = e.message; err.classList.remove('hidden');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Guardar';
+  }
+}
+
+/* ═══════════════ Ficha: tarjeta, QR, descargas y escaneos ═══════════════ */
+function pintarCabeceraFicha(t) {
+  $('fcCabecera').innerHTML = avatar(t) +
+    '<div><h2 id="fcNombre" style="font-family:\'Cormorant Garamond\',serif;font-size:24px;color:var(--slate-dk);line-height:1.1">' + esc(t.nombre) + '</h2>' +
+    '<div style="font-size:12.5px;color:var(--orange-txt);font-weight:600">' + esc(t.cargo || '') + '</div>' +
+    '<span class="badge ' + (t.activa ? 'on' : 'off') + '">' + (t.activa ? 'Activa' : 'Inactiva — su QR no abre el perfil') + '</span></div>';
+  $('fcEstado').textContent = t.activa ? '⏸ Desactivar' : '▶ Activar';
+  $('fcLink').value = t.urlPublica;
+  $('fcAbrir').href = '/t/' + encodeURIComponent(t.token) + '?preview=1';
+  $('fcAbrir').classList.toggle('hidden', !t.activa);
+}
+
+async function abrirFicha(id) {
+  const t = tarjetas.find((x) => x.id === id);
+  if (!t) return;
+  fichaId = id;
+  pintarCabeceraFicha(t);
+  $('fcTarjeta').innerHTML = '<span>Cargando tarjeta…</span>';
+  ['fcEsc', 'fcVcf', 'fc30', 'fcUlt'].forEach((k) => ($(k).textContent = '—'));
+  $('fcBarras').innerHTML = '';
+  $('fcEventos').innerHTML = '<tr><td colspan="4" style="color:var(--muted)">Cargando…</td></tr>';
+  abrir('mFicha');
+
+  api('/' + id + '/tarjeta').then(async (res) => {
+    if (!res.ok || fichaId !== id) return;
+    $('fcTarjeta').innerHTML = '<img alt="Tarjeta de ' + esc(t.nombre) + '" src="' + nuevaUrlBlob(await res.blob()) + '">';
+  }).catch(() => { $('fcTarjeta').innerHTML = '<span>No se pudo cargar la tarjeta</span>'; });
+
+  try {
+    const ev = await apiJson('/' + id + '/eventos');
+    if (fichaId !== id) return;
+    $('fcEsc').textContent = ev.escaneos.toLocaleString('es-VE');
+    $('fcVcf').textContent = ev.contactosGuardados.toLocaleString('es-VE');
+    $('fc30').textContent = ev.ultimos30Dias.toLocaleString('es-VE');
+    $('fcUlt').textContent = ev.ultimoEscaneo ? fechaHora(ev.ultimoEscaneo) + ' (' + haceCuanto(ev.ultimoEscaneo) + ')' : 'Aún no se ha escaneado';
+
+    const fmt = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Caracas' });
+    const dias = [];
+    for (let i = 29; i >= 0; i--) dias.push(fmt.format(new Date(Date.now() - i * 86400000)));
+    const max = Math.max(1, ...dias.map((d) => ev.porDia[d] || 0));
+    $('fcBarras').innerHTML = dias.map((d) => {
+      const n = ev.porDia[d] || 0;
+      return '<div class="' + (n ? '' : 'cero') + '" style="height:' + Math.max(4, (n / max) * 100) + '%" title="' + d + ': ' + n + ' escaneo' + (n === 1 ? '' : 's') + '"></div>';
+    }).join('');
+
+    const region = typeof Intl.DisplayNames === 'function' ? new Intl.DisplayNames(['es'], { type: 'region' }) : null;
+    const lugar = (e) => {
+      let pais = e.pais || '';
+      try { if (pais && region) pais = region.of(pais) || pais; } catch (_) {}
+      return [e.ciudad, pais].filter(Boolean).join(', ') || '—';
+    };
+    $('fcEventos').innerHTML = ev.eventos.length
+      ? ev.eventos.map((e) => '<tr><td>' + esc(fechaHora(e.creadoEn)) + '</td><td>' + (e.tipo === 'vcard' ? '👤 Guardó contacto' : '📱 Escaneo') + '</td><td>' + esc(e.dispositivo || '—') + '</td><td>' + esc(lugar(e)) + '</td></tr>').join('')
+      : '<tr><td colspan="4" style="color:var(--muted)">Todavía no hay escaneos registrados.</td></tr>';
+  } catch (e) { toast(e.message, true); }
+}
+
+async function copiarLink() {
+  try { await navigator.clipboard.writeText($('fcLink').value); toast('Enlace copiado'); }
+  catch (_) { $('fcLink').select(); document.execCommand('copy'); toast('Enlace copiado'); }
+}
+
+async function descargarDe(sufijo) {
+  if (!fichaId) return;
+  try {
+    const res = await api('/' + fichaId + '/' + sufijo);
+    if (!res.ok) throw new Error('No se pudo descargar');
+    const nombre = ((res.headers.get('Content-Disposition') || '').match(/filename="([^"]+)"/) || [])[1] || 'descarga';
+    const a = document.createElement('a');
+    a.href = nuevaUrlBlob(await res.blob());
+    a.download = nombre;
+    document.body.appendChild(a); a.click(); a.remove();
+  } catch (e) { toast(e.message, true); }
+}
+
+function alternarDesdeFicha() { if (fichaId) alternar(fichaId); }
+
+async function regenerarQR() {
+  const t = tarjetas.find((x) => x.id === fichaId);
+  if (!t) return;
+  if (!confirm('Se generará un QR nuevo para ' + t.nombre + '.\n\nEl QR anterior dejará de funcionar (si ya lo imprimiste o compartiste, habrá que reemplazarlo). ¿Continuar?')) return;
+  try {
+    const json = await apiJson('/' + t.id + '/regenerar', { method: 'POST' });
+    reemplazar(json.tarjeta);
+    toast('QR nuevo generado');
+    abrirFicha(t.id);
+  } catch (e) { toast(e.message, true); }
+}
+
+async function eliminar() {
+  const t = tarjetas.find((x) => x.id === fichaId);
+  if (!t) return;
+  if (!confirm('¿Eliminar a ' + t.nombre + '?\n\nSe borrarán su tarjeta, su QR y su historial de escaneos. Esta acción no se puede deshacer.\n\nSi solo quieres suspenderla, usa «Desactivar».')) return;
+  try {
+    await apiJson('/' + t.id, { method: 'DELETE' });
+    tarjetas = tarjetas.filter((x) => x.id !== t.id);
+    cerrar('mFicha');
+    render();
+    toast('Persona eliminada');
+  } catch (e) { toast(e.message, true); }
+}
+
+iniciar().catch((e) => {
+  if ($('estado').textContent === 'Cargando…') {
+    $('estado').innerHTML = '<h2>No se pudo cargar</h2><p>' + esc(e.message) + '</p>';
+  }
+});
+</script>
+</body>
+</html>

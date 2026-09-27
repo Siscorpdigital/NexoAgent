@@ -448,3 +448,40 @@ enum CategoriaTicket {
   BUG
   MEJORA
 }
+
+// ── Tarjetas de presentación digitales (Previsión Familiar) ──
+// Perfil público de cada empleado, accesible solo por su QR (/t/<token>).
+model TarjetaDigital {
+  id                 String          @id @default(cuid())
+  token              String          @unique // segmento oculto de la URL pública
+  nombre             String // tal como aparece en la tarjeta
+  cargo              String?
+  email              String?
+  telefono           String?
+  celular            String?
+  whatsapp           String?
+  web                String?
+  foto               String? // data URL JPEG redimensionada (foto carnet)
+  extras             Json            @default("[]") // [{ tipo, valor, etiqueta? }]
+  activa             Boolean         @default(true)
+  escaneos           Int             @default(0)
+  contactosGuardados Int             @default(0)
+  ultimoEscaneo      DateTime?
+  creadoPor          String?
+  creadoEn           DateTime        @default(now())
+  actualizadoEn      DateTime        @updatedAt
+  eventos            TarjetaEvento[]
+}
+
+model TarjetaEvento {
+  id          String         @id @default(cuid())
+  tarjetaId   String
+  tipo        String // "escaneo" | "vcard"
+  dispositivo String?
+  ciudad      String?
+  pais        String?
+  creadoEn    DateTime       @default(now())
+  tarjeta     TarjetaDigital @relation(fields: [tarjetaId], references: [id], onDelete: Cascade)
+
+  @@index([tarjetaId, creadoEn])
+}

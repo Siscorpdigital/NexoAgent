@@ -5,6 +5,13 @@ const nextConfig: NextConfig = {
     root: __dirname,
   },
 
+  // Tarjetas digitales: la plantilla y la fuente se leen del disco al generar
+  // la imagen de cada tarjeta, así que deben viajar dentro de esas funciones.
+  outputFileTracingIncludes: {
+    "/api/tarjetas/**/*": ["./public/tarjetas/**/*"],
+    "/t/**/*": ["./public/tarjetas/**/*"],
+  },
+
   // Enrutado del dominio Previsión Familiar (un solo dominio para todo):
   //  - "/"           → landing pública de marketing (public/inicio.html), como antes.
   //  - "/cotizador"  → cotizador estático (asesores), como antes.

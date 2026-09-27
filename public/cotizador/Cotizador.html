@@ -899,6 +899,9 @@ body{padding-bottom:36px}
       <a class="sb-item hidden" id="nav-nexo" onclick="openNexo()">
         <span class="sb-icon">🤖</span><span class="sb-txt">NexoAgent</span>
       </a>
+      <a class="sb-item hidden" id="nav-tarjetas" href="/cotizador/tarjetas.html">
+        <span class="sb-icon">🪪</span><span class="sb-txt">Tarjetas digitales</span>
+      </a>
     </nav>
     <div class="sb-footer">
       <div style="font-size:10px;color:rgba(255,255,255,.3);text-align:center">Previsión Familiar © 2026<br>Cotizador v2.0</div>
@@ -1940,6 +1943,7 @@ body{padding-bottom:36px}
         Acceso restringido
       </div>
       <button class="hdr-btn hidden" id="histNexoBtn" onclick="openNexo()" title="NexoAgent">🤖</button>
+      <button class="hdr-btn hidden" id="histTarjetasBtn" onclick="location.href='/cotizador/tarjetas.html'" title="Tarjetas digitales">🪪</button>
       <button class="hdr-btn" onclick="openPwdModal()" title="Cambiar contraseña">🔑</button>
       <button class="hdr-btn hdr-btn-logout" onclick="doLogout()" title="Cerrar sesión">⏻</button>
     </div>
@@ -3449,10 +3453,20 @@ function canAccessNexo() {
   if (!u) return false;
   return u._realRol === 'admin' || u._realRol === 'superadmin' || u.rol === 'admin' || u.acceso_nexo === true;
 }
+/* Tarjetas digitales: solo Admin y Superadmin (rol real de Supabase). */
+function canAccessTarjetas() {
+  const u = window.currentUser || currentUser;
+  if (!u) return false;
+  const r = String(u._realRol || u.rol || '').toLowerCase();
+  return r === 'admin' || r === 'superadmin';
+}
 function updateNexoAccess() {
   const ok = canAccessNexo();
   const nav = $('nav-nexo');   if (nav) nav.classList.toggle('hidden', !ok);
   const hb  = $('histNexoBtn'); if (hb)  hb.classList.toggle('hidden', !ok);
+  const tj = canAccessTarjetas();
+  const nt = $('nav-tarjetas');     if (nt) nt.classList.toggle('hidden', !tj);
+  const ht = $('histTarjetasBtn');  if (ht) ht.classList.toggle('hidden', !tj);
 }
 window.updateNexoAccess = updateNexoAccess;
 function openNexo() {
