@@ -12,6 +12,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ token: string }
 
   return renderTarjeta({
     nombre: tarjeta.nombre,
+    cargo: tarjeta.cargo,
     urlQR: urlPublica(urlBase(req.headers), tarjeta.token),
     origen: new URL(req.url).origin,
     headers: {

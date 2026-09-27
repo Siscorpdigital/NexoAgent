@@ -12,27 +12,45 @@ export const RIF = "J-402246722";
 
 export const PLANTILLA = { ancho: 1387, alto: 843 } as const;
 
+/** Distancia del tope de la caja de texto a la línea base, en em (Arimo). */
+export const BASELINE_EM = 0.8293;
+/** Altura de mayúsculas de Arimo, en em. */
+export const CAP_EM = 0.688;
+/** Centro vertical de la barra naranja del diseño: el bloque de texto se alinea con ella. */
+export const CENTRO_BARRA = 464;
+
 /**
- * Nombre: Arimo Bold (métricas de Arial), calibrado píxel a píxel contra el
- * diseño: a 82 px el nombre de ejemplo ocupa exactamente el mismo ancho y alto
- * que en la imagen original.
+ * Nombre: Arimo Bold (métricas de Arial), en negro y siempre en una sola
+ * línea. A 82 px el nombre de ejemplo ocupa el mismo ancho y alto que en la
+ * imagen original; si un nombre no cabe antes de la curva, se reduce.
  */
 export const NOMBRE = {
   x: 153,
-  /** Centro vertical de las mayúsculas (alineado con la barra naranja). */
-  centroMayusculas: 462,
+  /** Sin cargo, el nombre queda exactamente donde estaba en el diseño. */
+  centroMayusculasSolo: 462,
   /** Límite derecho antes de la curva naranja. */
-  bordeDerecho: 928,
+  bordeDerecho: 940,
   fuenteMax: 82,
-  /** Por debajo de este tamaño en una línea, el nombre pasa a dos líneas. */
-  fuenteMin: 60,
-  fuenteMax2Lineas: 66,
+  fuenteMin: 26,
   trackingEm: -0.033,
-  /** Distancia del tope de la caja de texto a la línea base, en em. */
-  baselineEm: 0.8293,
-  /** Altura de mayúsculas de Arimo Bold, en em. */
-  capEm: 0.688,
-  color: "#374748",
+  color: "#111111",
+} as const;
+
+/**
+ * Cargo: debajo del nombre, Arimo Regular en el verde de la "P" del logo
+ * (#17817D, contraste AA sobre blanco) y siempre más pequeño que el nombre.
+ */
+export const CARGO = {
+  fuenteMax: 44,
+  /** Nunca más del 56 % del tamaño del nombre. */
+  proporcionMax: 0.56,
+  fuenteMin: 20,
+  trackingEm: 0.005,
+  /** Espacio entre la línea base del nombre y el tope del cargo, en em del nombre. */
+  separacionEm: 0.37,
+  /** Más a la izquierda que el nombre: la curva naranja baja hacia ese lado. */
+  bordeDerecho: 900,
+  color: "#17817D",
 } as const;
 
 /** QR: centrado dentro de los corchetes del diseño. */

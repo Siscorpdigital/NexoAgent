@@ -117,7 +117,7 @@ export default async function TarjetaPublica({ params, searchParams }: Props) {
                 {t.nombre}
               </h1>
               {t.cargo && (
-                <p className="text-sm font-semibold mt-1" style={{ color: "#B4610A" }}>
+                <p className="text-sm font-semibold mt-1" style={{ color: "#17817D" }}>
                   {t.cargo}
                 </p>
               )}

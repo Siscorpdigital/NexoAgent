@@ -14,6 +14,7 @@ export async function GET(req: Request, ctx: ContextoId) {
   const descargar = new URL(req.url).searchParams.get("descargar") === "1";
   return renderTarjeta({
     nombre: r.tarjeta.nombre,
+    cargo: r.tarjeta.cargo,
     urlQR: urlPublica(base, r.tarjeta.token),
     origen: new URL(req.url).origin,
     headers: descargar ? descarga(`tarjeta-${slugArchivo(r.tarjeta.nombre)}.png`, "image/png") : SIN_CACHE,

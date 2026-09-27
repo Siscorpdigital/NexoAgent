@@ -1,100 +1,112 @@
-import { NOMBRE } from "./config";
+import { BASELINE_EM, CAP_EM, CARGO, CENTRO_BARRA, NOMBRE } from "./config";
 
 /**
- * Anchos de avance de Arimo Bold (métricamente compatible con Arial Bold), en
- * unidades por 1000 em. Permiten ajustar el tamaño del nombre sin medir en el
- * navegador, de forma idéntica en el servidor y en cualquier dispositivo.
+ * Anchos de avance de Arimo (métricamente compatible con Arial), en unidades
+ * por 1000 em. Permiten ajustar el tamaño del texto sin medir en el navegador,
+ * de forma idéntica en el servidor y en cualquier dispositivo.
  */
-const ANCHOS: Record<string, number> = {
-  " ": 278, "!": 333, '"': 474, "#": 556, $: 556, "%": 889, "&": 722, "'": 238,
-  "(": 333, ")": 333, "*": 389, "+": 584, ",": 278, "-": 333, ".": 278, "/": 278,
-  ":": 333, ";": 333, "<": 584, "=": 584, ">": 584, "?": 611, "@": 975,
-  "[": 333, "\\": 278, "]": 333, "^": 584, _: 556, "`": 333,
-  "{": 389, "|": 280, "}": 389, "~": 584,
+const COMUNES: Record<string, number> = {
+  " ": 278, "#": 556, $: 556, "%": 889, "*": 389, "+": 584, ",": 278, "-": 333,
+  ".": 278, "/": 278, "<": 584, "=": 584, ">": 584, "\\": 278, _: 556, "`": 333, "~": 584,
 };
-for (const d of "0123456789") ANCHOS[d] = 556;
-for (const par of (
+for (const d of "0123456789") COMUNES[d] = 556;
+
+function tabla(extra: Record<string, number>, letras: string): Record<string, number> {
+  const t: Record<string, number> = { ...COMUNES, ...extra };
+  for (const par of letras.split(" ")) t[par[0]] = Number(par.slice(1));
+  return t;
+}
+
+const NEGRITA = tabla(
+  { "!": 333, '"': 474, "&": 722, "'": 238, "(": 333, ")": 333, ":": 333, ";": 333, "?": 611, "@": 975, "[": 333, "]": 333, "^": 584, "{": 389, "|": 280, "}": 389 },
   "A722 B722 C722 D722 E667 F611 G778 H722 I278 J556 K722 L611 M833 N722 O778 P667 " +
-  "Q778 R722 S667 T611 U722 V667 W944 X667 Y667 Z611 " +
-  "a556 b611 c556 d611 e556 f333 g611 h611 i278 j278 k556 l278 m889 n611 o611 p611 " +
-  "q611 r389 s556 t333 u611 v556 w778 x556 y556 z500"
-).split(" ")) {
-  ANCHOS[par[0]] = Number(par.slice(1));
-}
+    "Q778 R722 S667 T611 U722 V667 W944 X667 Y667 Z611 " +
+    "a556 b611 c556 d611 e556 f333 g611 h611 i278 j278 k556 l278 m889 n611 o611 p611 " +
+    "q611 r389 s556 t333 u611 v556 w778 x556 y556 z500",
+);
 
-function anchoCaracter(ch: string): number {
-  if (ANCHOS[ch] !== undefined) return ANCHOS[ch];
-  // Letras acentuadas (á, é, ñ, ü…) tienen el mismo ancho que su letra base.
-  const base = ch.normalize("NFD").replace(/[̀-ͯ]/g, "");
-  return ANCHOS[base] ?? 611;
-}
+const REGULAR = tabla(
+  { "!": 278, '"': 355, "&": 667, "'": 191, "(": 333, ")": 333, ":": 278, ";": 278, "?": 556, "@": 1015, "[": 278, "]": 278, "^": 469, "{": 334, "|": 260, "}": 334 },
+  "A667 B667 C722 D722 E667 F611 G778 H722 I278 J500 K667 L556 M833 N722 O778 P667 " +
+    "Q778 R722 S667 T611 U722 V667 W944 X667 Y667 Z611 " +
+    "a556 b556 c500 d556 e556 f278 g556 h556 i222 j222 k500 l222 m833 n556 o556 p556 " +
+    "q556 r333 s500 t278 u556 v500 w722 x500 y500 z500",
+);
 
-/** Ancho de un texto en em, incluyendo el tracking del diseño. */
-function anchoEm(texto: string): number {
+/** Ancho de un texto en em, incluyendo el tracking. */
+function anchoEm(texto: string, anchos: Record<string, number>, trackingEm: number): number {
   let total = 0;
   const chars = [...texto];
-  for (const ch of chars) total += anchoCaracter(ch);
-  return total / 1000 + NOMBRE.trackingEm * chars.length;
+  for (const ch of chars) {
+    // Letras acentuadas (á, é, ñ, ü…) tienen el mismo ancho que su letra base.
+    const base = ch.normalize("NFD").replace(/[̀-ͯ]/g, "");
+    total += anchos[ch] ?? anchos[base] ?? 611;
+  }
+  return total / 1000 + trackingEm * chars.length;
 }
 
-export interface LineaNombre {
+export interface LineaTexto {
   texto: string;
   /** Posición superior de la caja de texto (px de la plantilla). */
   top: number;
-}
-
-export interface LayoutNombre {
   fontSize: number;
   letterSpacing: number;
-  lineas: LineaNombre[];
 }
 
-const redondear = (n: number) => Math.round(n * 10) / 10;
+export interface LayoutTarjeta {
+  nombre: LineaTexto;
+  cargo: LineaTexto | null;
+}
+
+const r1 = (n: number) => Math.round(n * 10) / 10;
+const limpiar = (s: string | null | undefined) => (s || "").replace(/\s+/g, " ").trim();
 
 /**
- * Calcula tamaño y posición del nombre. Con nombres de largo normal se usa
- * exactamente el tamaño del diseño (82 px); si no cabe antes de la curva se
- * reduce, y con nombres muy largos se reparte en dos líneas. Siempre queda
- * centrado verticalmente con la barra naranja, igual que en el diseño.
+ * Nombre en una sola línea (82 px como en el diseño, reducido solo si no cabe)
+ * y, debajo, el cargo más pequeño. Con cargo, el bloque nombre + cargo queda
+ * centrado sobre la barra naranja; sin cargo, el nombre queda en su posición
+ * original del diseño.
  */
-export function layoutNombre(nombreCrudo: string): LayoutNombre {
-  const nombre = nombreCrudo.replace(/\s+/g, " ").trim();
-  const disponible = NOMBRE.bordeDerecho - NOMBRE.x;
+export function layoutTarjeta(nombreCrudo: string, cargoCrudo?: string | null): LayoutTarjeta {
+  const nombre = limpiar(nombreCrudo);
+  const cargo = limpiar(cargoCrudo);
 
-  const unaLinea = (texto: string, size: number): LayoutNombre => {
-    const baseline = NOMBRE.centroMayusculas + (NOMBRE.capEm * size) / 2;
-    return {
-      fontSize: redondear(size),
-      letterSpacing: redondear(NOMBRE.trackingEm * size),
-      lineas: [{ texto, top: redondear(baseline - NOMBRE.baselineEm * size) }],
-    };
-  };
+  const f = Math.max(
+    NOMBRE.fuenteMin,
+    Math.min(NOMBRE.fuenteMax, (NOMBRE.bordeDerecho - NOMBRE.x) / Math.max(anchoEm(nombre, NEGRITA, NOMBRE.trackingEm), 0.01)),
+  );
+  const lineaNombre = (baseline: number): LineaTexto => ({
+    texto: nombre,
+    top: r1(baseline - BASELINE_EM * f),
+    fontSize: r1(f),
+    letterSpacing: r1(NOMBRE.trackingEm * f),
+  });
 
-  const f1 = Math.min(NOMBRE.fuenteMax, disponible / Math.max(anchoEm(nombre), 0.01));
-  if (f1 >= NOMBRE.fuenteMin || !nombre.includes(" ")) {
-    return unaLinea(nombre, Math.max(f1, 24));
+  if (!cargo) {
+    return { nombre: lineaNombre(NOMBRE.centroMayusculasSolo + (CAP_EM * f) / 2), cargo: null };
   }
 
-  // Dos líneas: se corta en el espacio que deja las líneas más parejas.
-  const palabras = nombre.split(" ");
-  let mejor = { l1: nombre, l2: "", ancho: Infinity };
-  for (let i = 1; i < palabras.length; i++) {
-    const l1 = palabras.slice(0, i).join(" ");
-    const l2 = palabras.slice(i).join(" ");
-    const ancho = Math.max(anchoEm(l1), anchoEm(l2));
-    if (ancho < mejor.ancho) mejor = { l1, l2, ancho };
-  }
-  const size = Math.max(Math.min(NOMBRE.fuenteMax2Lineas, disponible / mejor.ancho), 24);
-  const interlinea = size * 1.12;
-  const baseline1 = NOMBRE.centroMayusculas + (NOMBRE.capEm * size - interlinea) / 2;
-  const baseline2 = baseline1 + interlinea;
+  const c = Math.max(
+    CARGO.fuenteMin,
+    Math.min(
+      CARGO.fuenteMax,
+      f * CARGO.proporcionMax,
+      (CARGO.bordeDerecho - NOMBRE.x) / Math.max(anchoEm(cargo, REGULAR, CARGO.trackingEm), 0.01),
+    ),
+  );
+  const separacion = CARGO.separacionEm * f;
+  const alto = CAP_EM * f + separacion + CAP_EM * c;
+  const baselineNombre = CENTRO_BARRA - alto / 2 + CAP_EM * f;
+  const baselineCargo = baselineNombre + separacion + CAP_EM * c;
+
   return {
-    fontSize: redondear(size),
-    letterSpacing: redondear(NOMBRE.trackingEm * size),
-    lineas: [
-      { texto: mejor.l1, top: redondear(baseline1 - NOMBRE.baselineEm * size) },
-      { texto: mejor.l2, top: redondear(baseline2 - NOMBRE.baselineEm * size) },
-    ],
+    nombre: lineaNombre(baselineNombre),
+    cargo: {
+      texto: cargo,
+      top: r1(baselineCargo - BASELINE_EM * c),
+      fontSize: r1(c),
+      letterSpacing: r1(CARGO.trackingEm * c),
+    },
   };
 }
 

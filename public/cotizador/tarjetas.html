@@ -12,7 +12,7 @@
 <style>
 :root{
   --slate:#3D6E65; --slate-dk:#2D5750; --orange:#F2A020; --orange-txt:#B4610A; --orange-pale:#FEF3DC;
-  --teal:#2BAA8A; --teal-txt:#1E7D66; --teal-pale:#E6F7F3;
+  --teal:#2BAA8A; --teal-txt:#1E7D66; --teal-pale:#E6F7F3; --verde-logo:#17817D;
   --cream:#F4F7F6; --text:#1C2B28; --muted:#5C7872; --light:#9AB6B0; --border:#C8DAD6; --line:#E5EDEB;
   --err:#991B1B; --err-bg:#FEF2F2;
   --sh:0 4px 18px rgba(45,87,80,.09),0 1px 4px rgba(45,87,80,.05);
@@ -75,7 +75,7 @@ input,select{font-family:inherit;font-size:14px}
 .av-ini{display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;background:linear-gradient(135deg,#2D5750,#2BAA8A);border:none}
 .item-info{flex:1;min-width:0}
 .item-info h3{font-size:15.5px;color:var(--slate-dk);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.item-info .sub{font-size:12.5px;color:var(--orange-txt);font-weight:600}
+.item-info .sub{font-size:12.5px;color:var(--verde-logo);font-weight:600}
 .item-info .meta{font-size:12px;color:var(--muted);margin-top:3px;display:flex;flex-wrap:wrap;gap:4px 12px}
 .item-act{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 .badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px}
@@ -233,10 +233,10 @@ footer a{color:var(--teal-txt);font-weight:700;text-decoration:none}
           <div class="fld">
             <label for="fNombre">Nombre en la tarjeta <span class="req">*</span></label>
             <input id="fNombre" maxlength="60" placeholder="Ej: Rohely C. Fajardo G." oninput="programarVistaPrevia()">
-            <div class="hint">Tal como debe verse en la tarjeta.</div>
+            <div class="hint">Tal como debe verse en la tarjeta (va en una sola línea; el cargo aparece debajo).</div>
           </div>
           <div class="grid2" style="margin-top:12px">
-            <div class="fld"><label for="fCargo">Cargo</label><input id="fCargo" maxlength="80" placeholder="Ej: Director / CEO"></div>
+            <div class="fld"><label for="fCargo">Cargo</label><input id="fCargo" maxlength="80" placeholder="Ej: Director / CEO" oninput="programarVistaPrevia()"></div>
             <div class="fld"><label for="fEmail">Email</label><input id="fEmail" type="email" maxlength="120" placeholder="nombre@previsionfamiliar.com.ve"></div>
             <div class="fld"><label for="fTelefono">Teléfono</label><input id="fTelefono" type="tel" maxlength="30" placeholder="+58 212 000 0000"></div>
             <div class="fld"><label for="fCelular">Celular</label><input id="fCelular" type="tel" maxlength="30" placeholder="+58 414 000 0000"></div>
@@ -628,7 +628,7 @@ async function actualizarVistaPrevia() {
   else if (!caja.querySelector('.cargando')) caja.insertAdjacentHTML('beforeend', '<span class="cargando">Actualizando…</span>');
   try {
     const t = editandoId ? tarjetas.find((x) => x.id === editandoId) : null;
-    const res = await api('/vista-previa', { method: 'POST', body: JSON.stringify({ nombre, token: t ? t.token : undefined }) });
+    const res = await api('/vista-previa', { method: 'POST', body: JSON.stringify({ nombre, cargo: $('fCargo').value.trim(), token: t ? t.token : undefined }) });
     if (!res.ok) throw new Error('No se pudo generar la vista previa');
     const url = nuevaUrlBlob(await res.blob());
     if (v !== versionVista) return;
@@ -676,7 +676,7 @@ async function guardar() {
 function pintarCabeceraFicha(t) {
   $('fcCabecera').innerHTML = avatar(t) +
     '<div><h2 id="fcNombre" style="font-family:\'Cormorant Garamond\',serif;font-size:24px;color:var(--slate-dk);line-height:1.1">' + esc(t.nombre) + '</h2>' +
-    '<div style="font-size:12.5px;color:var(--orange-txt);font-weight:600">' + esc(t.cargo || '') + '</div>' +
+    '<div style="font-size:12.5px;color:var(--verde-logo);font-weight:600">' + esc(t.cargo || '') + '</div>' +
     '<span class="badge ' + (t.activa ? 'on' : 'off') + '">' + (t.activa ? 'Activa' : 'Inactiva — su QR no abre el perfil') + '</span></div>';
   $('fcEstado').textContent = t.activa ? '⏸ Desactivar' : '▶ Activar';
   $('fcLink').value = t.urlPublica;
