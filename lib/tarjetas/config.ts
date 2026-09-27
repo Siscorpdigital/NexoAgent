@@ -61,19 +61,21 @@ export const QR = {
   color: "#3B4A4C",
 } as const;
 
+/** Dominio público de Previsión Familiar: los QR siempre apuntan aquí. */
+export const DOMINIO_PUBLICO = "https://www.previsionfamiliar.com.ve";
+
 /**
- * URL base pública para los QR. Si se define TARJETAS_URL_BASE (p. ej.
- * https://www.previsionfamiliar.com.ve) se usa siempre esa; si no, el dominio
- * desde el que se hace la petición.
+ * URL base pública para los QR. Nunca se usa el host de la petición: si el
+ * panel se abre desde un enlace de deploy de Vercel (protegido con login),
+ * el QR apuntaría ahí y pediría iniciar sesión en Vercel. Se puede cambiar
+ * con TARJETAS_URL_BASE; en local (localhost) se usa el propio servidor.
  */
 export function urlBase(h: Headers): string {
-  const env = process.env.TARJETAS_URL_BASE || process.env.NEXT_PUBLIC_SITE_URL;
+  const env = process.env.TARJETAS_URL_BASE;
   if (env) return env.trim().replace(/\/+$/, "");
-  const host = (h.get("x-forwarded-host") || h.get("host") || "localhost:3000").split(",")[0].trim();
-  const proto =
-    (h.get("x-forwarded-proto") || "").split(",")[0].trim() ||
-    (host.startsWith("localhost") || host.startsWith("127.") ? "http" : "https");
-  return `${proto}://${host}`;
+  const host = (h.get("x-forwarded-host") || h.get("host") || "").split(",")[0].trim();
+  if (host.startsWith("localhost") || host.startsWith("127.")) return `http://${host}`;
+  return DOMINIO_PUBLICO;
 }
 
 export function urlPublica(base: string, token: string): string {
