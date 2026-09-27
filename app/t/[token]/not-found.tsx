@@ -22,7 +22,7 @@ export default function TarjetaNoDisponible() {
           Ir a Previsión Familiar
         </a>
         <p className="text-[11px] mt-6" style={{ color: "#8FA69F" }}>
-          {ORGANIZACION} · RIF: {RIF}
+          {ORGANIZACION} · <span className="whitespace-nowrap">RIF: {RIF}</span>
         </p>
       </div>
     </div>

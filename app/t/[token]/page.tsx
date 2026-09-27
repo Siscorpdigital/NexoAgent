@@ -96,24 +96,24 @@ export default async function TarjetaPublica({ params, searchParams }: Props) {
 
         {/* Perfil */}
         <section className="mt-6 bg-white rounded-2xl p-5" style={{ border: `1px solid ${LINEA}`, boxShadow: "0 4px 18px rgba(45,87,80,.07)" }}>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4">
             {t.foto ? (
               <img
                 src={t.foto}
                 alt={t.nombre}
-                className="w-20 h-20 rounded-full object-cover flex-shrink-0"
+                className="w-16 h-16 min-[400px]:w-20 min-[400px]:h-20 rounded-full object-cover flex-shrink-0"
                 style={{ border: `3px solid ${TEAL}` }}
               />
             ) : (
               <div
-                className="w-20 h-20 rounded-full flex items-center justify-center flex-shrink-0 text-2xl font-bold text-white"
+                className="w-16 h-16 min-[400px]:w-20 min-[400px]:h-20 rounded-full flex items-center justify-center flex-shrink-0 text-xl min-[400px]:text-2xl font-bold text-white"
                 style={{ background: `linear-gradient(135deg, ${SLATE}, ${TEAL})` }}
               >
                 {iniciales}
               </div>
             )}
             <div className="min-w-0">
-              <h1 className="text-xl font-bold leading-tight" style={{ color: SLATE }}>
+              <h1 className="text-lg min-[400px]:text-xl font-bold leading-tight [overflow-wrap:anywhere]" style={{ color: SLATE }}>
                 {t.nombre}
               </h1>
               {t.cargo && (
@@ -136,12 +136,12 @@ export default async function TarjetaPublica({ params, searchParams }: Props) {
                     {...(f.externo ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                     className="flex items-center gap-3 py-3"
                   >
-                    <span className="text-lg w-7 text-center">{f.icono}</span>
-                    <span className="min-w-0">
+                    <span className="text-lg w-7 text-center flex-shrink-0">{f.icono}</span>
+                    <span className="min-w-0 flex-1">
                       <span className="block text-[11px] uppercase tracking-wide" style={{ color: MUTED }}>
                         {f.etiqueta}
                       </span>
-                      <span className={`block text-sm font-medium truncate ${f.numero ? "font-roboto" : ""}`} style={{ color: SLATE }}>
+                      <span className={`block text-sm font-medium [overflow-wrap:anywhere] ${f.numero ? "font-roboto" : ""}`} style={{ color: SLATE }}>
                         {f.valor}
                       </span>
                     </span>
@@ -193,7 +193,7 @@ export default async function TarjetaPublica({ params, searchParams }: Props) {
         </details>
 
         <footer className="mt-8 text-center text-[11px]" style={{ color: "#8FA69F" }}>
-          {ORGANIZACION} · RIF: {RIF}
+          {ORGANIZACION} · <span className="whitespace-nowrap">RIF: {RIF}</span>
         </footer>
       </div>
     </div>

@@ -789,6 +789,57 @@ body{padding-bottom:36px}
   body{padding-bottom:0}
 }
 
+/* ══ Revisión responsive (auditoría 320–1440 px) ══ */
+/* El logo de la barra puede encogerse: evita el desborde horizontal en móvil. */
+.sb-user-movil{display:none}
+.app-topbar .logo{min-width:0}
+.app-topbar .logo-img{max-width:100%;width:auto;object-fit:contain;object-position:left center}
+@media(max-width:600px){
+  .app-topbar{padding:0 12px;gap:10px}
+  .app-topbar .logo-img{height:34px}
+  .topbar-right{gap:8px;flex-shrink:0}
+  .topbar-user{display:none}            /* en móvil el nombre se muestra arriba del menú lateral */
+  .sb-user-movil{display:block;padding:14px 18px 12px;color:#fff;font-weight:600;font-size:14px;border-bottom:1px solid rgba(255,255,255,.12);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .hdr-btn{width:38px;height:38px;font-size:17px}
+  /* iOS hace zoom al enfocar campos con letra < 16 px */
+  input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{font-size:16px!important}
+  /* Áreas táctiles mínimas */
+  .modal-eye{min-width:40px;min-height:40px}
+  .global-footer-link{display:inline-block;padding:6px 2px}
+  /* Textos diminutos: mínimo legible */
+  .sb-section-label,.pc-badge{font-size:10.5px}
+  /* Historial (superadmin): pestañas desplazables en lugar de desbordar la pantalla */
+  .hist-tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .hist-tabs::-webkit-scrollbar{display:none}
+  .hist-tab{flex:1 0 auto;padding:0 12px}
+  /* Botón × de los modales con zona táctil suficiente */
+  .modal-close{top:4px;right:4px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-size:24px}
+  /* Planilla de emisión: campos de tabla más fáciles de tocar */
+  .pl-input,.pl-select{min-height:36px}
+  .pl-lbl,.pl-section-title,.pl-sub-title{font-size:11px}
+}
+/* Historial (superadmin): la cabecera tenía altura fija y en móvil se montaba sobre el contenido */
+@media(max-width:900px){
+  .hist-hdr{height:auto;min-height:64px;padding:10px 16px;gap:10px;flex-wrap:wrap}
+  .hist-hdr .logo{min-width:0}
+  .hist-tabs{order:3;width:100%;margin-bottom:4px}
+}
+@media(max-width:600px){
+  .hist-hdr-info{display:none!important}
+  .hist-hdr .logo-img{height:34px;width:auto}
+  .hist-hdr .logo-sub-hdr{display:none}
+  .hist-hdr-r{gap:8px!important}
+  .hist-tab{flex:1 1 0;min-width:0;padding:4px 6px;height:auto;min-height:40px;white-space:normal;line-height:1.2;font-size:12.5px}
+  .hist-stats-bar{padding:14px 12px;justify-content:center}
+  .hist-stat-sep{display:none}
+  .hist-stat{flex:1 1 40%;padding:0 6px}
+  .met-kpi-lbl{font-size:11px}
+}
+@media(max-width:360px){
+  .app-topbar .logo-img{height:30px}
+  .hdr-btn{width:36px;height:36px}
+}
+
 </style>
 </head>
 <body>
@@ -874,6 +925,7 @@ body{padding-bottom:36px}
 
   <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
+    <div class="sb-user-movil" id="sbUser"></div>
     <nav class="sb-nav">
       <div class="sb-section-label">Operaciones</div>
       <a class="sb-item active" id="nav-cotizar" onclick="navTo('cotizar')">
@@ -1937,8 +1989,8 @@ body{padding-bottom:36px}
         📈 Métricas
       </button>
     </div>
-    <div style="display:flex;align-items:center;gap:10px">
-      <div style="text-align:right;font-size:11px;color:var(--muted)">
+    <div class="hist-hdr-r" style="display:flex;align-items:center;gap:10px">
+      <div class="hist-hdr-info" style="text-align:right;font-size:11px;color:var(--muted)">
         <strong style="color:var(--pf-slate-dk);display:block">Módulo Administrativo</strong>
         Acceso restringido
       </div>
@@ -3338,6 +3390,7 @@ function enterApp(user) {
   else $('btnAdmin').classList.add('hidden');
   // Set user display in new topbar
   $('hdrUser').textContent = user.nombre + (user.rol === 'admin' ? ' · Admin' : '');
+  if ($('sbUser')) $('sbUser').textContent = $('hdrUser').textContent;
   $('hdrDate').textContent = new Date().toLocaleDateString('es-VE', { weekday:'short', day:'2-digit', month:'short', year:'numeric' });
   // Pre-fill agent name
   if ($('agentName').value === '') $('agentName').value = user.nombre;

@@ -250,6 +250,14 @@
     .contact-form-wrap { padding:28px 20px; }
     .planes-grid { padding:60px 24px; }
     .footer-bottom { flex-direction:column; text-align:center; }
+    /* Enlaces del footer: área táctil cómoda */
+    .footer-col nav { gap:2px; }
+    .footer-col nav a { display:block; padding:9px 0; }
+    footer a[href*="siscorpdigital"] { display:inline-block; padding:6px 2px; }
+  }
+  /* iOS hace zoom al enfocar campos con letra < 16 px */
+  @media (max-width:768px) {
+    input:not([type=checkbox]):not([type=radio]), select, textarea { font-size:16px !important; }
   }
 </style>
 </head>
