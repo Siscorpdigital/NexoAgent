@@ -33,6 +33,12 @@ const nextConfig: NextConfig = {
   // Headers de seguridad HTTP
   async headers() {
     return [
+      // El cotizador es HTML estático: que el navegador siempre pida la versión
+      // vigente (evita seguir usando una copia vieja tras cada actualización).
+      ...["/cotizador", "/cotizador/:path*"].map((source) => ({
+        source,
+        headers: [{ key: "Cache-Control", value: "no-cache, must-revalidate" }],
+      })),
       {
         source: "/:path*",
         headers: [

@@ -57,6 +57,11 @@ function resumenHtml(texto: string): string {
     .slice(0, 300);
 }
 
+/** Comprobación rápida desde el navegador de que el servicio está publicado. */
+export function GET() {
+  return Response.json({ servicio: "correo del cotizador", estado: "activo", version: 2 }, { headers: { "Cache-Control": "no-store" } });
+}
+
 export async function POST(req: Request) {
   if (!(await usuarioActivo(req))) return error("Sesión no válida. Cierre sesión y vuelva a entrar al cotizador.", 401);
 
