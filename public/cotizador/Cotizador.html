@@ -2460,7 +2460,7 @@ body{padding-bottom:36px}
 
       <div class="al info" style="margin-bottom:18px;font-size:12.5px">
         <span class="ai" style="font-size:14px">ℹ️</span>
-        <span>El email se envía desde <strong>noreply@previsionfamiliar.com</strong>. Por favor no responda a este correo.</span>
+        <span>El email se envía desde <strong>no_responder@previsionfamiliar.com.ve</strong> con la cotización en PDF adjunta.</span>
       </div>
 
       <div class="modal-btns">
@@ -5149,7 +5149,7 @@ function savePlanillaEmision() {
 }
 
 async function emailPlanilla() {
-  const DEST = 'suscripcion@previsionfamiliar.com.ve';
+  const DEST = 'suscripcion@previsionfamiliar.com.ve'; // el servidor fuerza este destino
 
   // Basic validation: need at least tomador name
   const tomNombre = $('pl-tom-nombre')?.value?.trim();
@@ -5177,7 +5177,7 @@ async function emailPlanilla() {
     <p style="color:rgba(255,255,255,.6);margin:3px 0 0;font-size:11px;letter-spacing:.1em;text-transform:uppercase">Solicitud de Emisión de Plan Contratado</p>
   </div>
   <div style="padding:22px 26px;background:white">
-    <p style="font-size:15px">Nueva solicitud de emisión recibida:</p>
+    <p style="font-size:15px">Nueva solicitud de emisión recibida. La planilla completa va adjunta en PDF.</p>
     <table style="width:100%;border-collapse:collapse;margin:14px 0;font-size:14px">
       <tr style="background:#F4F7F6"><td style="padding:9px 14px;border:1px solid #DDD;font-weight:700;color:#2D5750;width:42%">N° Solicitud</td><td style="padding:9px 14px;border:1px solid #DDD">${nroSol}</td></tr>
       <tr><td style="padding:9px 14px;border:1px solid #DDD;font-weight:700;color:#2D5750">Tomador</td><td style="padding:9px 14px;border:1px solid #DDD"><strong>${tomNombre}</strong></td></tr>
@@ -5202,7 +5202,11 @@ async function emailPlanilla() {
   </div>
 </div>`;
 
-    await gasSendEmail(DEST, subject, htmlBody);
+    const pdf = await htmlAPdfBase64(capturarDocumento(downloadPdfPlanilla));
+    await enviarCorreo({
+      tipo: 'emision', subject, htmlBody,
+      adjunto: { nombre: 'Solicitud_Emision_' + _slugArchivo(nroSol) + '_' + _slugArchivo(tomNombre) + '.pdf', base64: pdf },
+    });
     showPlanillaToast('ok', DEST);
   } catch(err) {
     console.error('Email planilla error:', err);
@@ -5279,54 +5283,101 @@ function clearHistFilters() {
 })();
 
 /* ═══════════════════════════════════════════════
-   ENVÍO DE CORREO — Google Apps Script (Gmail)
-   Endpoint: Google Workspace suscripcion@previsionfamiliar.com.ve
+   ENVÍO DE CORREO — servidor del sitio (/api/correo)
+   Sale por SMTP de Google Workspace desde no_responder@previsionfamiliar.com.ve.
+   - Cotizaciones: al cliente, con la cotización en PDF.
+   - Emisiones: solo a suscripcion@previsionfamiliar.com.ve (lo fija el servidor),
+     con la planilla en PDF.
 ═══════════════════════════════════════════════ */
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbwDJVcpLrCSLYwDT02OZ2l_guJVKeR7N_sG5SlABjRKCzFRtd1zlEQhyV6Xw9XTcJIo/exec';
+const HTML2PDF_SRC = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
 
-// El envío pasa primero por el servidor del sitio (/api/correo), que llama a
-// Google desde allí: no depende de la CSP/CORS del navegador y devuelve el
-// motivo exacto si Google rechaza el correo. Si esa ruta no existe (p. ej. el
-// HTML servido desde otro hosting), se llama a Google directamente como antes.
 function _tokenSesion() {
   try { return (JSON.parse(localStorage.getItem('pf_supa_session') || 'null') || {}).access_token || ''; }
   catch (e) { return ''; }
 }
 
-async function _leerRespuestaCorreo(resp) {
-  const texto = await resp.text();
-  let data = null;
-  try { data = JSON.parse(texto); } catch (e) {}
-  if (data && data.status === 'ok') return data;
-  const detalle = (data && data.message) ||
-    texto.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 200) ||
-    ('HTTP ' + resp.status);
-  throw new Error(detalle);
-}
-
-async function gasSendEmail(to, subject, htmlBody) {
-  const payload = { to, subject, body: htmlBody.replace(/<[^>]+>/g,''), htmlBody };
-  const cuerpo  = JSON.stringify(payload);
-
-  let resp = null;
+async function enviarCorreo({ tipo, to, subject, htmlBody, adjunto }) {
+  let resp;
   try {
     resp = await fetch('/api/correo', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + _tokenSesion() },
-      body:    cuerpo,
+      body:    JSON.stringify({ tipo, to, subject, htmlBody, adjunto }),
     });
   } catch (e) {
-    resp = null;
+    throw new Error('No se pudo conectar con el servidor. Verifique su conexión a internet.');
   }
-  if (resp && resp.status !== 404 && resp.status !== 405) return _leerRespuestaCorreo(resp);
+  const texto = await resp.text();
+  let data = null;
+  try { data = JSON.parse(texto); } catch (e) {}
+  if (resp.ok && data && data.status === 'ok') return data;
+  throw new Error((data && data.message) || ('Error del servidor de correo (HTTP ' + resp.status + ').'));
+}
 
-  // Respaldo: llamada directa a Google Apps Script.
-  try {
-    resp = await fetch(GAS_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: cuerpo });
-  } catch (e) {
-    throw new Error('No se pudo contactar el servicio de correo (' + (e && e.message || 'sin conexión') + ').');
-  }
-  return _leerRespuestaCorreo(resp);
+/* Ejecuta una de las funciones "Descargar PDF" (que abren una ventana de
+   impresión) pero captura el HTML del documento en lugar de abrir la ventana,
+   para que el PDF adjunto sea exactamente el mismo documento. */
+function capturarDocumento(fn) {
+  let html = '';
+  const original = window.open;
+  window.open = function () {
+    return { document: { write(t) { html += t; }, close() {} }, focus() {}, print() {}, close() {} };
+  };
+  try { fn(); } finally { window.open = original; }
+  // Sin impresión automática al renderizarlo.
+  return html.replace(/<script>\s*setTimeout\(\(\)=>window\.print\(\),\d+\);?\s*<\\?\/script>/g, '');
+}
+
+/* Convierte ese HTML en un PDF (base64). Se renderiza en un iframe oculto con
+   su propia copia de html2pdf, para que sus estilos no se mezclen con los del
+   cotizador. */
+function htmlAPdfBase64(html) {
+  return new Promise((resolve, reject) => {
+    const ifr = document.createElement('iframe');
+    ifr.setAttribute('aria-hidden', 'true');
+    ifr.style.cssText = 'position:fixed;left:-12000px;top:0;width:820px;height:1160px;border:0;opacity:0;pointer-events:none';
+    const limpiar = () => { if (ifr.parentNode) ifr.remove(); };
+    const vence = setTimeout(() => { limpiar(); reject(new Error('No se pudo generar el PDF (tiempo agotado).')); }, 45000);
+    ifr.onload = () => {
+      const win = ifr.contentWindow, doc = ifr.contentDocument;
+      const generar = async () => {
+        try {
+          doc.querySelectorAll('.no-print').forEach(el => el.remove());
+          const cont = doc.createElement('div');
+          while (doc.body.firstChild) cont.appendChild(doc.body.firstChild);
+          doc.body.style.padding = '0';
+          doc.body.appendChild(cont);
+          await Promise.all([...doc.images].map(img => img.complete ? null : new Promise(r => { img.onload = img.onerror = r; })));
+          // Las opciones se crean dentro del iframe: html2pdf no reconoce arreglos de otra ventana.
+          const opciones = win.JSON.parse(JSON.stringify({
+            margin:      [10, 10, 12, 10],
+            image:       { type: 'jpeg', quality: 0.88 },
+            html2canvas: { scale: 1.6, useCORS: true, logging: false, backgroundColor: '#ffffff' },
+            jsPDF:       { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true },
+            pagebreak:   { mode: ['css', 'legacy'], avoid: ['tr', '.kpi', '.benefit-row', '.wait-row', '.frow', '.sig-grid', '.header'] },
+          }));
+          const uri = await win.html2pdf().set(opciones).from(cont).outputPdf('datauristring');
+          clearTimeout(vence); limpiar();
+          resolve(String(uri).split(',')[1]);
+        } catch (e) {
+          clearTimeout(vence); limpiar();
+          reject(new Error('No se pudo generar el PDF: ' + (e && e.message || e)));
+        }
+      };
+      if (win.html2pdf) return generar();
+      const sc = doc.createElement('script');
+      sc.src = HTML2PDF_SRC;
+      sc.onload = generar;
+      sc.onerror = () => { clearTimeout(vence); limpiar(); reject(new Error('No se pudo cargar el generador de PDF. Verifique su conexión.')); };
+      doc.head.appendChild(sc);
+    };
+    ifr.srcdoc = html;
+    document.body.appendChild(ifr);
+  });
+}
+
+function _slugArchivo(t) {
+  return String(t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^A-Za-z0-9]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 60);
 }
 
 /* ── Email Modal Control ── */
@@ -5358,25 +5409,8 @@ function showEmailForm() {
   $('em-btn-txt').textContent = 'Enviar PDF';
 }
 
-/* ── PDF Generation helpers ── */
-async function generatePdfBase64() {
-  const source = document.getElementById('step3');
-  const opt = {
-    margin:      [10, 10, 10, 10],
-    filename:    'Cotizacion_PF.pdf',
-    image:       { type: 'jpeg', quality: 0.92 },
-    html2canvas: { scale: 2, useCORS: true, logging: false },
-    jsPDF:       { unit: 'mm', format: 'a4', orientation: 'portrait' },
-    pagebreak:   { mode: ['avoid-all', 'css', 'legacy'] },
-  };
-  const pdfBlob = await html2pdf().set(opt).from(source).outputPdf('blob');
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => resolve(reader.result.split(',')[1]);
-    reader.onerror  = reject;
-    reader.readAsDataURL(pdfBlob);
-  });
-}
+// Logo de los documentos PDF: el mismo de la cabecera (embebido en base64).
+const LOGO_SRC = (document.querySelector('.app-topbar .logo-img') || document.querySelector('img.logo-img[src^="data:"]') || {}).src || (location.origin + '/favicon-pf.png');
 
 function downloadPdfCotizacion() {
   const cfg      = planCfg();
@@ -5824,7 +5858,7 @@ async function sendEmail() {
   </div>
   <div style="padding:24px 28px;background:white">
     <p>Estimado/a <strong>${titName}</strong>,</p>
-    <p style="color:#444;font-size:14px">A continuación el resumen de su cotización:</p>
+    <p style="color:#444;font-size:14px">Adjunto encontrará su cotización completa en PDF. A continuación, el resumen:</p>
     <table style="width:100%;border-collapse:collapse;margin:16px 0;font-size:14px">
       <tr style="background:#F4F7F6"><td style="padding:9px 14px;border:1px solid #DDD;font-weight:700;color:#2D5750;width:40%">N° de Cotización</td><td style="padding:9px 14px;border:1px solid #DDD">${qnum}</td></tr>
       <tr><td style="padding:9px 14px;border:1px solid #DDD;font-weight:700;color:#2D5750">Plan</td><td style="padding:9px 14px;border:1px solid #DDD">${cfg.nombre}</td></tr>
@@ -5844,7 +5878,11 @@ async function sendEmail() {
   </div>
 </div>`;
 
-    await gasSendEmail(toEmail, subject, htmlBody);
+    const pdf = await htmlAPdfBase64(capturarDocumento(downloadPdfCotizacion));
+    await enviarCorreo({
+      tipo: 'cotizacion', to: toEmail, subject, htmlBody,
+      adjunto: { nombre: 'Cotizacion_' + _slugArchivo(qnum) + '_' + _slugArchivo(titName) + '.pdf', base64: pdf },
+    });
 
     $('em-sending').classList.add('hidden');
     $('em-ok').classList.remove('hidden');
